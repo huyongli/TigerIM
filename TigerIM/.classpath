@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
+	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
+	<classpathentry kind="lib" path="libs/jxmpp-core-0.4.1.jar"/>
+	<classpathentry kind="lib" path="libs/jxmpp-util-cache-0.4.1.jar"/>
+	<classpathentry kind="lib" path="libs/smack-android-4.1.4.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/E:/06-Android/05-IM/smack_4_1_4/libs/smack-android-4.1.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/smack-android-extensions-4.1.4.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/E:/06-Android/05-IM/smack_4_1_4/libs/smack-android-extensions-4.1.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/smack-core-4.1.4.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/E:/06-Android/05-IM/smack_4_1_4/libs/smack-core-4.1.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/smack-experimental-4.1.4.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/E:/06-Android/05-IM/smack_4_1_4/libs/smack-experimental-4.1.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/smack-im-4.1.4.jar" sourcepath="E:/06-Android/05-IM/smack_4_1_4/libs/smack-im-4.1.4-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/E:/06-Android/05-IM/smack_4_1_4/libs/smack-im-4.1.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/smack-sasl-provided-4.1.4.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/E:/06-Android/05-IM/smack_4_1_4/libs/smack-sasl-provided-4.1.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/smack-tcp-4.1.4.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/E:/06-Android/05-IM/smack_4_1_4/libs/smack-tcp-4.1.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="libs/smack-extensions-4.1.4.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/E:/06-Android/05-IM/smack_4_1_4/libs/smack-android-extensions-4.1.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin/classes"/>
+</classpath>

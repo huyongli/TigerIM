@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 自定义控件topTitleBar的默认背景色 -->
+    <color name="topTitleBar_default_background">#18B5EA</color>
+    
+    <color name="seperator">#EBEBEB</color>
+    <color name="emoji_keyboard_bg_light">#f6f5f5</color>
+    <color name="chat_keyboard_bg">#ECECEC</color>
+    <color name="white">#FFFFFF</color><!--白色 -->
+    <color name="black">#000000</color><!--黑色 -->
+    <color name="transparency">#00000000</color><!--透明 -->
+</resources>

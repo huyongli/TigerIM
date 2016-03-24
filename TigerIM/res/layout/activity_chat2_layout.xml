@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    
+	<TextView 
+	    android:id="@+id/tv_chat_content"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:layout_above="@+id/ll_voice_msg"
+	    android:padding="@dimen/dimen_10"/>
+	
+	<LinearLayout 
+	    android:id="@+id/ll_voice_msg"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_above="@+id/ll_chat_msg"
+	    android:orientation="horizontal">
+	    <Button 
+	        android:id="@+id/btn_start_record"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="开始录音"/>
+	    <Button 
+	        android:id="@+id/btn_stop_record"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="停止录音"/>
+	    <Button 
+	        android:id="@+id/btn_voice_msg_send"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="发送"/>
+	</LinearLayout>
+	<LinearLayout 
+	    android:id="@+id/ll_chat_msg"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentBottom="true"
+	    android:orientation="horizontal">
+	    <EditText 
+	        android:id="@+id/et_chat_msg"
+	        android:layout_width="0dp"
+	        android:layout_height="wrap_content"
+	        android:singleLine="false"
+	        android:layout_weight="1"/>
+	    <Button 
+	        android:id="@+id/btn_chat_msg_send"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="发送"/>
+	</LinearLayout>
+</RelativeLayout>

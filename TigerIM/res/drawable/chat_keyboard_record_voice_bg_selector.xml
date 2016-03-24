@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <!-- <item android:drawable="@drawable/ktf">
+        <shape>
+            <corners android:radius="@dimen/dimen_4"/>
+            <stroke android:color="#E8E8E8" android:width="@dimen/dimen_2"/>
+        </shape>
+    </item> -->
+    
+    <item android:drawable="@drawable/ktf" android:state_checked="false" android:state_pressed="true">
+        <shape>
+            <corners android:radius="@dimen/dimen_4"/>
+            <stroke android:color="@color/black" android:width="@dimen/dimen_2"/>
+        </shape>
+    </item>
+    <item android:drawable="@drawable/ktf" android:state_checked="false" android:state_pressed="false">
+        <shape>
+            <corners android:radius="@dimen/dimen_4"/>
+            <stroke android:color="@color/black" android:width="@dimen/dimen_2"/>
+        </shape>
+    </item>
+    <item android:drawable="@drawable/icon_keyboard_nor" android:state_checked="true" android:state_pressed="true">
+        <shape>
+            <corners android:radius="@dimen/dimen_4"/>
+            <stroke android:color="@color/black" android:width="@dimen/dimen_2"/>
+        </shape>
+    </item>
+    <item android:drawable="@drawable/icon_keyboard_nor" android:state_checked="true" android:state_pressed="false">
+        <shape>
+            <corners android:radius="@dimen/dimen_4"/>
+            <stroke android:color="@color/black" android:width="@dimen/dimen_2"/>
+        </shape>
+    </item>
+
+</selector>

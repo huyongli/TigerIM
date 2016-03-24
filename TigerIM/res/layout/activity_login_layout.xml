@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg_shape">
+
+    <ImageView 
+        android:id="@+id/iv_login_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_launcher"
+        android:layout_marginTop="@dimen/dimen_30"
+        android:layout_marginBottom="@dimen/dimen_30"
+        android:layout_centerHorizontal="true"/>
+    
+    <LinearLayout 
+        android:id="@+id/ll_login_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@+id/iv_login_icon">
+	    <cn.ittiger.im.ui.ClearEditText
+	        android:id="@+id/et_login_username"
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/dimen_55"
+	        android:padding="@dimen/dimen_10"
+	        android:hint="@string/login_username"
+	        android:background="@color/white"/>
+		<TextView 
+		    android:layout_width="match_parent"
+		    android:layout_height="@dimen/dimen_1"
+		    android:background="@color/seperator"/>
+	    <cn.ittiger.im.ui.ClearEditText
+	        android:id="@+id/et_login_password"
+	        android:layout_width="match_parent"
+	        android:layout_height="@dimen/dimen_55"
+	        android:inputType="textPassword"
+	        android:hint="@string/login_password"
+	        android:padding="@dimen/dimen_10"
+	        android:background="@color/white"/>
+    </LinearLayout>
+    
+    <CheckBox 
+        android:id="@+id/cb_remember_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:layout_below="@+id/ll_login_edit"
+        android:layout_centerHorizontal="true"
+        android:text="记住密码"/>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_15"
+        android:layout_marginRight="@dimen/dimen_15"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:background="@drawable/login_button_selector"
+        android:text="@string/login_button_text" 
+        android:textColor="@color/white"
+        android:layout_below="@+id/cb_remember_password"/>
+    
+	<TextView 
+        android:id="@+id/tv_login_register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/login_register"
+        android:textColor="@color/topTitleBar_default_background"
+        android:layout_below="@+id/btn_login"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dimen_15"
+        android:layout_marginRight="@dimen/dimen_15"/>
+	
+	<!-- <TextView 
+        android:id="@+id/tv_login_demo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="demo"
+        android:textColor="@color/topTitleBar_default_background"
+        android:layout_below="@+id/btn_login"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="@dimen/dimen_15"
+        android:layout_marginLeft="@dimen/dimen_15"/> -->
+	
+</RelativeLayout>

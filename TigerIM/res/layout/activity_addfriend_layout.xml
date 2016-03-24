@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/login_bg_shape"
+    android:orientation="vertical" >
+
+    <cn.ittiger.im.ui.TopTitleBar
+        android:id="@+id/ttb_addfriend_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dimen_10"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="用户名：" />
+
+        <cn.ittiger.im.ui.ClearEditText
+            android:id="@+id/cet_friend_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入好友用户名" >
+        </cn.ittiger.im.ui.ClearEditText>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dimen_10"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="昵    称：" />
+
+        <cn.ittiger.im.ui.ClearEditText
+            android:id="@+id/cet_friend_nickname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入好友昵称" >
+        </cn.ittiger.im.ui.ClearEditText>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_add_friend"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_20"
+        android:background="@drawable/login_button_selector"
+        android:text="添加好友"
+        android:textColor="@color/white" />
+
+</LinearLayout>

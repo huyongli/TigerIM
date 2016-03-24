@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TopTitleBar">
+        <attr name="titleText" format="string" />
+        <attr name="titleTextSize" format="dimension" />
+        <attr name="titleTextColor" format="color" />
+        
+        <attr name="leftDrawable" format="reference|color"/>
+        <attr name="leftTextColor" format="color" />
+        <attr name="leftText" format="string" />
+        <attr name="leftTextSize" format="dimension" />
+        <attr name="leftVisible" format="boolean" />
+        <attr name="leftImageVisible" format="boolean" />
+        <attr name="leftTextVisible" format="boolean" />
+        
+        <attr name="backgroundColor" format="color" />
+    </declare-styleable>
+</resources>
