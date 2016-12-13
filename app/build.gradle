@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+//butterknife
+apply plugin: 'android-apt'
 
 android {
     compileSdkVersion 23
@@ -20,7 +22,6 @@ android {
 }
 
 dependencies {
-//    compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.4.0'
 
@@ -31,13 +32,19 @@ dependencies {
     //Smack for Android. All the required dependencies to run Smack on Android.
     //smack-android依赖smack-extensions和smack-experimental和smack-tcp
     compile "org.igniterealtime.smack:smack-android:4.1.9"
+    compile "org.igniterealtime.smack:smack-android-extensions:4.1.9"
     //XMPP connections
     compile "org.igniterealtime.smack:smack-tcp:4.1.9"
     //support for the various XMPP XEPs (Multi-User Chat, PubSub, …) and other XMPP extensions.
     compile "org.igniterealtime.smack:smack-extensions:4.1.9"
     compile "org.igniterealtime.smack:smack-experimental:4.1.9"
-    //support Java7 or higher JVM
-    compile "org.igniterealtime.smack:smack-java7:4.1.9"
 
+    //UIL
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+    //Logger
+    compile 'com.orhanobut:logger:1.15'
+
+    //butterknife
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
 }

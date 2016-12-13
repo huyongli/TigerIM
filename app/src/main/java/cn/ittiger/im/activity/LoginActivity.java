@@ -11,16 +11,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 import cn.ittiger.im.R;
 import cn.ittiger.im.exception.UnCaughtCrashExceptionHandler;
-import cn.ittiger.im.inject.annotation.InjectView;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.ui.ClearEditText;
 import cn.ittiger.im.util.DialogUtil;
 import cn.ittiger.im.util.ValueUtil;
 
 /**
- * 登陆Xmpp服务器
+ * 登陆openfire服务器
  * 
  * @auther: hyl
  * @time: 2015-10-23下午1:36:59
@@ -29,36 +31,33 @@ public class LoginActivity extends BaseActivity {
 	/**
 	 * 登陆用户
 	 */
-	@InjectView(id = R.id.et_login_username)
+	@BindView(R.id.et_login_username)
 	private ClearEditText mEditTextUser;
 	/**
 	 * 登陆密码
 	 */
-	@InjectView(id = R.id.et_login_password)
+	@BindView(R.id.et_login_password)
 	private ClearEditText mEditTextPwd;
 	/**
 	 * 登陆按钮
 	 */
-	@InjectView(id = R.id.btn_login, onClick = "onLoginClick")
+	@BindView(R.id.btn_login)
 	private Button mBtnLogin;
 	/**
 	 * 注册按钮
 	 */
-	@InjectView(id=R.id.tv_login_register, onClick="onRegisterClick")
+	@BindView(R.id.tv_login_register)
 	private TextView mTvRegister;
 	/**
 	 * 记住密码
 	 */
-	@InjectView(id=R.id.cb_remember_password)
+	@BindView(R.id.cb_remember_password)
 	private CheckBox mCbRememberPassword;
 	/**
 	 * 
 	 */
 	private SharedPreferences mSharedPreferences;
 	
-//	@InjectView(id=R.id.tv_login_demo, onClick="onDemoClick")
-//	private TextView mTvDemo;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,6 +78,7 @@ public class LoginActivity extends BaseActivity {
 	 * 
 	 * @param v
 	 */
+	@OnClick(R.id.btn_login)
 	public void onLoginClick(View v) {
 		final String username = mEditTextUser.getText().toString();
 		final String password = mEditTextPwd.getText().toString();
@@ -149,11 +149,9 @@ public class LoginActivity extends BaseActivity {
 	 * 用户注册
 	 * @param v
 	 */
+	@OnClick(R.id.tv_login_register)
 	public void onRegisterClick(View v) {
+
 		showActivity(RegisterActivity.class);
-	}
-	
-	public void onDemoClick(View v) {
-		showActivity(ChatActivity.class);
 	}
 }
