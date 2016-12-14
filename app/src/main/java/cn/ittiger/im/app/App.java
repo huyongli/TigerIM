@@ -1,5 +1,7 @@
 package cn.ittiger.im.app;
 
+import cn.ittiger.im.exception.UnCaughtCrashExceptionHandler;
+
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -22,6 +24,7 @@ public class App extends Application {
 	public void onCreate() {
 		super.onCreate();
 
+        UnCaughtCrashExceptionHandler.getInstance().init(this);
         initImageLoader();
 	}
 

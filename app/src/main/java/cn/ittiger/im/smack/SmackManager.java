@@ -1,5 +1,7 @@
 package cn.ittiger.im.smack;
 
+import cn.ittiger.im.bean.LoginResult;
+
 import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
@@ -111,16 +113,16 @@ public class SmackManager {
      * @return
      * @throws Exception 
      */
-    public boolean login(String user, String password) throws Exception {
+    public LoginResult login(String user, String password) {
     	if(!isConnected()) {
 			throw new IllegalStateException("服务器断开，请先连接服务器");
     	}
         try {
 			mConnection.login(user, password);
-            return  true;
+            return  new LoginResult(true);
         } catch (Exception e) {
 			Logger.e(TAG, e, "login failure");
-            throw e;
+            return new LoginResult(false, e.getMessage());
         }
     }
 

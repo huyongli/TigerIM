@@ -13,7 +13,7 @@
             <corners 
 		        android:radius="@dimen/dimen_5"/>
 		    <solid 
-		        android:color="@color/topTitleBar_default_background"/>
+		        android:color="@color/main_color"/>
         </shape>
 	</item>
 	<item>
@@ -21,7 +21,7 @@
             <corners 
 		        android:radius="@dimen/dimen_5"/>
 		    <solid 
-		        android:color="@color/topTitleBar_default_background"/>
+		        android:color="@color/main_color"/>
         </shape>
 	</item>
 </selector>

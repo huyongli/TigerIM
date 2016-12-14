@@ -1,10 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest package="cn.ittiger.im"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -12,44 +13,43 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name="cn.ittiger.im.activity.LoginActivity"
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <category android:name="android.intent.category.LAUNCHER"/>
+
                 <action android:name="android.intent.action.MAIN"/>
             </intent-filter>
         </activity>
         <activity
-            android:name="cn.ittiger.im.activity.AccountMngActivity"
+            android:name=".activity.AccountMngActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="cn.ittiger.im.activity.ChatActivity2"
+            android:name=".activity.ChatActivity2"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="cn.ittiger.im.activity.MultiChatActivity"
+            android:name=".activity.MultiChatActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="cn.ittiger.im.activity.AddFriendActivity"
+            android:name=".activity.AddFriendActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="cn.ittiger.im.activity.ChatActivity"
+            android:name=".activity.ChatActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="cn.ittiger.im.activity.RegisterActivity"
+            android:name=".activity.RegisterActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name="cn.ittiger.im.activity.FriendListActivity"
+            android:name=".activity.FriendListActivity"
             android:screenOrientation="portrait">
         </activity>
-
     </application>
 
 </manifest>

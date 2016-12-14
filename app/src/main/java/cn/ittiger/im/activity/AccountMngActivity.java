@@ -5,10 +5,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
+
+import butterknife.BindView;
+import butterknife.OnClick;
 import cn.ittiger.im.R;
-import cn.ittiger.im.inject.InjectHelper;
-import cn.ittiger.im.inject.annotation.InjectView;
 import cn.ittiger.im.smack.SmackManager;
+import cn.ittiger.im.util.ActivityUtil;
+import cn.ittiger.im.util.UIUtil;
 
 /**
  * 账号管理
@@ -19,20 +22,19 @@ public class AccountMngActivity extends BaseActivity {
 	/**
 	 * 注销登陆
 	 */
-	@InjectView(id=R.id.btn_logout, onClick="onLogoutClick")
-	private Button mBtnLogout;
+	@BindView(R.id.btn_logout)
+	Button mBtnLogout;
 	/**
 	 * 用户状态修改
 	 */
-	@InjectView(id=R.id.rg_user_state)
-	private RadioGroup mUserState;
+	@BindView(R.id.rg_user_state)
+	RadioGroup mUserState;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_account_mng_layout);
-		InjectHelper.inject(mContext);
-		
+
 		mUserState.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -53,17 +55,17 @@ public class AccountMngActivity extends BaseActivity {
 	
 	public void changeState(int code) {
 		if(SmackManager.getInstance().updateUserState(code)) {
-			showShortToast("修改状态成功");
+			UIUtil.showToast(this, "修改状态成功");
 		} else {
-			showShortToast("修改状态失败");
+			UIUtil.showToast(this, "修改状态失败");
 		}
 	}
 	
 	public void disconnect() {
 		if(SmackManager.getInstance().disconnect()) {
-			finishActivity();
+			ActivityUtil.finishActivity(this);
 		} else {
-			showShortToast("断开连接失败");
+			UIUtil.showToast(this, "断开连接失败");
 		}
 	}
 	
@@ -71,11 +73,12 @@ public class AccountMngActivity extends BaseActivity {
 	 * 注销登陆
 	 * @param v
 	 */
+	@OnClick(R.id.btn_logout)
 	public void onLogoutClick(View v) {
 		if(SmackManager.getInstance().logout()) {
-			finishActivity();
+			ActivityUtil.finishActivity(this);
 		} else {
-			showShortToast("注销失败");
+			UIUtil.showToast(this, "注销失败");
 		}
 	}
 }

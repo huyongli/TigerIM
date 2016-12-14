@@ -1,6 +1,7 @@
 package cn.ittiger.im.util;
 
 import cn.ittiger.im.app.AppContext;
+import cn.ittiger.im.util.cipher.Cipher;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -43,5 +44,41 @@ public class PreferenceHelper {
     public static boolean getBoolean(String key, boolean defaultValue) {
 
         return sSharedPreferences.getBoolean(key, defaultValue);
+    }
+
+    public static Object get(String key) {
+        return get(key, (Cipher) null);
+    }
+
+    public static Object get(String key, Cipher cipher) {
+        try {
+            String hex = getString(key, null);
+            if (hex == null) return null;
+            byte[] bytes = HexUtil.decodeHex(hex.toCharArray());
+            if (cipher != null) bytes = cipher.decrypt(bytes);
+            Object obj = ByteUtil.byteToObject(bytes);
+            return obj;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void put(String key, Object ser) {
+        put(key, ser, null);
+    }
+
+    public static void put(String key, Object ser, Cipher cipher) {
+        try {
+            if (ser == null) {
+                sSharedPreferences.edit().remove(key).commit();
+            } else {
+                byte[] bytes = ByteUtil.objectToByte(ser);
+                if (cipher != null) bytes = cipher.encrypt(bytes);
+                putString(key, HexUtil.encodeHexStr(bytes));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

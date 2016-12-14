@@ -12,6 +12,13 @@
     <dimen name="dimen_30">30dp</dimen>
     <dimen name="dimen_50">50dp</dimen>
     <dimen name="dimen_55">55dp</dimen>
-    <dimen name="dimen_60">560dp</dimen>
+    <dimen name="dimen_60">60dp</dimen>
     <dimen name="dimen_80">80dp</dimen>
+
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="tabbar_height">48dp</dimen>
+    <dimen name="global_divider_size">1px</dimen>
+
+    <!-- font size -->
+    <dimen name="tabbar_textsize">11sp</dimen>
 </resources>

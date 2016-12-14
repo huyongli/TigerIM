@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
     <!-- 自定义控件topTitleBar的默认背景色 -->
     <color name="topTitleBar_default_background">#18B5EA</color>
-    
+
+    <color name="main_color">#18B5EA</color>
+    <color name="tabbar_divider_color">#c9c9c9</color>
     <color name="seperator">#EBEBEB</color>
     <color name="emoji_keyboard_bg_light">#f6f5f5</color>
     <color name="chat_keyboard_bg">#ECECEC</color>
