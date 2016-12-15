@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_bg_shape"
+    android:background="@drawable/main_bg"
     android:orientation="vertical" >
 
     <cn.ittiger.im.ui.TopTitleBar
@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:layout_marginRight="@dimen/dimen_20"
-                android:background="@drawable/login_button_selector"
+                android:background="@drawable/main_button_bg"
                 android:textColor="@color/white"
                 android:text="取消" />
 
@@ -117,7 +117,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:layout_marginLeft="@dimen/dimen_20"
-                android:background="@drawable/login_button_selector"
+                android:background="@drawable/main_button_bg"
                 android:textColor="@color/white"
                 android:text="注册" />
         </LinearLayout>

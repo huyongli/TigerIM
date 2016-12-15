@@ -23,7 +23,7 @@ import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.fragment.ContactFragment;
 import cn.ittiger.im.fragment.MessageFragment;
-import cn.ittiger.im.util.UIUtil;
+import cn.ittiger.im.util.ActivityUtil;
 
 /**
  * Created by laohu on 16-12-14.
@@ -143,7 +143,7 @@ public class MainActivity extends BaseActivity
 
         switch (item.getItemId()) {
             case R.id.toolbar_add:
-                UIUtil.showToast(mActivity, "toolbar add");
+                ActivityUtil.startActivity(mActivity, AddFriendActivity.class);
                 break;
             default:
                 break;

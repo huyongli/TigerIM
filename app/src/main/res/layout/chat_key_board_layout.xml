@@ -48,7 +48,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/dimen_5"
                 android:layout_marginRight="@dimen/dimen_5"
-                android:background="@drawable/login_button_selector"
+                android:background="@drawable/main_button_bg"
                 android:text="@string/chat_send"
                 android:textColor="@color/white"
                 android:gravity="center"

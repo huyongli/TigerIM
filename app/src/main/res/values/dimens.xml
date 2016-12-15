@@ -14,14 +14,18 @@
     <dimen name="dimen_55">55dp</dimen>
     <dimen name="dimen_60">60dp</dimen>
     <dimen name="dimen_80">80dp</dimen>
+    <dimen name="dimen_150">150dp</dimen>
 
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="tabbar_height">48dp</dimen>
     <dimen name="global_divider_size">1px</dimen>
 
     <!-- font size -->
+    <dimen name="sp_12">12sp</dimen>
+    <dimen name="sp_18">18sp</dimen>
     <dimen name="tabbar_textsize">11sp</dimen>
     <dimen name="toolbar_title_textsize">18sp</dimen>
+    <dimen name="edittext_textsize">18sp</dimen>
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>

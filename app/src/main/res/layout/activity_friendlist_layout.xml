@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_bg_shape"
+    android:background="@drawable/main_bg"
     android:orientation="vertical" >
     
     <cn.ittiger.im.ui.TopTitleBar
@@ -22,7 +22,7 @@
         android:id="@+id/btn_add_friend"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/login_button_selector"
+        android:background="@drawable/main_button_bg"
         android:layout_alignParentBottom="true"
         android:textColor="@color/white"
         android:text="添加好友"/>

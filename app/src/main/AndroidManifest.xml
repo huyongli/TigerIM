@@ -36,7 +36,8 @@
         </activity>
         <activity
             android:name=".activity.AddFriendActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:configChanges="">
         </activity>
         <activity
             android:name=".activity.ChatActivity"
@@ -49,8 +50,6 @@
         <activity
             android:name=".activity.FriendListActivity"
             android:screenOrientation="portrait">
-        </activity>
-        <activity android:name=".activity.Main2Activity">
         </activity>
     </application>
 

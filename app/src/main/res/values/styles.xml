@@ -2,8 +2,8 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimary">@color/main_color</item>
+        <item name="colorPrimaryDark">@color/main_color</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
@@ -20,5 +20,22 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="TextInputLayout_Style" parent="TextAppearance.AppCompat">
+        <item name="android:textColorHint">#8c8c8c</item>
+        <item name="android:textSize">@dimen/edittext_textsize</item>
+        <!-- 下面可以根据需要设置，如果没有将默认使用默认theme的颜色 -->
+        <!-- Label标签的颜色 -->
+        <item name="colorAccent">@color/colorAccent</item>
+        <!-- 默认状态状态设置底线颜色 -->
+        <item name="colorControlNormal">@color/colorPrimaryDark</item>
+        <!-- 选择的底线颜色 -->
+        <item name="colorControlActivated">@color/colorAccent</item>
+    </style>
+
+    <style name="TextInputLayout_Error_Msg_Style" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textSize">@dimen/sp_12</item>
+    </style>
 
 </resources>

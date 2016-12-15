@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/login_bg_shape">
+                android:background="@drawable/main_bg">
 
     <ImageView
         android:id="@+id/iv_login_icon"
@@ -60,7 +60,7 @@
         android:layout_marginLeft="@dimen/dimen_15"
         android:layout_marginRight="@dimen/dimen_15"
         android:layout_marginTop="@dimen/dimen_20"
-        android:background="@drawable/login_button_selector"
+        android:background="@drawable/main_button_bg"
         android:paddingBottom="@dimen/dimen_10"
         android:paddingTop="@dimen/dimen_10"
         android:text="@string/login_button_unlogin_text"

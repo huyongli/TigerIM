@@ -16,6 +16,12 @@
     <string name="text_contact">联系人</string>
     <string name="text_add">添加</string>
 
+    <string name="title_add_friend">添加好友</string>
+    <string name="hint_input_friend_username">好友用户名</string>
+    <string name="hint_input_friend_nickname">好友昵称</string>
+    <string name="error_input_friend_username">请输入好友用户名</string>
+    <string name="error_input_friend_nickname">请输入好友昵称</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
