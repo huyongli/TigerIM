@@ -30,7 +30,7 @@
 	        android:layout_width="match_parent"
 	        android:layout_height="1dp"
 	        android:background="#7fd8d8d8"/>
-	    <cn.ittiger.im.ui.ChatKeyboard
+	    <cn.ittiger.im.ui.keyboard.ChatKeyboard
 	        android:id="@+id/ckb_chat_board"
 	        android:layout_width="match_parent"
 	        android:layout_height="wrap_content"/>

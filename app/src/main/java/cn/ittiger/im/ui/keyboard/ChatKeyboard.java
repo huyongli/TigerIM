@@ -1,4 +1,4 @@
-package cn.ittiger.im.ui;
+package cn.ittiger.im.ui.keyboard;
 
 import java.io.File;
 
@@ -19,6 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ittiger.im.R;
+import cn.ittiger.im.ui.PressSpeakView;
 import cn.ittiger.im.util.ValueUtil;
 
 public class ChatKeyboard extends RelativeLayout implements

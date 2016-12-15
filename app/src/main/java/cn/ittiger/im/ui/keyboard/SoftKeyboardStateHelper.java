@@ -1,4 +1,4 @@
-package cn.ittiger.im.ui;
+package cn.ittiger.im.ui.keyboard;
 
 import android.graphics.Rect;
 import android.view.View;

@@ -50,6 +50,8 @@
             android:name=".activity.FriendListActivity"
             android:screenOrientation="portrait">
         </activity>
+        <activity android:name=".activity.Main2Activity">
+        </activity>
     </application>
 
 </manifest>

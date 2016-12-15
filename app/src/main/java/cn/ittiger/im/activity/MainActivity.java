@@ -10,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.support.v4.widget.DrawerLayout;
 import android.view.View;
@@ -22,13 +23,14 @@ import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.fragment.ContactFragment;
 import cn.ittiger.im.fragment.MessageFragment;
+import cn.ittiger.im.util.UIUtil;
 
 /**
  * Created by laohu on 16-12-14.
  */
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
-        TabHost.OnTabChangeListener{
+        TabHost.OnTabChangeListener, Toolbar.OnMenuItemClickListener {
     static {
         /**
          * 此方法必须必须引用appcompat-v7:23.4.0
@@ -41,11 +43,13 @@ public class MainActivity extends BaseActivity
 
     private static final Class[] TABBAR_CLASSES = {MessageFragment.class, ContactFragment.class};
     private static final int[] TABBAR_DRAWABLES = {R.drawable.ic_tabbar_message, R.drawable.ic_tabbar_contact};
-    private static final int[] TABBAR_NAMES = {R.string.tabbar_message, R.string.tabbar_contact};
-    private static final int[] TABBAR_TAGS = {R.string.tabbar_message, R.string.tabbar_contact};
+    private static final int[] TABBAR_NAMES = {R.string.text_message, R.string.text_contact};
+    private static final int[] TABBAR_TAGS = {R.string.text_message, R.string.text_contact};
 
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.toolbarTitle)
+    TextView mToolbarTitle;
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
     @BindView(R.id.nav_view)
@@ -60,18 +64,28 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        setSupportActionBar(mToolbar);
+        initToolbar();
+        initTabHost();
+    }
 
+    private void initToolbar() {
+
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);//不显示ToolBar的标题
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.setDrawerListener(toggle);
         toggle.syncState();
 
         mNavigationView.setNavigationItemSelectedListener(this);
-
-        initTabHost();
+        mToolbar.setNavigationIcon(R.drawable.ic_toolbar_avatar);
+        mToolbar.setOnMenuItemClickListener(this);
     }
 
+    /**
+     * 主页底部Tab
+     */
     private void initTabHost() {
 
         mTabHost.setup(this, getSupportFragmentManager(), R.id.tabItemContent);
@@ -100,6 +114,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void onTabChanged(String tabId) {
 
+        mToolbarTitle.setText(tabId);
     }
 
     @Override
@@ -113,6 +128,26 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
         mDrawerLayout.closeDrawer(GravityCompat.START);
 
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.toolbar_add:
+                UIUtil.showToast(mActivity, "toolbar add");
+                break;
+            default:
+                break;
+        }
         return true;
     }
 

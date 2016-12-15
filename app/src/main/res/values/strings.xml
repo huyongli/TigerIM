@@ -12,8 +12,9 @@
     <string name="login_error_password">请输入密码</string>
     <string name="chat_send">发送</string>
 
-    <string name="tabbar_message">消息</string>
-    <string name="tabbar_contact">联系人</string>
+    <string name="text_message">消息</string>
+    <string name="text_contact">联系人</string>
+    <string name="text_add">添加</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
