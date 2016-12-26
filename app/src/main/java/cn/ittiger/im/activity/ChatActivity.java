@@ -37,12 +37,12 @@ import cn.ittiger.im.ui.keyboard.ChatKeyboard;
 import cn.ittiger.im.ui.keyboard.ChatKeyboard.ChatKeyboardOperateListener;
 import cn.ittiger.im.ui.TopTitleBar;
 import cn.ittiger.im.ui.TopTitleBar.LeftClickListener;
-import cn.ittiger.im.util.ActivityUtil;
 import cn.ittiger.im.util.BitmapUtil;
 import cn.ittiger.im.util.DateUtil;
 import cn.ittiger.im.util.FileUtil;
-import cn.ittiger.im.util.SdCardUtil;
 import cn.ittiger.im.util.ValueUtil;
+import cn.ittiger.util.ActivityUtil;
+import cn.ittiger.util.SdCardUtil;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 

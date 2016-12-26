@@ -1,12 +1,12 @@
-package cn.ittiger.im.util;
-
-import java.io.File;
+package cn.ittiger.util;
 
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
+
+import java.io.File;
 
 /**
  * SDCard帮助类

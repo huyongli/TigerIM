@@ -43,7 +43,7 @@
             android:padding="@dimen/dimen_10"/>
     </LinearLayout>
 
-    <CheckBox
+    <android.support.v7.widget.AppCompatCheckBox
         android:id="@+id/cb_remember_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

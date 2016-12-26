@@ -1,4 +1,4 @@
-package cn.ittiger.im.util;
+package cn.ittiger.util;
 
 import android.app.Activity;
 import android.content.Intent;

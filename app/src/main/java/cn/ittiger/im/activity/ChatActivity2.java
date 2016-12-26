@@ -30,9 +30,9 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.ittiger.im.R;
 import cn.ittiger.im.smack.SmackManager;
-import cn.ittiger.im.util.SdCardUtil;
-import cn.ittiger.im.util.UIUtil;
 import cn.ittiger.im.util.ValueUtil;
+import cn.ittiger.util.SdCardUtil;
+import cn.ittiger.util.UIUtil;
 
 /**
  * 聊天界面

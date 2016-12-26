@@ -1,8 +1,4 @@
-package cn.ittiger.im.util;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+package cn.ittiger.util;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -13,7 +9,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
-import cn.ittiger.im.bean.AppInfo;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * 应用相关信息工具函数

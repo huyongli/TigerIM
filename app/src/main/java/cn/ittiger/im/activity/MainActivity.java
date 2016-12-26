@@ -2,6 +2,7 @@ package cn.ittiger.im.activity;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTabHost;
@@ -64,6 +65,7 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        initNavigationBarColor();
         initToolbar();
         initTabHost();
     }
@@ -81,6 +83,13 @@ public class MainActivity extends BaseActivity
         mNavigationView.setNavigationItemSelectedListener(this);
         mToolbar.setNavigationIcon(R.drawable.ic_toolbar_avatar);
         mToolbar.setOnMenuItemClickListener(this);
+    }
+
+    private void initNavigationBarColor() {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
+        }
     }
 
     /**

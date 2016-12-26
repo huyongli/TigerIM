@@ -26,8 +26,8 @@ import cn.ittiger.im.adapter.BaseViewAdapter;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.ui.TopTitleBar;
 import cn.ittiger.im.ui.TopTitleBar.LeftClickListener;
-import cn.ittiger.im.util.ActivityUtil;
 import cn.ittiger.im.util.DialogUtil;
+import cn.ittiger.util.ActivityUtil;
 
 /**
  * 好友列表

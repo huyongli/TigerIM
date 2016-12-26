@@ -16,8 +16,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ittiger.im.R;
 import cn.ittiger.im.smack.SmackManager;
-import cn.ittiger.im.util.UIUtil;
 import cn.ittiger.im.util.ValueUtil;
+import cn.ittiger.util.UIUtil;
 
 /**
  * 多人聊天

@@ -1,8 +1,8 @@
-package cn.ittiger.im.bean;
-
-import java.io.Serializable;
+package cn.ittiger.util;
 
 import android.graphics.drawable.Drawable;
+
+import java.io.Serializable;
 
 /**
  * 系统内安装的应用信息

@@ -1,7 +1,7 @@
 package cn.ittiger.im.activity;
 
 import cn.ittiger.im.R;
-import cn.ittiger.im.util.ActivityUtil;
+import cn.ittiger.util.ActivityUtil;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

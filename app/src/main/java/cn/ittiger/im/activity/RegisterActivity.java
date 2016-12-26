@@ -13,9 +13,9 @@ import cn.ittiger.im.R;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.ui.ClearEditText;
 import cn.ittiger.im.ui.TopTitleBar;
-import cn.ittiger.im.util.ActivityUtil;
-import cn.ittiger.im.util.UIUtil;
 import cn.ittiger.im.util.ValueUtil;
+import cn.ittiger.util.ActivityUtil;
+import cn.ittiger.util.UIUtil;
 
 /**
  * 注册

@@ -114,10 +114,10 @@ public class SmackManager {
      * @throws Exception 
      */
     public LoginResult login(String user, String password) {
-    	if(!isConnected()) {
-			throw new IllegalStateException("服务器断开，请先连接服务器");
-    	}
         try {
+			if(!isConnected()) {
+				throw new IllegalStateException("服务器断开，请先连接服务器");
+			}
 			mConnection.login(user, password);
             return  new LoginResult(true);
         } catch (Exception e) {

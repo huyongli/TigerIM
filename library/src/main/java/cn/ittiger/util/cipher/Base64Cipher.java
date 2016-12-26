@@ -1,4 +1,4 @@
-package cn.ittiger.im.util.cipher;
+package cn.ittiger.util.cipher;
 
 import android.util.Base64;
 

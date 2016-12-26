@@ -9,7 +9,8 @@ android {
     defaultConfig {
         applicationId "cn.ittiger.im"
         minSdkVersion 14
-        targetSdkVersion 23
+        targetSdkVersion
+        23
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary=true
@@ -25,8 +26,10 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    compile project(':library')
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
+    compile 'cn.ittiger:indexstickyview:1.0.0'
 
     //smack-core为核心库
     compile 'org.igniterealtime.smack:smack-core:4.1.9'
@@ -50,4 +53,8 @@ dependencies {
     //butterknife
     compile 'com.jakewharton:butterknife:8.4.0'
     apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
+    //rxjava
+    compile 'io.reactivex:rxjava:1.1.6'
+    compile 'io.reactivex:rxandroid:1.2.1'
 }

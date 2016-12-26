@@ -10,8 +10,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import cn.ittiger.im.R;
 import cn.ittiger.im.smack.SmackManager;
-import cn.ittiger.im.util.ActivityUtil;
-import cn.ittiger.im.util.UIUtil;
+import cn.ittiger.util.ActivityUtil;
+import cn.ittiger.util.UIUtil;
 
 /**
  * 账号管理

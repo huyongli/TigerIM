@@ -2,12 +2,11 @@ package cn.ittiger.im.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,12 +16,16 @@ import cn.ittiger.im.bean.LoginResult;
 import cn.ittiger.im.bean.User;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.ui.ClearEditText;
-import cn.ittiger.im.util.ActivityUtil;
 import cn.ittiger.im.util.LoginHelper;
-import cn.ittiger.im.util.UIUtil;
 import cn.ittiger.im.util.ValueUtil;
-
-import com.litesuits.android.async.SimpleTask;
+import cn.ittiger.util.ActivityUtil;
+import cn.ittiger.util.UIUtil;
+import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * 登陆openfire服务器
@@ -50,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
      * 记住密码
      */
     @BindView(R.id.cb_remember_password)
-    CheckBox mCbRememberPassword;
+    AppCompatCheckBox mCbRememberPassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,41 +118,47 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        SimpleTask<LoginResult> task = new SimpleTask<LoginResult>() {
-
-            @Override
-            protected void onPreExecute() {
-
-                super.onPreExecute();
-                mBtnLogin.setEnabled(false);
-                mBtnLogin.setText(getString(R.string.login_button_login_loading));
-            }
-
-            @Override
-            protected LoginResult doInBackground() {
-
-                return SmackManager.getInstance().login(username, password);
-            }
-
-            @Override
-            protected void onPostExecute(LoginResult loginResult) {
-
-                super.onPostExecute(loginResult);
-                mBtnLogin.setEnabled(true);
-                mBtnLogin.setText(getString(R.string.login_button_unlogin_text));
-                LoginHelper.rememberRassword(mCbRememberPassword.isChecked());
-
-                if (loginResult.isSuccess()) {
-                    ActivityUtil.skipActivity(LoginActivity.this, FriendListActivity.class);
-                    if (mCbRememberPassword.isChecked()) {
-                        LoginHelper.saveUser(new User(username, password));
-                    }
-                } else {
-                    UIUtil.showToast(LoginActivity.this, loginResult.getErrorMsg());
+        Observable.just(new User(username, password))
+            .doOnNext(new Action1<User>() {
+                @Override
+                public void call(User user) {
+                    mBtnLogin.setEnabled(false);
+                    mBtnLogin.setText(getString(R.string.login_button_login_loading));
                 }
-            }
-        };
-        task.execute();
+            })
+            .subscribeOn(Schedulers.io())//指定下面的flatMap线程
+            .flatMap(new Func1<User, Observable<LoginResult>>() {
+                @Override
+                public Observable<LoginResult> call(User user) {
+
+                    LoginResult loginResult = SmackManager.getInstance().login(username, password);
+                    return Observable.just(loginResult);
+                }
+            })
+            .doOnSubscribe(new Action0() {
+                @Override
+                public void call() {
+                    mBtnLogin.setEnabled(true);
+                    mBtnLogin.setText(getString(R.string.login_button_unlogin_text));
+                    LoginHelper.rememberRassword(mCbRememberPassword.isChecked());
+                }
+            })
+            .subscribeOn(AndroidSchedulers.mainThread())//给上面的Action0设定线程
+            .observeOn(AndroidSchedulers.mainThread())//给下面的subscribe设定线程
+            .subscribe(new Action1<LoginResult>() {
+                @Override
+                public void call(LoginResult loginResult) {
+
+                    if (loginResult.isSuccess()) {
+                        ActivityUtil.skipActivity(LoginActivity.this, FriendListActivity.class);
+                        if (mCbRememberPassword.isChecked()) {
+                            LoginHelper.saveUser(new User(username, password));
+                        }
+                    } else {
+                        UIUtil.showToast(LoginActivity.this, loginResult.getErrorMsg());
+                    }
+                }
+            });
     }
 
     /**
