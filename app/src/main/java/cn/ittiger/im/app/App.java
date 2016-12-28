@@ -1,5 +1,6 @@
 package cn.ittiger.im.app;
 
+import cn.ittiger.app.AppContext;
 import cn.ittiger.util.UnCaughtCrashExceptionHandler;
 
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;

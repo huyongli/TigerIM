@@ -5,6 +5,7 @@ import butterknife.ButterKnife;
 import cn.ittiger.base.BaseFragment;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.ContactAdapter;
+import cn.ittiger.im.adapter.ContactItemDecoration;
 import cn.ittiger.im.adapter.ContactViewHolder;
 import cn.ittiger.im.bean.ContactEntity;
 import cn.ittiger.im.bean.ContactMenuEntity;
@@ -46,6 +47,7 @@ public class ContactFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_contact, null);
         ButterKnife.bind(this, view);
+        mIndexStickyView.addItemDecoration(new ContactItemDecoration());
         return view;
     }
 
@@ -83,7 +85,7 @@ public class ContactFragment extends BaseFragment {
             @Override
             public void onNext(List<ContactEntity> contacts) {
 
-                mAdapter = new ContactAdapter(contacts);
+                mAdapter = new ContactAdapter(mContext, contacts);
                 mAdapter.setOnItemClickListener(mContactItemClickListener);
                 mIndexStickyView.setAdapter(mAdapter);
                 mIndexStickyView.addIndexHeaderAdapter(getHeaderMenuAdapter());

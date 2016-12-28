@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/TigerIM.iml" filepath="$PROJECT_DIR$/TigerIM.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TigerLibrary/TigerLibrary.iml" filepath="$PROJECT_DIR$/TigerLibrary/TigerLibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
     </modules>
   </component>
 </project>

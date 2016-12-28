@@ -6,12 +6,12 @@
 
     <ImageView
         android:id="@+id/iv_login_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dimen_60"
+        android:layout_height="@dimen/dimen_60"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/dimen_30"
         android:layout_marginTop="@dimen/dimen_30"
-        android:src="@mipmap/ic_launcher"/>
+        android:background="@mipmap/ic_launcher"/>
 
     <LinearLayout
         android:id="@+id/ll_login_edit"
@@ -28,10 +28,7 @@
             android:hint="@string/login_username"
             android:padding="@dimen/dimen_10"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_1"
-            android:background="@color/seperator"/>
+        <include layout="@layout/divider_horizontal_view"/>
 
         <cn.ittiger.im.ui.ClearEditText
             android:id="@+id/et_login_password"

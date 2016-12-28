@@ -21,12 +21,12 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.ittiger.base.BaseActivity;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.BaseViewAdapter;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.ui.TopTitleBar;
 import cn.ittiger.im.ui.TopTitleBar.LeftClickListener;
-import cn.ittiger.im.util.DialogUtil;
 import cn.ittiger.util.ActivityUtil;
 
 /**
@@ -91,7 +91,7 @@ public class FriendListActivity extends BaseActivity {
             protected void onPreExecute() {
 
                 super.onPreExecute();
-                DialogUtil.showProgressDialog(FriendListActivity.this, "正在查询好友信息，请稍后...");
+//                DialogUtil.showProgressDialog(FriendListActivity.this, "正在查询好友信息，请稍后...");
             }
 
             @Override
@@ -109,7 +109,7 @@ public class FriendListActivity extends BaseActivity {
             protected void onPostExecute(List<RosterEntry> result) {
 
                 super.onPostExecute(result);
-                DialogUtil.hideProgressDialog();
+//                DialogUtil.hideProgressDialog();
                 initListView(result);
             }
         };
@@ -127,13 +127,13 @@ public class FriendListActivity extends BaseActivity {
                                         int position, long id) {
 
                     final RosterEntry friend = mAdapter.getItem(position);
-                    DialogUtil.showDialog(FriendListActivity.this, null, "确定要与[" + friend.getName() + "]聊天吗？", null, null, new OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+//                    DialogUtil.showDialog(FriendListActivity.this, null, "确定要与[" + friend.getName() + "]聊天吗？", null, null, new OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which) {
 
                             startChat(friend);
-                        }
-                    }, null);
+//                        }
+//                    }, null);
                 }
             });
         } else {

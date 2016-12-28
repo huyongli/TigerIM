@@ -8,6 +8,7 @@ import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.ittiger.base.BaseActivity;
 import cn.ittiger.im.R;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.util.ActivityUtil;

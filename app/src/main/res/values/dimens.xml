@@ -7,8 +7,10 @@
     <dimen name="dimen_5">5dp</dimen>
     <dimen name="dimen_8">8dp</dimen>
     <dimen name="dimen_10">10dp</dimen>
+    <dimen name="dimen_12">12dp</dimen>
     <dimen name="dimen_15">15dp</dimen>
     <dimen name="dimen_20">20dp</dimen>
+    <dimen name="dimen_24">24dp</dimen>
     <dimen name="dimen_30">30dp</dimen>
     <dimen name="dimen_50">50dp</dimen>
     <dimen name="dimen_55">55dp</dimen>
@@ -19,6 +21,8 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="tabbar_height">48dp</dimen>
     <dimen name="global_divider_size">1px</dimen>
+    <dimen name="contact_item_left_margin">10dp</dimen>
+    <dimen name="contact_item_right_margin">24dp</dimen>
 
     <!-- font size -->
     <dimen name="sp_12">12sp</dimen>

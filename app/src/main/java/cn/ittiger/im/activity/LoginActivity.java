@@ -1,13 +1,5 @@
 package cn.ittiger.im.activity;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatCheckBox;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.Button;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -17,15 +9,23 @@ import cn.ittiger.im.bean.User;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.ui.ClearEditText;
 import cn.ittiger.im.util.LoginHelper;
-import cn.ittiger.im.util.ValueUtil;
 import cn.ittiger.util.ActivityUtil;
 import cn.ittiger.util.UIUtil;
+import cn.ittiger.util.ValueUtil;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
+
+import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatCheckBox;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.View;
+import android.widget.Button;
 
 /**
  * 登陆openfire服务器
@@ -118,14 +118,9 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+        mBtnLogin.setEnabled(false);
+        mBtnLogin.setText(getString(R.string.login_button_login_loading));
         Observable.just(new User(username, password))
-            .doOnNext(new Action1<User>() {
-                @Override
-                public void call(User user) {
-                    mBtnLogin.setEnabled(false);
-                    mBtnLogin.setText(getString(R.string.login_button_login_loading));
-                }
-            })
             .subscribeOn(Schedulers.io())//指定下面的flatMap线程
             .flatMap(new Func1<User, Observable<LoginResult>>() {
                 @Override
@@ -135,26 +130,26 @@ public class LoginActivity extends AppCompatActivity {
                     return Observable.just(loginResult);
                 }
             })
-            .doOnSubscribe(new Action0() {
+            .observeOn(AndroidSchedulers.mainThread())//给下面的subscribe设定线程
+            .doOnNext(new Action1<LoginResult>() {
                 @Override
-                public void call() {
-                    mBtnLogin.setEnabled(true);
-                    mBtnLogin.setText(getString(R.string.login_button_unlogin_text));
+                public void call(LoginResult loginResult) {
+
                     LoginHelper.rememberRassword(mCbRememberPassword.isChecked());
                 }
             })
-            .subscribeOn(AndroidSchedulers.mainThread())//给上面的Action0设定线程
-            .observeOn(AndroidSchedulers.mainThread())//给下面的subscribe设定线程
             .subscribe(new Action1<LoginResult>() {
                 @Override
                 public void call(LoginResult loginResult) {
 
                     if (loginResult.isSuccess()) {
-                        ActivityUtil.skipActivity(LoginActivity.this, FriendListActivity.class);
                         if (mCbRememberPassword.isChecked()) {
                             LoginHelper.saveUser(new User(username, password));
                         }
+                        ActivityUtil.skipActivity(LoginActivity.this, MainActivity.class);
                     } else {
+                        mBtnLogin.setEnabled(true);
+                        mBtnLogin.setText(getString(R.string.login_button_unlogin_text));
                         UIUtil.showToast(LoginActivity.this, loginResult.getErrorMsg());
                     }
                 }

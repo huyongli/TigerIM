@@ -21,13 +21,17 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import cn.ittiger.base.BaseActivity;
 import cn.ittiger.im.R;
 import cn.ittiger.im.fragment.ContactFragment;
 import cn.ittiger.im.fragment.MessageFragment;
-import cn.ittiger.im.util.ActivityUtil;
+import cn.ittiger.im.util.ShareHelper;
+import cn.ittiger.util.ActivityUtil;
 
 /**
- * Created by laohu on 16-12-14.
+ * 主页面
+ * @author: laohu on 2016/12/24
+ * @site: http://ittiger.cn
  */
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -53,7 +57,7 @@ public class MainActivity extends BaseActivity
     TextView mToolbarTitle;
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    @BindView(R.id.nav_view)
+    @BindView(R.id.nav_container)
     NavigationView mNavigationView;
     @BindView(android.R.id.tabhost)
     FragmentTabHost mTabHost;
@@ -83,6 +87,7 @@ public class MainActivity extends BaseActivity
         mNavigationView.setNavigationItemSelectedListener(this);
         mToolbar.setNavigationIcon(R.drawable.ic_toolbar_avatar);
         mToolbar.setOnMenuItemClickListener(this);
+        mDrawerLayout.addDrawerListener(new NavDrawerListener());
     }
 
     private void initNavigationBarColor() {
@@ -135,6 +140,14 @@ public class MainActivity extends BaseActivity
         }
 
         int id = item.getItemId();
+        switch (id) {
+            case R.id.nav_share:
+                ShareHelper.shareApp(mActivity);
+                break;
+            case R.id.nav_about:
+                ActivityUtil.startActivity(mActivity, AboutActivity.class);
+                break;
+        }
         mDrawerLayout.closeDrawer(GravityCompat.START);
 
         return true;
@@ -164,5 +177,45 @@ public class MainActivity extends BaseActivity
     public boolean doubleExitAppEnable() {
 
         return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if(mDrawerLayout.isDrawerOpen(GravityCompat.START)) {
+            mDrawerLayout.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    class NavDrawerListener implements DrawerLayout.DrawerListener {
+
+        @Override
+        public void onDrawerSlide(View drawerView, float slideOffset) {
+
+        }
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+
+        }
+
+        @Override
+        public void onDrawerClosed(View drawerView) {
+
+            int size = mNavigationView.getMenu().size();
+            for(int i = 0; i < size; i++) {
+                if(mNavigationView.getMenu().getItem(i).isChecked()) {
+                    mNavigationView.getMenu().getItem(i).setChecked(false);
+                    break;
+                }
+            }
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+
+        }
     }
 }

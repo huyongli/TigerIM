@@ -1,6 +1,7 @@
 package cn.ittiger.im.util;
 
 import cn.ittiger.im.bean.User;
+import cn.ittiger.util.PreferenceHelper;
 
 /**
  * Created by laohu on 16-12-14.

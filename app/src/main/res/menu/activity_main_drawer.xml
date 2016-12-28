@@ -1,25 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:title="视频">
-        <menu>
-            <item
-                android:id="@+id/nav_net_easy"
-                android:icon="@drawable/nav_net_easy"
-                android:checkable="true"
-                android:checked="true"
-                android:title="网易"/>
-        </menu>
-    </item>
-
-    <item android:title="选项">
-        <menu>
-            <item
-                android:id="@+id/nav_about"
-                android:icon="@drawable/nav_net_easy"
-                android:checkable="true"
-                android:title="关于"/>
-        </menu>
-    </item>
-
+    <item
+        android:id="@+id/nav_share"
+        android:icon="@drawable/vector_share"
+        android:checkable="true"
+        android:title="@string/nav_share"/>
+    <item
+        android:id="@+id/nav_about"
+        android:icon="@drawable/vector_about"
+        android:checkable="true"
+        android:title="@string/nav_about"/>
 </menu>

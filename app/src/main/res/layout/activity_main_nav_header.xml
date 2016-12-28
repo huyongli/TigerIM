@@ -3,28 +3,38 @@
               android:layout_width="match_parent"
               android:layout_height="@dimen/nav_header_height"
               android:background="@color/main_color"
-              android:gravity="bottom"
               android:orientation="vertical"
               android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/nav_header_layout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TigerVideo"
-        android:layout_above="@+id/textView"
-        android:textStyle="bold"
-        android:textSize="24sp"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/dimen_10"
-        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dimen_10"
+        android:orientation="horizontal">
+        <ImageView
+            android:id="@+id/nav_header_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/nav_header_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/nav_header_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:text="a pure funny video App for you"
+        android:layout_below="@id/nav_header_layout"
+        android:layout_marginTop="@dimen/dimen_10"
+        android:layout_marginLeft="@dimen/dimen_10"
+        android:text="@string/nav_header_title"
+        android:textColor="@color/white"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
 </RelativeLayout>

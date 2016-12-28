@@ -1,0 +1,4 @@
+<resources>
+    <string name="load_failed">加载失败，点击重试</string>
+    <string name="exit_app">再按一次退出程序</string>
+</resources>

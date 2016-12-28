@@ -28,11 +28,12 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import cn.ittiger.base.BaseActivity;
 import cn.ittiger.im.R;
 import cn.ittiger.im.smack.SmackManager;
-import cn.ittiger.im.util.ValueUtil;
 import cn.ittiger.util.SdCardUtil;
 import cn.ittiger.util.UIUtil;
+import cn.ittiger.util.ValueUtil;
 
 /**
  * 聊天界面

@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ittiger.im.R;
 import cn.ittiger.im.ui.PressSpeakView;
-import cn.ittiger.im.util.ValueUtil;
+import cn.ittiger.util.ValueUtil;
 
 public class ChatKeyboard extends RelativeLayout implements
         SoftKeyboardStateHelper.SoftKeyboardStateListener {

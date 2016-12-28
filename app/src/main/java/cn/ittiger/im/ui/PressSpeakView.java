@@ -13,8 +13,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
 import cn.ittiger.im.R;
-import cn.ittiger.im.util.DateUtil;
-import cn.ittiger.im.util.SdCardUtil;
+import cn.ittiger.util.DateUtil;
+import cn.ittiger.util.SdCardUtil;
 
 /**
  * 按住说话
