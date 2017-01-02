@@ -23,6 +23,7 @@ import org.jivesoftware.smack.roster.RosterEntry;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,8 @@ import java.util.Set;
  * @site: http://ittiger.cn
  */
 public class ContactFragment extends BaseFragment {
+    @BindView(R.id.contactRefreshLayout)
+    SwipeRefreshLayout mRefreshLayout;
     @BindView(R.id.indexStickyView)
     IndexStickyView mIndexStickyView;
     ContactAdapter mAdapter;
@@ -47,8 +50,19 @@ public class ContactFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_contact, null);
         ButterKnife.bind(this, view);
-        mIndexStickyView.addItemDecoration(new ContactItemDecoration());
+
         return view;
+    }
+
+    private void initView() {
+
+        mIndexStickyView.addItemDecoration(new ContactItemDecoration());
+        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+            }
+        });
     }
 
     @Override
@@ -85,10 +99,12 @@ public class ContactFragment extends BaseFragment {
             @Override
             public void onNext(List<ContactEntity> contacts) {
 
-                mAdapter = new ContactAdapter(mContext, contacts);
-                mAdapter.setOnItemClickListener(mContactItemClickListener);
-                mIndexStickyView.setAdapter(mAdapter);
-                mIndexStickyView.addIndexHeaderAdapter(getHeaderMenuAdapter());
+                if(mAdapter == null) {
+                    mAdapter = new ContactAdapter(mContext, contacts);
+                    mAdapter.setOnItemClickListener(mContactItemClickListener);
+                    mIndexStickyView.setAdapter(mAdapter);
+                    mIndexStickyView.addIndexHeaderAdapter(getHeaderMenuAdapter());
+                }
             }
         });
     }

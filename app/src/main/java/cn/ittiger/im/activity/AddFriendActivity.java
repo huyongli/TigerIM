@@ -12,7 +12,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.ittiger.base.BaseActivity;
 import cn.ittiger.im.R;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.util.ActivityUtil;
@@ -24,7 +23,7 @@ import cn.ittiger.util.ValueUtil;
  *
  * @auther: laohu
  */
-public class AddFriendActivity extends BaseActivity {
+public class AddFriendActivity extends IMBaseActivity {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.toolbarTitle)

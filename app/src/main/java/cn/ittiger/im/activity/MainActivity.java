@@ -2,7 +2,6 @@ package cn.ittiger.im.activity;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentTabHost;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.ittiger.base.BaseActivity;
 import cn.ittiger.im.R;
 import cn.ittiger.im.fragment.ContactFragment;
 import cn.ittiger.im.fragment.MessageFragment;
@@ -33,7 +31,7 @@ import cn.ittiger.util.ActivityUtil;
  * @author: laohu on 2016/12/24
  * @site: http://ittiger.cn
  */
-public class MainActivity extends BaseActivity
+public class MainActivity extends IMBaseActivity
         implements NavigationView.OnNavigationItemSelectedListener,
         TabHost.OnTabChangeListener, Toolbar.OnMenuItemClickListener {
     static {
@@ -69,7 +67,6 @@ public class MainActivity extends BaseActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        initNavigationBarColor();
         initToolbar();
         initTabHost();
     }
@@ -88,13 +85,6 @@ public class MainActivity extends BaseActivity
         mToolbar.setNavigationIcon(R.drawable.ic_toolbar_avatar);
         mToolbar.setOnMenuItemClickListener(this);
         mDrawerLayout.addDrawerListener(new NavDrawerListener());
-    }
-
-    private void initNavigationBarColor() {
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
-        }
     }
 
     /**

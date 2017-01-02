@@ -4,10 +4,15 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-    <cn.ittiger.indexlist.IndexStickyView
-        android:id="@+id/indexStickyView"
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/contactRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:sideBarBackgroundColor="@color/transparency">
-    </cn.ittiger.indexlist.IndexStickyView>
+        android:layout_height="match_parent">
+        <cn.ittiger.indexlist.IndexStickyView
+            android:id="@+id/indexStickyView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:sideBarBackgroundColor="@color/transparency">
+        </cn.ittiger.indexlist.IndexStickyView>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>

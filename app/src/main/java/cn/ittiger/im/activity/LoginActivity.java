@@ -14,13 +14,11 @@ import cn.ittiger.util.UIUtil;
 import cn.ittiger.util.ValueUtil;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatCheckBox;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -33,7 +31,7 @@ import android.widget.Button;
  * @auther: hyl
  * @time: 2015-10-23下午1:36:59
  */
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends IMBaseActivity {
     /**
      * 登陆用户
      */
