@@ -54,8 +54,7 @@ public class AboutActivity extends BaseActivity {
         } else {
             url = "https://github.com/huyongli/TigerIM";
         }
-        Intent intent = new Intent();
-        intent.setAction("android.intent.action.VIEW");
+        Intent intent = new Intent(mActivity, WebPageActivity.class);
         Uri content_url = Uri.parse(url);
         intent.setData(content_url);
         ActivityUtil.startActivity(mActivity, intent);

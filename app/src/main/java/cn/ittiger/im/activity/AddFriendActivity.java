@@ -69,10 +69,10 @@ public class AddFriendActivity extends IMBaseActivity {
             return;
         }
         String nickname = mNickNameEditText.getText().toString();
-        if (ValueUtil.isEmpty(nickname)) {
-            mNickNameTextInput.setError(getString(R.string.error_input_friend_username));
-            return;
-        }
+//        if (ValueUtil.isEmpty(nickname)) {
+//            mNickNameTextInput.setError(getString(R.string.error_input_friend_username));
+//            return;
+//        }
         boolean flag = SmackManager.getInstance().addFriend(username, nickname, null);
         if (flag) {
             UIUtil.showToast(this, "好友添加成功");

@@ -37,8 +37,10 @@ public class ContactItemDecoration extends RecyclerView.ItemDecoration {
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
 
         int position = parent.getChildAdapterPosition(view);
-        IndexStickyEntity entity = ((IndexStickyViewAdapter)parent.getAdapter()).getItem(position);
-        if(entity.getItemType() != ItemType.ITEM_TYPE_INDEX) {
+        IndexStickyViewAdapter adapter = (IndexStickyViewAdapter)parent.getAdapter();
+        IndexStickyEntity entity = adapter.getItem(position);
+        if(entity.getItemType() != ItemType.ITEM_TYPE_INDEX && position < (adapter.getItemCount() - 1)
+                && adapter.getItem(position + 1).getItemType() != ItemType.ITEM_TYPE_INDEX) {
             outRect.set(0, 0, 0, mSize);
         }
     }
@@ -52,11 +54,15 @@ public class ContactItemDecoration extends RecyclerView.ItemDecoration {
         int left = parent.getPaddingLeft() + mLeftMargin;
         int right = parent.getWidth() - parent.getPaddingRight() - mRightMargin;
         final int childCount = parent.getChildCount();
+        IndexStickyViewAdapter adapter = (IndexStickyViewAdapter)parent.getAdapter();
+        IndexStickyEntity entity;
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
             int position = parent.getChildAdapterPosition(child);
-            IndexStickyEntity entity = ((IndexStickyViewAdapter)parent.getAdapter()).getItem(position);
-            if(entity.getItemType() != ItemType.ITEM_TYPE_INDEX) {
+            entity = adapter.getItem(position);
+            if(entity.getItemType() != ItemType.ITEM_TYPE_INDEX &&
+                    position < (adapter.getItemCount() - 1) &&
+                    adapter.getItem(position + 1).getItemType() != ItemType.ITEM_TYPE_INDEX) {
                 //获得child的布局信息
                 final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)child.getLayoutParams();
                 top = child.getBottom() + params.bottomMargin;

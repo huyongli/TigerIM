@@ -16,8 +16,8 @@
     <string name="text_add">添加</string>
 
     <string name="title_add_friend">添加好友</string>
-    <string name="hint_input_friend_username">好友用户名</string>
-    <string name="hint_input_friend_nickname">好友昵称</string>
+    <string name="hint_input_friend_username">*用户名</string>
+    <string name="hint_input_friend_nickname">昵称</string>
     <string name="error_input_friend_username">请输入好友用户名</string>
     <string name="error_input_friend_nickname">请输入好友昵称</string>
     
