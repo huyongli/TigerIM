@@ -1,6 +1,7 @@
 package cn.ittiger.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -9,27 +10,27 @@ import android.os.Bundle;
  */
 public class ActivityUtil {
 
-    public static void startActivity(Activity activity, Intent intent) {
+    public static void startActivity(Context context, Intent intent) {
 
-        activity.startActivity(intent);
+        context.startActivity(intent);
     }
 
-    public static void startActivity(Activity activity, Class claxx) {
+    public static void startActivity(Context context, Class claxx) {
 
-        startActivity(activity, new Intent(activity, claxx));
+        startActivity(context, new Intent(context, claxx));
     }
 
-    public static void startActivity(Activity activity, Class claxx, Bundle bundle) {
+    public static void startActivity(Context context, Class claxx, Bundle bundle) {
 
-        Intent intent = new Intent(activity, claxx);
+        Intent intent = new Intent(context, claxx);
         intent.putExtras(bundle);
-        startActivity(activity, intent);
+        startActivity(context, intent);
     }
 
-    public static void skipActivity(Activity activity, Class claxx) {
+    public static void skipActivity(Context context, Class claxx) {
 
-        startActivity(activity, claxx);
-        finishActivity(activity);
+        startActivity(context, claxx);
+        finishActivity((Activity) context);
     }
 
     public static void finishActivity(Activity activity) {

@@ -49,7 +49,7 @@ public class UnCaughtCrashExceptionHandler implements UncaughtExceptionHandler {
         mContext = ctx;
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(this);
-        mLogPath = SdCardUtil.getFilesDir(mContext) + File.separator + "log";
+        mLogPath = SdCardUtil.getCacheDir(mContext) + File.separator + "log";
     }
 
     /**

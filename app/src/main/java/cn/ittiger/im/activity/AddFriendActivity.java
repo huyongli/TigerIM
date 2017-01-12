@@ -20,8 +20,8 @@ import cn.ittiger.util.ValueUtil;
 
 /**
  * 添加好友
- *
- * @auther: laohu
+ * @author: laohu on 2016/12/24
+ * @site: http://ittiger.cn
  */
 public class AddFriendActivity extends IMBaseActivity {
     @BindView(R.id.toolbar)

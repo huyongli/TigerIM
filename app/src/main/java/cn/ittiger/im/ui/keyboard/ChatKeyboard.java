@@ -111,9 +111,8 @@ public class ChatKeyboard extends RelativeLayout implements
     private void init(Context context) {
 
         this.context = context;
-        View root = View.inflate(context, R.layout.chat_key_board_layout, null);
-        this.addView(root);
-        ButterKnife.bind(root, this);
+        inflate(context, R.layout.chat_key_board_layout, this);
+        ButterKnife.bind(this, this);
     }
 
     @Override
@@ -367,25 +366,25 @@ public class ChatKeyboard extends RelativeLayout implements
          *
          * @param message
          */
-        public void send(String message);
+        void send(String message);
 
         /**
          * 录音完成，发送语音文件，UI线程
          *
          * @param audioFile
          */
-        public void sendVoice(File audioFile);
+        void sendVoice(File audioFile);
 
         /**
          * 开始录音，UI线程
          */
-        public void recordStart();
+        void recordStart();
 
         /**
          * 点击触发的功能
          *
          * @param index 从1开始，按照展示顺序进行索引
          */
-        public void functionClick(int index);
+        void functionClick(int index);
     }
 }

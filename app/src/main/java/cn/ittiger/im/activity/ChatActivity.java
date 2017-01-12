@@ -21,38 +21,43 @@ import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import butterknife.BindView;
-import cn.ittiger.base.BaseActivity;
+import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.ChatAdapter;
+import cn.ittiger.im.bean.ChatMessage;
+import cn.ittiger.im.bean.MessageType;
+import cn.ittiger.im.util.ImageLoaderHelper;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.ui.keyboard.ChatKeyboard;
 import cn.ittiger.im.ui.keyboard.ChatKeyboard.ChatKeyboardOperateListener;
-import cn.ittiger.im.ui.TopTitleBar;
-import cn.ittiger.im.ui.TopTitleBar.LeftClickListener;
-import cn.ittiger.util.ActivityUtil;
+import cn.ittiger.im.util.IntentHelper;
 import cn.ittiger.util.BitmapUtil;
 import cn.ittiger.util.DateUtil;
 import cn.ittiger.util.FileUtil;
 import cn.ittiger.util.SdCardUtil;
 import cn.ittiger.util.ValueUtil;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-
-public class ChatActivity extends BaseActivity implements ChatKeyboardOperateListener {
-    /**
-     * 标题头部
-     */
-    @BindView(R.id.ttb_chat_title)
-    TopTitleBar mTitleBar;
+/**
+ * 单聊窗口
+ * @author: laohu on 2017/1/12
+ * @site: http://ittiger.cn
+ */
+public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateListener {
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.toolbarTitle)
+    TextView mToolbarTitle;
     /**
      * 聊天内容展示列表
      */
@@ -63,27 +68,22 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
      */
     @BindView(R.id.ckb_chat_board)
     ChatKeyboard mChatKyboard;
-
     /**
      * 聊天对象用户Jid
      */
-    private String friendRosterUser;
+    private String mFriendUser;
     /**
      * 聊天对象昵称
      */
-    private String friendNickname;
+    private String mFriendName;
     /**
      * 聊天窗口对象
      */
-    private Chat chat;
+    private Chat mChat;
     /**
      * 当前自己昵称
      */
-    private String currNickname;
-    /**
-     * ImageLoader图片加载参数配置
-     */
-    private DisplayImageOptions options;
+    private String mMeName;
     /**
      * 聊天记录展示适配器
      */
@@ -92,55 +92,52 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
     /**
      * 文件发送对象
      */
-    private String sendUser;
+    private String mFileSendJid;
     /**
      * 文件存储目录
      */
-    private String fileDir;
+    private String mFileDir;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        mFriendUser = getIntent().getStringExtra(IntentHelper.KEY_CHAT_USER);
+        mFriendName = getIntent().getStringExtra(IntentHelper.KEY_CHAT_NAME);
+        mMeName = SmackManager.getInstance().getAccountName();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_layout);
-        mChatKyboard.setChatKeyboardOperateListener(this);
-        friendRosterUser = getIntent().getStringExtra("user");
-        friendNickname = getIntent().getStringExtra("nickname");
-        currNickname = SmackManager.getInstance().getAccountName();
-
-        mTitleBar.setTitle(friendNickname);
-        mTitleBar.setLeftClickListener(new LeftClickListener() {
+        ButterKnife.bind(this);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);//不显示ToolBar的标题
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbarTitle.setText(mFriendName);
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
-            public void onLeftClick() {
+            public void onClick(View v) {
 
-                ActivityUtil.finishActivity(ChatActivity.this);
+                onBackPressed();
             }
         });
+        mChatKyboard.setChatKeyboardOperateListener(this);
 
-        String chatJid = SmackManager.getInstance().getChatJidByUser(friendRosterUser);
-        sendUser = SmackManager.getInstance().getFileTransferJidChatJid(chatJid);
-        SmackManager.getInstance().getChatManager().addChatListener(chatManagerListener);
-        chat = SmackManager.getInstance().createChat(chatJid);
+        String chatJid = SmackManager.getInstance().getChatJidByUser(mFriendUser);
+        mFileSendJid = SmackManager.getInstance().getFileTransferJidChatJid(chatJid);
+        SmackManager.getInstance().getChatManager().addChatListener(mChatManagerListener);
+        mChat = SmackManager.getInstance().createChat(chatJid);
 
-        options = new DisplayImageOptions.Builder()
-                .cacheOnDisk(true)//图片下载后是否缓存到SDCard
-                .cacheInMemory(true)//图片下载后是否缓存到内存
-                .bitmapConfig(Config.RGB_565)//图片解码类型，推荐此种方式，减少OOM
-                .considerExifParams(true)//是否考虑JPEG图像EXIF参数（旋转，翻转）
-                .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
-                .showImageOnFail(R.drawable.pic_default)//图片加载失败后显示的图片
-                .showImageOnLoading(R.drawable.pic_default)
-                .build();
+        mFileDir = SdCardUtil.getCacheDir(this);
+        addReceiveFileListener();
 
-        fileDir = SdCardUtil.getCacheDir(this);
-        receiveFile();
-
-        List<cn.ittiger.im.bean.Message> list = new ArrayList<>();
-        mAdapter = new ChatAdapter(this, options, list);
+        List<ChatMessage> list = new ArrayList<>();
+        mAdapter = new ChatAdapter(this, ImageLoaderHelper.getChatImageOptions(), list);
         mListView.setAdapter(mAdapter);
     }
 
-    private ChatManagerListener chatManagerListener = new ChatManagerListener() {
+    /**
+     * 消息接收处理器
+     */
+    private ChatManagerListener mChatManagerListener = new ChatManagerListener() {
         @Override
         public void chatCreated(Chat chat, boolean createdLocally) {
 
@@ -148,7 +145,7 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
                 @Override
                 public void processMessage(Chat chat, Message message) {
                     //接收到消息Message之后进行消息展示处理，这个地方可以处理所有人的消息
-                    cn.ittiger.im.bean.Message msg = new cn.ittiger.im.bean.Message(cn.ittiger.im.bean.Message.MESSAGE_TYPE_TEXT, friendNickname, DateUtil.formatDatetime(new Date()), false);
+                    ChatMessage msg = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT, mFriendName, DateUtil.formatDatetime(new Date()), false);
                     msg.setContent(message.getBody());
                     handler.obtainMessage(1, msg).sendToTarget();
                 }
@@ -171,8 +168,8 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
             public void run() {
 
                 try {
-                    chat.sendMessage(message);
-                    cn.ittiger.im.bean.Message msg = new cn.ittiger.im.bean.Message(cn.ittiger.im.bean.Message.MESSAGE_TYPE_TEXT, currNickname, DateUtil.formatDatetime(new Date()), true);
+                    mChat.sendMessage(message);
+                    ChatMessage msg = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT, mMeName, DateUtil.formatDatetime(new Date()), true);
                     msg.setContent(message);
                     handler.obtainMessage(1, msg).sendToTarget();
                 } catch (NotConnectedException e) {
@@ -193,10 +190,10 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
 
             switch (msg.what) {
                 case 1:
-                    mAdapter.add((cn.ittiger.im.bean.Message) msg.obj);
+                    mAdapter.add((ChatMessage) msg.obj);
                     break;
                 case 2:
-                    mAdapter.update((cn.ittiger.im.bean.Message) msg.obj);
+                    mAdapter.update((ChatMessage) msg.obj);
                     break;
             }
         }
@@ -209,12 +206,12 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
      *
      * @param file
      */
-    public void sendFile(final File file, int type) {
+    public void sendFile(final File file, MessageType messageType) {
 
-        final OutgoingFileTransfer transfer = SmackManager.getInstance().getSendFileTransfer(sendUser);
+        final OutgoingFileTransfer transfer = SmackManager.getInstance().getSendFileTransfer(mFileSendJid);
         try {
-            transfer.sendFile(file, String.valueOf(type));
-            checkTransferStatus(transfer, file, type, true);
+            transfer.sendFile(file, String.valueOf(messageType.value()));
+            checkTransferStatus(transfer, file, messageType, true);
         } catch (SmackException e) {
             e.printStackTrace();
         }
@@ -223,7 +220,7 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
     /**
      * 接收文件
      */
-    public void receiveFile() {
+    public void addReceiveFileListener() {
 
         SmackManager.getInstance().addFileTransferListener(new FileTransferListener() {
             @Override
@@ -232,9 +229,9 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
                 IncomingFileTransfer transfer = request.accept();
                 try {
                     String type = request.getDescription();
-                    File file = new File(fileDir, request.getFileName());
+                    File file = new File(mFileDir, request.getFileName());
                     transfer.recieveFile(file);
-                    checkTransferStatus(transfer, file, Integer.parseInt(type), false);
+                    checkTransferStatus(transfer, file, MessageType.getMessageType(Integer.parseInt(type)), false);
                 } catch (SmackException | IOException e) {
                     e.printStackTrace();
                 }
@@ -246,18 +243,18 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
      * 检查发送文件、接收文件的状态
      *
      * @param transfer
-     * @param file     发送或接收的文件
-     * @param type     文件类型，语音或图片
-     * @param isSend   是否为发送
+     * @param file              发送或接收的文件
+     * @param messageType       文件类型，语音或图片
+     * @param isSend            是否为发送
      */
-    public void checkTransferStatus(final FileTransfer transfer, final File file, final int type, final boolean isSend) {
+    public void checkTransferStatus(final FileTransfer transfer, final File file, final MessageType messageType, final boolean isSend) {
 
-        String username = friendNickname;
+        String username = mFriendName;
         if (isSend) {
-            username = currNickname;
+            username = mMeName;
         }
         final String name = username;
-        final cn.ittiger.im.bean.Message msg = new cn.ittiger.im.bean.Message(type, name, DateUtil.formatDatetime(new Date()), isSend);
+        final ChatMessage msg = new ChatMessage(messageType, name, DateUtil.formatDatetime(new Date()), isSend);
         msg.setFilePath(file.getAbsolutePath());
         msg.setLoadState(0);
         new Thread() {
@@ -298,7 +295,7 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
     protected void onDestroy() {
 
         super.onDestroy();
-        SmackManager.getInstance().getChatManager().removeChatListener(chatManagerListener);
+        SmackManager.getInstance().getChatManager().removeChatListener(mChatManagerListener);
     }
 
     /**
@@ -309,7 +306,7 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
     @Override
     public void sendVoice(File audioFile) {
 
-        sendFile(audioFile, cn.ittiger.im.bean.Message.MESSAGE_TYPE_VOICE);
+        sendFile(audioFile, MessageType.MESSAGE_TYPE_VOICE);
     }
 
     @Override
@@ -357,16 +354,16 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
         }
     }
 
-    private String picPath = "";
+    private String mPicPath = "";
 
     /**
      * 拍照
      */
     public void takePhoto() {
 
-        picPath = fileDir + "/" + DateUtil.formatDatetime(new Date(), "yyyyMMddHHmmss") + ".png";
+        mPicPath = mFileDir + "/" + DateUtil.formatDatetime(new Date(), "yyyyMMddHHmmss") + ".png";
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(picPath)));
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(mPicPath)));
         startActivityForResult(intent, REQUEST_CODE_TAKE_PHOTO);
     }
 
@@ -381,7 +378,7 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
                 Uri dataUri = data.getData();
                 if (dataUri != null) {
                     File file = FileUtil.uri2File(this, dataUri);
-                    sendFile(file, cn.ittiger.im.bean.Message.MESSAGE_TYPE_IMAGE);
+                    sendFile(file, MessageType.MESSAGE_TYPE_IMAGE);
                 }
             }
         }
@@ -392,12 +389,12 @@ public class ChatActivity extends BaseActivity implements ChatKeyboardOperateLis
      */
     public void takePhotoSuccess() {
 
-        Bitmap bitmap = BitmapUtil.createBitmapWithFile(picPath, 640);
-        BitmapUtil.createPictureWithBitmap(picPath, bitmap, 80);
+        Bitmap bitmap = BitmapUtil.createBitmapWithFile(mPicPath, 640);
+        BitmapUtil.createPictureWithBitmap(mPicPath, bitmap, 80);
         if (!bitmap.isRecycled()) {
             bitmap.recycle();
             bitmap = null;
         }
-        sendFile(new File(picPath), cn.ittiger.im.bean.Message.MESSAGE_TYPE_IMAGE);
+        sendFile(new File(mPicPath), MessageType.MESSAGE_TYPE_IMAGE);
     }
 }

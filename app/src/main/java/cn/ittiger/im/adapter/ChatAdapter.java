@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.BaseViewAdapter.AbsViewHolder;
-import cn.ittiger.im.bean.Message;
+import cn.ittiger.im.bean.ChatMessage;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -46,14 +46,14 @@ public class ChatAdapter extends BaseAdapter {
 	/**
 	 * 聊天数据
 	 */
-	private List<Message> list;
+	private List<ChatMessage> list;
 	/**
 	 * 音频播放器
 	 */
 	private MediaPlayer mediaPlayer;
 	
 	public ChatAdapter(Activity context, DisplayImageOptions options,
-			List<Message> list) {
+			List<ChatMessage> list) {
 		super();
 		this.context = context;
 		this.options = options;
@@ -66,7 +66,7 @@ public class ChatAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public Message getItem(int position) {
+	public ChatMessage getItem(int position) {
 		return list.get(position);
 	}
 
@@ -85,7 +85,7 @@ public class ChatAdapter extends BaseAdapter {
         return 2;
     }
     
-    public void update(Message message) {
+    public void update(ChatMessage message) {
     	int idx = list.indexOf(message);
     	if(idx < 0) {
     		list.add(message);
@@ -95,14 +95,14 @@ public class ChatAdapter extends BaseAdapter {
     	notifyDataSetChanged();
     }
 	
-	public void add(Message message) {
+	public void add(ChatMessage message) {
 		list.add(message);
 		notifyDataSetChanged();
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		final Message message = list.get(position);
+		final ChatMessage message = list.get(position);
 		final ChatViewHolder viewHolder;
 		if(convertView == null) {
 			viewHolder = new ChatViewHolder();
@@ -126,13 +126,13 @@ public class ChatAdapter extends BaseAdapter {
 		viewHolder.chatUsername.setText(message.getUsername());
 		viewHolder.chatContentTime.setText(message.getDatetime());
 		setMessageViewVisible(message.getType(), viewHolder);
-		if(message.getType() == Message.MESSAGE_TYPE_TEXT) {//文本消息
+		if(message.getType() == ChatMessage.MESSAGE_TYPE_TEXT) {//文本消息
 			viewHolder.chatContentText.setText(message.getContent());
-		} else if(message.getType() == Message.MESSAGE_TYPE_IMAGE) {//图片消息
+		} else if(message.getType() == ChatMessage.MESSAGE_TYPE_IMAGE) {//图片消息
 			String url = "file://" + message.getFilePath();
 			ImageLoader.getInstance().displayImage(url, viewHolder.chatContentImage, options, new SimpleImageLoadingListener());
 			showLoading(viewHolder, message);
-		} else if(message.getType() == Message.MESSAGE_TYPE_VOICE) {//语音消息
+		} else if(message.getType() == ChatMessage.MESSAGE_TYPE_VOICE) {//语音消息
 			viewHolder.chatContentVoice.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -144,7 +144,7 @@ public class ChatAdapter extends BaseAdapter {
 		return convertView;
 	}
 	
-	private void showLoading(ChatViewHolder viewHolder, Message message) {
+	private void showLoading(ChatViewHolder viewHolder, ChatMessage message) {
 		switch(message.getLoadState()) {
 		case 0://加载开始
 			viewHolder.chatContentLoading.setBackgroundResource(R.drawable.chat_file_content_loading_anim);
@@ -172,15 +172,15 @@ public class ChatAdapter extends BaseAdapter {
 	 * @param viewHolder
 	 */
 	private void setMessageViewVisible(int type, ChatViewHolder viewHolder) {
-		if(type == Message.MESSAGE_TYPE_TEXT) {//文本消息
+		if(type == ChatMessage.MESSAGE_TYPE_TEXT) {//文本消息
 			viewHolder.chatContentText.setVisibility(View.VISIBLE);
 			viewHolder.chatContentImage.setVisibility(View.GONE);
 			viewHolder.chatContentVoice.setVisibility(View.GONE);
-		} else if(type == Message.MESSAGE_TYPE_IMAGE) {//图片消息
+		} else if(type == ChatMessage.MESSAGE_TYPE_IMAGE) {//图片消息
 			viewHolder.chatContentText.setVisibility(View.GONE);
 			viewHolder.chatContentImage.setVisibility(View.VISIBLE);
 			viewHolder.chatContentVoice.setVisibility(View.GONE);
-		} else if(type == Message.MESSAGE_TYPE_VOICE) {//语音消息
+		} else if(type == ChatMessage.MESSAGE_TYPE_VOICE) {//语音消息
 			viewHolder.chatContentText.setVisibility(View.GONE);
 			viewHolder.chatContentImage.setVisibility(View.GONE);
 			viewHolder.chatContentVoice.setVisibility(View.VISIBLE);
@@ -192,7 +192,7 @@ public class ChatAdapter extends BaseAdapter {
 	 * @param iv
 	 * @param message
 	 */
-	private void playVoice(final ImageView iv, final Message message) {
+	private void playVoice(final ImageView iv, final ChatMessage message) {
 		if(message.isSend()) {
 			iv.setBackgroundResource(R.anim.anim_chat_voice_right);
 		} else {

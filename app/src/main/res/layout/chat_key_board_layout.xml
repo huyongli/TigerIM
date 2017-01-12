@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -119,9 +119,9 @@
             android:id="@+id/ll_chat_more_images"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:layout_marginRight="@dimen/dimen_10"
+            android:layout_marginTop="@dimen/dimen_10"
             android:clickable="true"
             android:focusable="false"
             android:orientation="vertical" >
@@ -135,7 +135,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/dimen_5"
                 android:text="图片" />
         </LinearLayout>
 
@@ -143,9 +143,9 @@
             android:id="@+id/ll_chat_more_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginLeft="@dimen/dimen_10"
+            android:layout_marginRight="@dimen/dimen_10"
+            android:layout_marginTop="@dimen/dimen_10"
             android:layout_toRightOf="@id/ll_chat_more_images"
             android:clickable="true"
             android:focusable="false"
@@ -160,7 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="@dimen/dimen_5"
                 android:text="拍照" />
         </LinearLayout>
     </RelativeLayout>

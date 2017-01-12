@@ -9,6 +9,7 @@ import cn.ittiger.im.adapter.ContactItemDecoration;
 import cn.ittiger.im.adapter.ContactViewHolder;
 import cn.ittiger.im.bean.ContactEntity;
 import cn.ittiger.im.bean.ContactMenuEntity;
+import cn.ittiger.im.ui.ChatDialog;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.indexlist.IndexStickyView;
 import cn.ittiger.indexlist.adapter.IndexHeaderFooterAdapter;
@@ -50,7 +51,7 @@ public class ContactFragment extends BaseFragment {
 
         View view = inflater.inflate(R.layout.fragment_contact, null);
         ButterKnife.bind(this, view);
-
+        initView();
         return view;
     }
 
@@ -61,6 +62,7 @@ public class ContactFragment extends BaseFragment {
             @Override
             public void onRefresh() {
 
+                refreshData();
             }
         });
     }
@@ -104,6 +106,8 @@ public class ContactFragment extends BaseFragment {
                     mAdapter.setOnItemClickListener(mContactItemClickListener);
                     mIndexStickyView.setAdapter(mAdapter);
                     mIndexStickyView.addIndexHeaderAdapter(getHeaderMenuAdapter());
+                } else {
+                    mAdapter.reset(contacts);
                 }
             }
         });
@@ -137,13 +141,20 @@ public class ContactFragment extends BaseFragment {
     }
 
     OnItemClickListener<ContactEntity> mContactItemClickListener = new OnItemClickListener<ContactEntity>() {
+        ChatDialog mDialog;
+
         @Override
         public void onItemClick(View childView, int position, ContactEntity item) {
 
+            if(mDialog == null) {
+                mDialog = new ChatDialog(mContext);
+            }
+            mDialog.show(item);
         }
     };
 
     OnItemClickListener<ContactMenuEntity> mContactMenuItemClickListener = new OnItemClickListener<ContactMenuEntity>() {
+
         @Override
         public void onItemClick(View childView, int position, ContactMenuEntity item) {
 
