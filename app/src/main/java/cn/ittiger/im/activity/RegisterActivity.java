@@ -4,12 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
+import android.support.v7.widget.AppCompatEditText;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.ittiger.base.BaseActivity;
 import cn.ittiger.im.R;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.ui.ClearEditText;
@@ -17,6 +21,12 @@ import cn.ittiger.im.ui.TopTitleBar;
 import cn.ittiger.util.ActivityUtil;
 import cn.ittiger.util.UIUtil;
 import cn.ittiger.util.ValueUtil;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * 注册
@@ -24,32 +34,36 @@ import cn.ittiger.util.ValueUtil;
  * @auther: hyl
  * @time: 2015-10-28上午10:52:49
  */
-public class RegisterActivity extends BaseActivity {
-    /**
-     * 头部
-     */
-    @BindView(R.id.ttb_register_title)
-    TopTitleBar mTitleBar;
-    /**
-     * 用户名
-     */
-    @BindView(R.id.cet_register_username)
-    ClearEditText mEtUsername;
-    /**
-     * 昵称
-     */
-    @BindView(R.id.cet_register_nickname)
-    ClearEditText mEtNickname;
-    /**
-     * 密码
-     */
-    @BindView(R.id.cet_register_password)
-    ClearEditText mEtPassword;
-    /**
-     * 重复密码
-     */
-    @BindView(R.id.cet_register_repassword)
-    ClearEditText mEtRepassword;
+public class RegisterActivity extends IMBaseActivity {
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.toolbarTitle)
+    TextView mToolbarTitle;
+
+    //用户名
+    @BindView(R.id.til_username)
+    TextInputLayout mUserTextInput;
+    @BindView(R.id.acet_username)
+    AppCompatEditText mUserEditText;
+
+    //昵称
+    @BindView(R.id.til_nickname)
+    TextInputLayout mNicknameTextInput;
+    @BindView(R.id.acet_nickname)
+    AppCompatEditText mNicknameEditText;
+
+    //密码
+    @BindView(R.id.til_password)
+    TextInputLayout mPasswordTextInput;
+    @BindView(R.id.acet_password)
+    AppCompatEditText mPasswordEditText;
+
+    //重复密码
+    @BindView(R.id.til_repassword)
+    TextInputLayout mRePasswordTextInput;
+    @BindView(R.id.acet_repassword)
+    AppCompatEditText mRePasswordEditText;
+
     /**
      * 注册
      */
@@ -66,71 +80,78 @@ public class RegisterActivity extends BaseActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_layout);
-        mTitleBar.setLeftClickListener(new TopTitleBar.LeftClickListener() {
-            @Override
-            public void onLeftClick() {
+        ButterKnife.bind(this);
 
-                ActivityUtil.finishActivity(RegisterActivity.this);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);//不显示ToolBar的标题
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        mToolbarTitle.setText(getString(R.string.title_register));
+        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                onBackPressed();
             }
         });
-        mTitleBar.setTitle("用户注册");
     }
 
     @OnClick(R.id.btn_register_ok)
     public void onRegisterOk(View v) {
 
-        final String username = mEtUsername.getText().toString();
-        final String nickname = mEtNickname.getText().toString();
-        String password = mEtPassword.getText().toString();
-        final String repassword = mEtRepassword.getText().toString();
+        final String username = mUserEditText.getText().toString();
         if (ValueUtil.isEmpty(username)) {
-            mEtUsername.setError("用户名不能为空");
+            mUserTextInput.setError(getString(R.string.error_register_input_username));
             return;
         }
+        final String nickname = mNicknameEditText.getText().toString();
         if (ValueUtil.isEmpty(nickname)) {
-            mEtNickname.setError("昵称不能为空");
+            mNicknameTextInput.setError(getString(R.string.error_register_input_nickname));
             return;
         }
+        String password = mPasswordEditText.getText().toString();
         if (ValueUtil.isEmpty(password)) {
-            mEtPassword.setError("密码不能为空");
+            mPasswordTextInput.setError(getString(R.string.error_register_input_password));
             return;
         }
+        final String repassword = mRePasswordEditText.getText().toString();
         if (ValueUtil.isEmpty(repassword)) {
-            mEtRepassword.setError("密码确认不能为空");
+            mRePasswordTextInput.setError(getString(R.string.error_register_input_repassword));
             return;
         }
         if (!password.equals(repassword)) {
-            mEtRepassword.setError("两次密码不相同，请重新确认");
-            mEtRepassword.setText("");
+            mRePasswordTextInput.setError(getString(R.string.error_register_input_password_not_equal));
+            mRePasswordEditText.setText("");
             return;
         }
-        new Thread() {
-            public void run() {
-
-                register(username, nickname, repassword);
-            }
-
-            ;
-        }.start();
+        register(username, nickname, repassword);
     }
 
-    public void register(String username, String nickname, String password) {
+    public void register(final String username, String nickname, final String password) {
 
-        Map<String, String> attributes = new HashMap<>();
+        final Map<String, String> attributes = new HashMap<>();
         attributes.put("name", nickname);
-        final boolean flag = SmackManager.getInstance().registerUser(username, password, attributes);
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
 
-                if (flag) {
-                    UIUtil.showToast(RegisterActivity.this, "注册成功");
-                    ActivityUtil.finishActivity(RegisterActivity.this);
-                } else {
-                    UIUtil.showToast(RegisterActivity.this, "注册失败");
+        Observable.just(attributes)
+            .subscribeOn(Schedulers.io())
+            .map(new Func1<Map<String,String>, Boolean>() {
+                @Override
+                public Boolean call(Map<String, String> attribute) {
+
+                    return SmackManager.getInstance().registerUser(username, password, attribute);
                 }
-            }
-        });
+            })
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Action1<Boolean>() {
+                @Override
+                public void call(Boolean aBoolean) {
+                    if (aBoolean) {
+                        UIUtil.showToast(RegisterActivity.this, getString(R.string.hint_register_success));
+                        ActivityUtil.finishActivity(RegisterActivity.this);
+                    } else {
+                        UIUtil.showToast(RegisterActivity.this, getString(R.string.hint_register_failure));
+                    }
+                }
+            });
     }
 
     @OnClick(R.id.btn_register_cancel)

@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/main_bg"
-    android:orientation="vertical" >
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:background="@drawable/main_bg"
+              android:orientation="vertical">
 
-    <cn.ittiger.im.ui.TopTitleBar
-        android:id="@+id/ttb_register_title"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dimen_50" />
+    <include layout="@layout/toolbar_layout"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,83 +14,65 @@
         android:padding="@dimen/dimen_10"
         android:orientation="vertical" >
 
-        <LinearLayout
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            style="@style/TextInputLayout_Style"
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/TextInputLayout_Error_Msg_Style">
 
-            <TextView
-                android:layout_width="@dimen/dimen_80"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="用&#160;&#160;户&#160;&#160;名*：" />
-
-            <cn.ittiger.im.ui.ClearEditText
-                android:id="@+id/cet_register_username"
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/acet_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="输入用户名" >
-            </cn.ittiger.im.ui.ClearEditText>
-        </LinearLayout>
+                android:hint="@string/hint_input_username"/>
+        </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_nickname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            style="@style/TextInputLayout_Style"
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/TextInputLayout_Error_Msg_Style">
 
-            <TextView
-                android:layout_width="@dimen/dimen_80"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="昵&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;称*：" />
-
-            <cn.ittiger.im.ui.ClearEditText
-                android:id="@+id/cet_register_nickname"
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/acet_nickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="输入昵称" >
-            </cn.ittiger.im.ui.ClearEditText>
-        </LinearLayout>
+                android:hint="@string/hint_input_nickname"/>
+        </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            style="@style/TextInputLayout_Style"
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/TextInputLayout_Error_Msg_Style">
 
-            <TextView
-                android:layout_width="@dimen/dimen_80"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="密&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;码*：" />
-
-            <cn.ittiger.im.ui.ClearEditText
-                android:id="@+id/cet_register_password"
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/acet_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="输入密码"
-                android:inputType="textPassword" >
-            </cn.ittiger.im.ui.ClearEditText>
-        </LinearLayout>
+                android:hint="@string/hint_input_password"/>
+        </android.support.design.widget.TextInputLayout>
 
-        <LinearLayout
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/til_repassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            style="@style/TextInputLayout_Style"
+            app:errorEnabled="true"
+            app:errorTextAppearance="@style/TextInputLayout_Error_Msg_Style">
 
-            <TextView
-                android:layout_width="@dimen/dimen_80"
-                android:layout_height="wrap_content"
-                android:gravity="right"
-                android:text="密码确认*：" />
-
-            <cn.ittiger.im.ui.ClearEditText
-                android:id="@+id/cet_register_repassword"
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/acet_repassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="再次输入密码"
-                android:inputType="textPassword" >
-            </cn.ittiger.im.ui.ClearEditText>
-        </LinearLayout>
+                android:hint="@string/hint_input_repassword"/>
+        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -109,6 +89,7 @@
                 android:layout_marginRight="@dimen/dimen_20"
                 android:background="@drawable/main_button_bg"
                 android:textColor="@color/white"
+                android:textSize="@dimen/sp_18"
                 android:text="取消" />
 
             <Button
@@ -118,6 +99,7 @@
                 android:layout_gravity="right"
                 android:layout_marginLeft="@dimen/dimen_20"
                 android:background="@drawable/main_button_bg"
+                android:textSize="@dimen/sp_18"
                 android:textColor="@color/white"
                 android:text="注册" />
         </LinearLayout>

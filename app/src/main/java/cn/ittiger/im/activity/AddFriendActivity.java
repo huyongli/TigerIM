@@ -76,7 +76,6 @@ public class AddFriendActivity extends IMBaseActivity {
         boolean flag = SmackManager.getInstance().addFriend(username, nickname, null);
         if (flag) {
             UIUtil.showToast(this, "好友添加成功");
-            FriendListActivity.isNeedRefresh = true;
             ActivityUtil.finishActivity(this);
         } else {
             UIUtil.showToast(this, "好友添加失败");

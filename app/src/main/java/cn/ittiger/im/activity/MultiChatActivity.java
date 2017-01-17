@@ -14,7 +14,6 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.ittiger.base.BaseActivity;
 import cn.ittiger.im.R;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.util.UIUtil;
@@ -26,7 +25,7 @@ import cn.ittiger.util.ValueUtil;
  * @auther: hyl
  * @time: 2015-10-27上午11:05:33
  */
-public class MultiChatActivity extends BaseActivity {
+public class MultiChatActivity extends IMBaseActivity {
     /**
      * 发送消息展示区
      */
@@ -53,7 +52,7 @@ public class MultiChatActivity extends BaseActivity {
     /**
      * 会议室名字
      */
-    private static final String ROOM_NAME = "chatroom";
+    private static final String ROOM_NAME = "chatRoom";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

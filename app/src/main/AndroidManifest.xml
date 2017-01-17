@@ -32,10 +32,6 @@
             android:screenOrientation="portrait">
         </activity>
         <activity
-            android:name=".activity.ChatActivity2"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name=".activity.MultiChatActivity"
             android:screenOrientation="portrait">
         </activity>
@@ -50,10 +46,6 @@
         </activity>
         <activity
             android:name=".activity.RegisterActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".activity.FriendListActivity"
             android:screenOrientation="portrait">
         </activity>
         <activity

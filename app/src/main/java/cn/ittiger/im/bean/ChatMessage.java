@@ -1,5 +1,8 @@
 package cn.ittiger.im.bean;
 
+import cn.ittiger.im.constant.FileLoadState;
+import cn.ittiger.im.constant.MessageType;
+
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -50,9 +53,9 @@ public class ChatMessage implements Serializable {
      */
     private String mFilePath;
     /**
-     * 文件加载状态,0:加载开始，1：加载成功，-1：加载失败
+     * 文件加载状态
      */
-    private int mLoadState = 0;
+    private FileLoadState mFileLoadState = FileLoadState.STATE_LOAD_START;
 
     public ChatMessage(MessageType type, String username, String datetime, boolean isSend) {
 
@@ -125,14 +128,14 @@ public class ChatMessage implements Serializable {
         mFilePath = filePath;
     }
 
-    public int getLoadState() {
+    public FileLoadState getFileLoadState() {
 
-        return mLoadState;
+        return mFileLoadState;
     }
 
-    public void setLoadState(int loadState) {
+    public void setFileLoadState(FileLoadState fileLoadState) {
 
-        mLoadState = loadState;
+        mFileLoadState = fileLoadState;
     }
 
     @Override

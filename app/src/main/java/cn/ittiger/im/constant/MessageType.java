@@ -1,4 +1,4 @@
-package cn.ittiger.im.bean;
+package cn.ittiger.im.constant;
 
 /**
  * 消息类型

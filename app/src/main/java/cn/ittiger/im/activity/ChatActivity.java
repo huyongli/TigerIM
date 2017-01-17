@@ -18,17 +18,15 @@ import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -36,7 +34,9 @@ import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.ChatAdapter;
 import cn.ittiger.im.bean.ChatMessage;
-import cn.ittiger.im.bean.MessageType;
+import cn.ittiger.im.constant.FileLoadState;
+import cn.ittiger.im.constant.MessageType;
+import cn.ittiger.im.ui.recyclerview.CommonRecyclerView;
 import cn.ittiger.im.util.ImageLoaderHelper;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.ui.keyboard.ChatKeyboard;
@@ -47,6 +47,14 @@ import cn.ittiger.util.DateUtil;
 import cn.ittiger.util.FileUtil;
 import cn.ittiger.util.SdCardUtil;
 import cn.ittiger.util.ValueUtil;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
+
+import com.orhanobut.logger.Logger;
 
 /**
  * 单聊窗口
@@ -61,8 +69,8 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
     /**
      * 聊天内容展示列表
      */
-    @BindView(R.id.lv_chat_content)
-    ListView mListView;
+    @BindView(R.id.chat_content)
+    CommonRecyclerView mChatMessageList;
     /**
      * 聊天输入控件
      */
@@ -85,18 +93,19 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
      */
     private String mMeName;
     /**
-     * 聊天记录展示适配器
-     */
-    private ChatAdapter mAdapter;
-
-    /**
      * 文件发送对象
      */
     private String mFileSendJid;
+
     /**
      * 文件存储目录
      */
     private String mFileDir;
+    /**
+     * 聊天记录展示适配器
+     */
+    private ChatAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,8 +139,10 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
         addReceiveFileListener();
 
         List<ChatMessage> list = new ArrayList<>();
-        mAdapter = new ChatAdapter(this, ImageLoaderHelper.getChatImageOptions(), list);
-        mListView.setAdapter(mAdapter);
+        mAdapter = new ChatAdapter(this, list);
+        mLayoutManager = new LinearLayoutManager(this);
+        mChatMessageList.setLayoutManager(mLayoutManager);
+        mChatMessageList.setAdapter(mAdapter);
     }
 
     /**
@@ -144,10 +155,19 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
             chat.addMessageListener(new ChatMessageListener() {
                 @Override
                 public void processMessage(Chat chat, Message message) {
+
                     //接收到消息Message之后进行消息展示处理，这个地方可以处理所有人的消息
                     ChatMessage msg = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT, mFriendName, DateUtil.formatDatetime(new Date()), false);
                     msg.setContent(message.getBody());
-                    handler.obtainMessage(1, msg).sendToTarget();
+                    Observable.just(msg)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action1<ChatMessage>() {
+                            @Override
+                            public void call(ChatMessage chatMessage) {
+
+                                addChatMessageView(chatMessage);
+                            }
+                        });
                 }
             });
         }
@@ -164,42 +184,31 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
         if (ValueUtil.isEmpty(message)) {
             return;
         }
-        new Thread() {
-            public void run() {
+        Observable.just(message)
+            .subscribeOn(Schedulers.io())
+            .map(new Func1<String, ChatMessage>() {
+                @Override
+                public ChatMessage call(String s) {
 
-                try {
-                    mChat.sendMessage(message);
-                    ChatMessage msg = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT, mMeName, DateUtil.formatDatetime(new Date()), true);
-                    msg.setContent(message);
-                    handler.obtainMessage(1, msg).sendToTarget();
-                } catch (NotConnectedException e) {
-                    e.printStackTrace();
+                    try {
+                        mChat.sendMessage(message);
+                        ChatMessage msg = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT, mMeName, DateUtil.formatDatetime(new Date()), true);
+                        msg.setContent(message);
+                        return msg;
+                    } catch (NotConnectedException e) {
+                        Logger.e(e, "send message failure");
+                        return null;
+                    }
                 }
-            }
-
-            ;
-        }.start();
-
+            })
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Action1<ChatMessage>() {
+                @Override
+                public void call(ChatMessage chatMessage) {
+                    addChatMessageView(chatMessage);
+                }
+            });
     }
-
-    ;
-
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        public void handleMessage(android.os.Message msg) {
-
-            switch (msg.what) {
-                case 1:
-                    mAdapter.add((ChatMessage) msg.obj);
-                    break;
-                case 2:
-                    mAdapter.update((ChatMessage) msg.obj);
-                    break;
-            }
-        }
-
-        ;
-    };
 
     /**
      * 发送文件
@@ -213,7 +222,7 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
             transfer.sendFile(file, String.valueOf(messageType.value()));
             checkTransferStatus(transfer, file, messageType, true);
         } catch (SmackException e) {
-            e.printStackTrace();
+            Logger.e(e, "send file failure");
         }
     }
 
@@ -233,7 +242,7 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
                     transfer.recieveFile(file);
                     checkTransferStatus(transfer, file, MessageType.getMessageType(Integer.parseInt(type)), false);
                 } catch (SmackException | IOException e) {
-                    e.printStackTrace();
+                    Logger.e(e, "receive file failure");
                 }
             }
         });
@@ -247,7 +256,7 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
      * @param messageType       文件类型，语音或图片
      * @param isSend            是否为发送
      */
-    public void checkTransferStatus(final FileTransfer transfer, final File file, final MessageType messageType, final boolean isSend) {
+    private void checkTransferStatus(final FileTransfer transfer, final File file, final MessageType messageType, final boolean isSend) {
 
         String username = mFriendName;
         if (isSend) {
@@ -256,13 +265,21 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
         final String name = username;
         final ChatMessage msg = new ChatMessage(messageType, name, DateUtil.formatDatetime(new Date()), isSend);
         msg.setFilePath(file.getAbsolutePath());
-        msg.setLoadState(0);
-        new Thread() {
-            public void run() {
 
-                if (transfer.getProgress() < 1) {//传输开始
-                    handler.obtainMessage(1, msg).sendToTarget();
-                }
+        Observable.create(new Observable.OnSubscribe<ChatMessage>(){
+            @Override
+            public void call(Subscriber<? super ChatMessage> subscriber) {
+                addChatMessageView(msg);
+                subscriber.onNext(msg);
+                subscriber.onCompleted();
+            }
+        })
+        .subscribeOn(AndroidSchedulers.mainThread())
+        .observeOn(Schedulers.io())
+        .map(new Func1<ChatMessage, ChatMessage>() {
+            @Override
+            public ChatMessage call(ChatMessage chatMessage) {
+
                 while (!transfer.isDone()) {
                     try {
                         Thread.sleep(200);
@@ -270,26 +287,37 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
                         e.printStackTrace();
                     }
                 }
-                if (FileTransfer.Status.complete.equals(transfer.getStatus())) {//传输完成
-                    msg.setLoadState(1);
-                    handler.obtainMessage(2, msg).sendToTarget();
-                } else if (FileTransfer.Status.cancelled.equals(transfer.getStatus())) {
+                return chatMessage;
+            }
+        })
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<ChatMessage>() {
+            @Override
+            public void call(ChatMessage chatMessage) {
+                if (FileTransfer.Status.complete.toString().equals(transfer.getStatus())) {//传输完成
+                    chatMessage.setFileLoadState(FileLoadState.STATE_LOAD_SUCCESS);
+                    mAdapter.update(chatMessage);
+                } else if (FileTransfer.Status.cancelled.toString().equals(transfer.getStatus())) {
                     //传输取消
-                    msg.setLoadState(-1);
-                    handler.obtainMessage(2, msg).sendToTarget();
-                } else if (FileTransfer.Status.error.equals(transfer.getStatus())) {
+                    chatMessage.setFileLoadState(FileLoadState.STATE_LOAD_ERROR);
+                    mAdapter.update(chatMessage);
+                } else if (FileTransfer.Status.error.toString().equals(transfer.getStatus())) {
                     //传输错误
-                    msg.setLoadState(-1);
-                    handler.obtainMessage(2, msg).sendToTarget();
-                } else if (FileTransfer.Status.refused.equals(transfer.getStatus())) {
+                    chatMessage.setFileLoadState(FileLoadState.STATE_LOAD_ERROR);
+                    mAdapter.update(chatMessage);
+                } else if (FileTransfer.Status.refused.toString().equals(transfer.getStatus())) {
                     //传输拒绝
-                    msg.setLoadState(-1);
-                    handler.obtainMessage(2, msg).sendToTarget();
+                    chatMessage.setFileLoadState(FileLoadState.STATE_LOAD_ERROR);
+                    mAdapter.update(chatMessage);
                 }
             }
+        });
+    }
 
-            ;
-        }.start();
+    private void addChatMessageView(ChatMessage message) {
+
+        mAdapter.add(message);
+        mLayoutManager.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     protected void onDestroy() {

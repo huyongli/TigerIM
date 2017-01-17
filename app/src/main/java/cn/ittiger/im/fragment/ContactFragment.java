@@ -162,8 +162,29 @@ public class ContactFragment extends BaseFragment {
     };
 
     @Override
+    public void onDestroyView() {
+
+        super.onDestroyView();
+        mAdapter = null;
+    }
+
+    @Override
     public String getTitle() {
 
         return getString(R.string.text_contact);
+    }
+
+    @Override
+    public void refreshFailed() {
+
+        super.refreshFailed();
+        mRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void refreshSuccess() {
+
+        super.refreshSuccess();
+        mRefreshLayout.setRefreshing(false);
     }
 }

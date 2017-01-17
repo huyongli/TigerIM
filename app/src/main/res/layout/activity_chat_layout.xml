@@ -14,17 +14,12 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ListView
-            android:id="@+id/lv_chat_content"
+        <cn.ittiger.im.ui.recyclerview.CommonRecyclerView
+            android:id="@+id/chat_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:cacheColorHint="@color/transparency"
-            android:divider="@null"
-            android:dividerHeight="@dimen/dimen_20"
-            android:listSelector="@color/transparency"
-            android:padding="@dimen/dimen_10"
-            android:transcriptMode="normal"/>
+            android:layout_margin="@dimen/dimen_10"/>
 
         <include layout="@layout/divider_horizontal_view"/>
 

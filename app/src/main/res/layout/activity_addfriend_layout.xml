@@ -28,7 +28,7 @@
                 android:id="@+id/acet_friend_user"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_input_friend_username"/>
+                android:hint="@string/hint_input_username"/>
         </android.support.design.widget.TextInputLayout>
 
 
@@ -44,7 +44,7 @@
                 android:id="@+id/acet_friend_nickname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_input_friend_nickname"/>
+                android:hint="@string/hint_input_nickname"/>
         </android.support.design.widget.TextInputLayout>
 
         <Button

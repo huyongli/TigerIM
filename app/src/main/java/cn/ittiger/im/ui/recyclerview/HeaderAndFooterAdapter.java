@@ -118,7 +118,7 @@ public abstract class HeaderAndFooterAdapter<T> extends RecyclerView.Adapter<Vie
         }
         int size = getItemDataCount();
         mList.add(item);
-        notifyItemInserted(size);
+        notifyDataSetChanged();
     }
 
     public void add(T item, int position) {
@@ -128,6 +128,20 @@ public abstract class HeaderAndFooterAdapter<T> extends RecyclerView.Adapter<Vie
         }
         mList.add(position, item);
         notifyItemInserted(position);
+    }
+
+    public void update(T item) {
+
+        if(mList == null) {
+            mList = new ArrayList<>();
+        }
+        int idx = mList.indexOf(item);
+        if (idx < 0) {
+            add(item);
+        } else {
+            mList.set(idx, item);
+            notifyItemChanged(idx);
+        }
     }
 
     public void update(T item , int position) {
