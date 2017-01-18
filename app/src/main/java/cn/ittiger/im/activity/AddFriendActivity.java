@@ -13,10 +13,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ittiger.im.R;
+import cn.ittiger.im.bean.ContactEntity;
+import cn.ittiger.im.event.ContactEvent;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.util.ActivityUtil;
 import cn.ittiger.util.UIUtil;
 import cn.ittiger.util.ValueUtil;
+import rx.Observable;
+import rx.Observer;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+
+import org.greenrobot.eventbus.EventBus;
+import org.jivesoftware.smack.roster.RosterEntry;
 
 /**
  * 添加好友
@@ -63,22 +73,51 @@ public class AddFriendActivity extends IMBaseActivity {
     @OnClick(R.id.btn_add_friend)
     public void onAddFriendClick(View v) {
 
-        String username = mUserEditText.getText().toString();
+        final String username = mUserEditText.getText().toString();
         if (ValueUtil.isEmpty(username)) {
             mUserTextInput.setError(getString(R.string.error_input_friend_username));
             return;
         }
-        String nickname = mNickNameEditText.getText().toString();
-//        if (ValueUtil.isEmpty(nickname)) {
-//            mNickNameTextInput.setError(getString(R.string.error_input_friend_username));
-//            return;
-//        }
-        boolean flag = SmackManager.getInstance().addFriend(username, nickname, null);
-        if (flag) {
-            UIUtil.showToast(this, "好友添加成功");
-            ActivityUtil.finishActivity(this);
-        } else {
-            UIUtil.showToast(this, "好友添加失败");
+        final String nickname = mNickNameEditText.getText().toString();
+        if (ValueUtil.isEmpty(nickname)) {
+            mNickNameTextInput.setError(getString(R.string.error_input_friend_username));
+            return;
         }
+        Observable.create(new Observable.OnSubscribe<RosterEntry>() {
+            @Override
+            public void call(Subscriber<? super RosterEntry> subscriber) {
+
+                boolean flag = SmackManager.getInstance().addFriend(username, nickname, null);
+                if(flag) {
+                    RosterEntry entry = SmackManager.getInstance().getFriend(username);
+                    subscriber.onNext(entry);
+                    subscriber.onCompleted();
+                } else {
+                    subscriber.onError(new IllegalArgumentException());
+                }
+            }
+        })
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Observer<RosterEntry>() {
+            @Override
+            public void onCompleted() {
+
+                UIUtil.showToast(mActivity, R.string.hint_add_friend_success);
+                ActivityUtil.finishActivity(mActivity);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+                UIUtil.showToast(mActivity, R.string.hint_add_friend_failure);
+            }
+
+            @Override
+            public void onNext(RosterEntry rosterEntry) {
+
+                EventBus.getDefault().post(new ContactEvent(new ContactEntity(rosterEntry)));
+            }
+        });
     }
 }

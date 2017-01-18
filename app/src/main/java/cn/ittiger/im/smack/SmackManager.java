@@ -104,6 +104,7 @@ public class SmackManager {
                     .setDebuggerEnabled(true).build();
 
             XMPPTCPConnection connection = new XMPPTCPConnection(config);
+            connection.addConnectionListener(new TigerConnectionListener());
             connection.connect();
             return connection;
         } catch (Exception e) {

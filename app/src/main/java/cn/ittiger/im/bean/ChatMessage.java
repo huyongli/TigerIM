@@ -2,8 +2,10 @@ package cn.ittiger.im.bean;
 
 import cn.ittiger.im.constant.FileLoadState;
 import cn.ittiger.im.constant.MessageType;
+import cn.ittiger.util.DateUtil;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.UUID;
 
 /**
@@ -13,7 +15,6 @@ import java.util.UUID;
  * @time: 2015-10-28下午5:16:13
  */
 public class ChatMessage implements Serializable {
-
     /**
      *
      */
@@ -22,12 +23,6 @@ public class ChatMessage implements Serializable {
      *
      */
     private String uuid;
-
-    public String getUuid() {
-
-        return uuid;
-    }
-
     /**
      * 消息内容
      */
@@ -37,9 +32,13 @@ public class ChatMessage implements Serializable {
      */
     private MessageType mMessageType;
     /**
-     * 消息发送人
+     * 消息发送人的用户名
      */
-    private String mSendUserName;
+    private String mSendUsername;
+    /**
+     * 消息发送人的昵称
+     */
+    private String mSendNickname;
     /**
      * 消息发送接收的时间
      */
@@ -57,15 +56,13 @@ public class ChatMessage implements Serializable {
      */
     private FileLoadState mFileLoadState = FileLoadState.STATE_LOAD_START;
 
-    public ChatMessage(MessageType type, String username, String datetime, boolean isSend) {
+    public ChatMessage(MessageType messageType, boolean isSend) {
 
-        super();
+        mMessageType = messageType;
+        mIsSend = isSend;
 
-        this.mMessageType = type;
-        this.mSendUserName = username;
-        this.mDatetime = datetime;
-        this.mIsSend = isSend;
         this.uuid = UUID.randomUUID().toString();
+        this.mDatetime = DateUtil.formatDatetime(new Date());
     }
 
     public String getContent() {
@@ -83,29 +80,29 @@ public class ChatMessage implements Serializable {
         return mMessageType;
     }
 
-    public void setMessageType(MessageType messageType) {
+    public String getSendUsername() {
 
-        mMessageType = messageType;
+        return mSendUsername;
     }
 
-    public String getSendUserName() {
+    public void setSendUsername(String sendUsername) {
 
-        return mSendUserName;
+        mSendUsername = sendUsername;
     }
 
-    public void setSendUserName(String sendUserName) {
+    public String getSendNickname() {
 
-        mSendUserName = sendUserName;
+        return mSendNickname;
+    }
+
+    public void setSendNickname(String sendNickname) {
+
+        mSendNickname = sendNickname;
     }
 
     public String getDatetime() {
 
         return mDatetime;
-    }
-
-    public void setDatetime(String datetime) {
-
-        mDatetime = datetime;
     }
 
     public boolean isSend() {

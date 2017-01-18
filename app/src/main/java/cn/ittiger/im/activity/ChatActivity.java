@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.chat.Chat;
@@ -37,11 +40,11 @@ import cn.ittiger.im.bean.ChatMessage;
 import cn.ittiger.im.constant.FileLoadState;
 import cn.ittiger.im.constant.MessageType;
 import cn.ittiger.im.ui.recyclerview.CommonRecyclerView;
-import cn.ittiger.im.util.ImageLoaderHelper;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.ui.keyboard.ChatKeyboard;
 import cn.ittiger.im.ui.keyboard.ChatKeyboard.ChatKeyboardOperateListener;
 import cn.ittiger.im.util.IntentHelper;
+import cn.ittiger.im.util.LoginHelper;
 import cn.ittiger.util.BitmapUtil;
 import cn.ittiger.util.DateUtil;
 import cn.ittiger.util.FileUtil;
@@ -93,6 +96,10 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
      */
     private String mMeName;
     /**
+     * 当前自己的用户名
+     */
+    private String mMeUser;
+    /**
      * 文件发送对象
      */
     private String mFileSendJid;
@@ -113,6 +120,7 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
         mFriendUser = getIntent().getStringExtra(IntentHelper.KEY_CHAT_USER);
         mFriendName = getIntent().getStringExtra(IntentHelper.KEY_CHAT_NAME);
         mMeName = SmackManager.getInstance().getAccountName();
+        mMeUser = LoginHelper.getUser().getUsername();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_layout);
@@ -132,7 +140,6 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
 
         String chatJid = SmackManager.getInstance().getChatJidByUser(mFriendUser);
         mFileSendJid = SmackManager.getInstance().getFileTransferJidChatJid(chatJid);
-        SmackManager.getInstance().getChatManager().addChatListener(mChatManagerListener);
         mChat = SmackManager.getInstance().createChat(chatJid);
 
         mFileDir = SdCardUtil.getCacheDir(this);
@@ -145,33 +152,26 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
         mChatMessageList.setAdapter(mAdapter);
     }
 
-    /**
-     * 消息接收处理器
-     */
-    private ChatManagerListener mChatManagerListener = new ChatManagerListener() {
-        @Override
-        public void chatCreated(Chat chat, boolean createdLocally) {
+    @Override
+    protected void onStart() {
 
-            chat.addMessageListener(new ChatMessageListener() {
-                @Override
-                public void processMessage(Chat chat, Message message) {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
-                    //接收到消息Message之后进行消息展示处理，这个地方可以处理所有人的消息
-                    ChatMessage msg = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT, mFriendName, DateUtil.formatDatetime(new Date()), false);
-                    msg.setContent(message.getBody());
-                    Observable.just(msg)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(new Action1<ChatMessage>() {
-                            @Override
-                            public void call(ChatMessage chatMessage) {
+    @Override
+    protected void onStop() {
 
-                                addChatMessageView(chatMessage);
-                            }
-                        });
-                }
-            });
-        }
-    };
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReceiveMessageEvent(ChatMessage message) {
+
+        message.setSendNickname(mFriendName);
+        addChatMessageView(message);
+    }
 
     /**
      * 发送消息
@@ -192,7 +192,9 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
 
                     try {
                         mChat.sendMessage(message);
-                        ChatMessage msg = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT, mMeName, DateUtil.formatDatetime(new Date()), true);
+                        ChatMessage msg = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT, true);
+                        msg.setSendUsername(mMeUser);
+                        msg.setSendNickname(mMeName);
                         msg.setContent(message);
                         return msg;
                     } catch (NotConnectedException e) {
@@ -258,12 +260,12 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
      */
     private void checkTransferStatus(final FileTransfer transfer, final File file, final MessageType messageType, final boolean isSend) {
 
-        String username = mFriendName;
+        String nickname = mFriendName;
         if (isSend) {
-            username = mMeName;
+            nickname = mMeName;
         }
-        final String name = username;
-        final ChatMessage msg = new ChatMessage(messageType, name, DateUtil.formatDatetime(new Date()), isSend);
+        final ChatMessage msg = new ChatMessage(messageType, isSend);
+        msg.setSendNickname(nickname);
         msg.setFilePath(file.getAbsolutePath());
 
         Observable.create(new Observable.OnSubscribe<ChatMessage>(){
@@ -318,12 +320,6 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
 
         mAdapter.add(message);
         mLayoutManager.scrollToPosition(mAdapter.getItemCount() - 1);
-    }
-
-    protected void onDestroy() {
-
-        super.onDestroy();
-        SmackManager.getInstance().getChatManager().removeChatListener(mChatManagerListener);
     }
 
     /**

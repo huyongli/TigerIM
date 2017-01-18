@@ -9,6 +9,7 @@ import cn.ittiger.im.adapter.ContactItemDecoration;
 import cn.ittiger.im.adapter.ContactViewHolder;
 import cn.ittiger.im.bean.ContactEntity;
 import cn.ittiger.im.bean.ContactMenuEntity;
+import cn.ittiger.im.event.ContactEvent;
 import cn.ittiger.im.ui.ChatDialog;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.indexlist.IndexStickyView;
@@ -20,6 +21,9 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.jivesoftware.smack.roster.RosterEntry;
 
 import android.os.Bundle;
@@ -162,10 +166,26 @@ public class ContactFragment extends BaseFragment {
     };
 
     @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        super.onViewCreated(view, savedInstanceState);
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     public void onDestroyView() {
 
         super.onDestroyView();
+        EventBus.getDefault().unregister(this);
         mAdapter = null;
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onAddContactEvent(ContactEvent event) {
+
+        if(!isRemoving() && mAdapter != null) {
+            mAdapter.add(event.getContactEntity());
+        }
     }
 
     @Override

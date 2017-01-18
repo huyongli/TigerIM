@@ -2,6 +2,7 @@ package cn.ittiger.im.activity;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -16,13 +17,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ittiger.im.R;
 import cn.ittiger.im.smack.SmackManager;
-import cn.ittiger.im.ui.ClearEditText;
-import cn.ittiger.im.ui.TopTitleBar;
 import cn.ittiger.util.ActivityUtil;
 import cn.ittiger.util.UIUtil;
 import cn.ittiger.util.ValueUtil;
 import rx.Observable;
-import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -99,8 +97,9 @@ public class RegisterActivity extends IMBaseActivity {
     public void onRegisterOk(View v) {
 
         final String username = mUserEditText.getText().toString();
-        if (ValueUtil.isEmpty(username)) {
-            mUserTextInput.setError(getString(R.string.error_register_input_username));
+        Pattern pattern = Pattern.compile("^[a-zA-Z0-9_]{3,16}$");//a-z,A-Z,0-9,_,3～16位
+        if(!pattern.matcher(username).matches()) {
+            mUserTextInput.setError(getString(R.string.error_register_input_username_invalid));
             return;
         }
         final String nickname = mNicknameEditText.getText().toString();
@@ -109,13 +108,16 @@ public class RegisterActivity extends IMBaseActivity {
             return;
         }
         String password = mPasswordEditText.getText().toString();
-        if (ValueUtil.isEmpty(password)) {
-            mPasswordTextInput.setError(getString(R.string.error_register_input_password));
+        pattern = Pattern.compile("^[a-zA-Z0-9]{6,18}$");//a-z,A-Z,0-9,_,3～16位
+        if(!pattern.matcher(password).matches()) {
+            mPasswordTextInput.setError(getString(R.string.error_register_input_password_invalid));
+            mPasswordEditText.setText("");
             return;
         }
         final String repassword = mRePasswordEditText.getText().toString();
-        if (ValueUtil.isEmpty(repassword)) {
-            mRePasswordTextInput.setError(getString(R.string.error_register_input_repassword));
+        if(!pattern.matcher(password).matches()) {
+            mRePasswordTextInput.setError(getString(R.string.error_register_input_password_invalid));
+            mRePasswordEditText.setText("");
             return;
         }
         if (!password.equals(repassword)) {
@@ -145,10 +147,10 @@ public class RegisterActivity extends IMBaseActivity {
                 @Override
                 public void call(Boolean aBoolean) {
                     if (aBoolean) {
-                        UIUtil.showToast(RegisterActivity.this, getString(R.string.hint_register_success));
+                        UIUtil.showToast(RegisterActivity.this, R.string.hint_register_success);
                         ActivityUtil.finishActivity(RegisterActivity.this);
                     } else {
-                        UIUtil.showToast(RegisterActivity.this, getString(R.string.hint_register_failure));
+                        UIUtil.showToast(RegisterActivity.this, R.string.hint_register_failure);
                     }
                 }
             });

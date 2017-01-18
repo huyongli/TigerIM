@@ -66,7 +66,7 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
     public void onBindItemViewHolder(ViewHolder holder, int position, final ChatMessage message) {
 
         final ChatViewHolder viewHolder = (ChatViewHolder) holder;
-        viewHolder.chatUsername.setText(message.getSendUserName());
+        viewHolder.chatUsername.setText(message.getSendNickname());
         viewHolder.chatContentTime.setText(message.getDatetime());
         setMessageViewVisible(message.getMessageType(), viewHolder);
         if (message.getMessageType() == MessageType.MESSAGE_TYPE_TEXT) {//文本消息

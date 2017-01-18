@@ -23,6 +23,8 @@ import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.fragment.ContactFragment;
 import cn.ittiger.im.fragment.MessageFragment;
+import cn.ittiger.im.smack.SmackListenerManager;
+import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.util.ShareHelper;
 import cn.ittiger.util.ActivityUtil;
 
@@ -69,6 +71,9 @@ public class MainActivity extends IMBaseActivity
 
         initToolbar();
         initTabHost();
+
+        //普通消息接收监听
+        SmackListenerManager.addMessageListener();
     }
 
     private void initToolbar() {
@@ -207,5 +212,14 @@ public class MainActivity extends IMBaseActivity
         public void onDrawerStateChanged(int newState) {
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+        SmackListenerManager.getInstance().destroy();
+        SmackManager.getInstance().logout();
+        SmackManager.getInstance().disconnect();
     }
 }
