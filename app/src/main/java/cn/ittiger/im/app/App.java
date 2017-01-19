@@ -48,7 +48,7 @@ public class App extends Application implements IDbApplication {
 
     private void initImageLoader() {
 
-        File cacheDir = new File(AppFileHelper.getAppImageDir());
+        File cacheDir = new File(AppFileHelper.getAppImageCacheDir());
         if(!cacheDir.exists()) {
             cacheDir.mkdirs();
         }

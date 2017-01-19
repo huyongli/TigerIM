@@ -1,65 +1,90 @@
 package cn.ittiger.im.bean;
 
+import cn.ittiger.database.annotation.Column;
+import cn.ittiger.database.annotation.PrimaryKey;
+import cn.ittiger.database.annotation.Table;
 import cn.ittiger.im.constant.FileLoadState;
 import cn.ittiger.im.constant.MessageType;
 import cn.ittiger.util.DateUtil;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
 import java.util.UUID;
 
 /**
  * 聊天发送的消息
  *
- * @auther: hyl
- * @time: 2015-10-28下午5:16:13
+ * @author: laohu on 2017/1/18
+ * @site: http://ittiger.cn
  */
-public class ChatMessage implements Serializable {
+@Table(name = "ChatMessage")
+public class ChatMessage implements Parcelable {
     /**
      *
      */
-    private static final long serialVersionUID = 1L;
-    /**
-     *
-     */
+    @PrimaryKey
     private String uuid;
     /**
      * 消息内容
      */
+    @Column(columnName = "message")
     private String mContent;
     /**
-     * 消息类型
+     * 消息类型  {@link MessageType}
      */
-    private MessageType mMessageType;
+    @Column(columnName = "messageType")
+    private int mMessageType;
     /**
-     * 消息发送人的用户名
+     * 聊天好友的用户名
      */
-    private String mSendUsername;
+    @Column(columnName = "friendUserName")
+    private String mFriendUsername;
     /**
-     * 消息发送人的昵称
+     * 聊天好友的昵称
      */
-    private String mSendNickname;
+    @Column(columnName = "friendNickName")
+    private String mFriendNickname;
+    /**
+     * 自己的用户名
+     */
+    @Column(columnName = "meUserName")
+    private String mMeUsername;
+    /**
+     * 自己的昵称
+     */
+    @Column(columnName = "meNickName")
+    private String mMeNickname;
     /**
      * 消息发送接收的时间
      */
+    @Column(columnName = "dateTime")
     private String mDatetime;
     /**
      * 当前消息是否是自己发出的
      */
-    private boolean mIsSend;
+    @Column(columnName = "isMeSend")
+    private boolean mIsMeSend;
     /**
      * 接收的图片或语音路径
      */
+    @Column(columnName = "filePath")
     private String mFilePath;
     /**
-     * 文件加载状态
+     * 文件加载状态 {@link FileLoadState}
      */
-    private FileLoadState mFileLoadState = FileLoadState.STATE_LOAD_START;
+    @Column(columnName = "fileLoadState")
+    private int mFileLoadState = FileLoadState.STATE_LOAD_START.value();
 
-    public ChatMessage(MessageType messageType, boolean isSend) {
+    public ChatMessage() {
+
+    }
+
+    public ChatMessage(int messageType, boolean isMeSend) {
 
         mMessageType = messageType;
-        mIsSend = isSend;
+        mIsMeSend = isMeSend;
 
         this.uuid = UUID.randomUUID().toString();
         this.mDatetime = DateUtil.formatDatetime(new Date());
@@ -75,29 +100,54 @@ public class ChatMessage implements Serializable {
         mContent = content;
     }
 
-    public MessageType getMessageType() {
+    public int getMessageType() {
 
         return mMessageType;
     }
 
-    public String getSendUsername() {
+    public void setMessageType(int messageType) {
 
-        return mSendUsername;
+        mMessageType = messageType;
     }
 
-    public void setSendUsername(String sendUsername) {
+    public String getFriendUsername() {
 
-        mSendUsername = sendUsername;
+        return mFriendUsername;
     }
 
-    public String getSendNickname() {
+    public void setFriendUsername(String friendUsername) {
 
-        return mSendNickname;
+        mFriendUsername = friendUsername;
     }
 
-    public void setSendNickname(String sendNickname) {
+    public String getFriendNickname() {
 
-        mSendNickname = sendNickname;
+        return mFriendNickname;
+    }
+
+    public void setFriendNickname(String friendNickname) {
+
+        mFriendNickname = friendNickname;
+    }
+
+    public String getMeUsername() {
+
+        return mMeUsername;
+    }
+
+    public void setMeUsername(String meUsername) {
+
+        mMeUsername = meUsername;
+    }
+
+    public String getMeNickname() {
+
+        return mMeNickname;
+    }
+
+    public void setMeNickname(String meNickname) {
+
+        mMeNickname = meNickname;
     }
 
     public String getDatetime() {
@@ -105,14 +155,19 @@ public class ChatMessage implements Serializable {
         return mDatetime;
     }
 
-    public boolean isSend() {
+    public void setDatetime(String datetime) {
 
-        return mIsSend;
+        mDatetime = datetime;
     }
 
-    public void setSend(boolean send) {
+    public boolean isMeSend() {
 
-        mIsSend = send;
+        return mIsMeSend;
+    }
+
+    public void setMeSend(boolean meSend) {
+
+        mIsMeSend = meSend;
     }
 
     public String getFilePath() {
@@ -125,14 +180,24 @@ public class ChatMessage implements Serializable {
         mFilePath = filePath;
     }
 
-    public FileLoadState getFileLoadState() {
+    public int getFileLoadState() {
 
         return mFileLoadState;
     }
 
-    public void setFileLoadState(FileLoadState fileLoadState) {
+    public void setFileLoadState(int fileLoadState) {
 
         mFileLoadState = fileLoadState;
+    }
+
+    public String getUuid() {
+
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+
+        this.uuid = uuid;
     }
 
     @Override
@@ -146,4 +211,56 @@ public class ChatMessage implements Serializable {
         }
         return false;
     }
+
+
+    @Override
+    public int describeContents() {
+
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+        dest.writeString(this.uuid);
+        dest.writeString(this.mContent);
+        dest.writeInt(this.mMessageType);
+        dest.writeString(this.mFriendUsername);
+        dest.writeString(this.mFriendNickname);
+        dest.writeString(this.mMeUsername);
+        dest.writeString(this.mMeNickname);
+        dest.writeString(this.mDatetime);
+        dest.writeByte(this.mIsMeSend ? (byte) 1 : (byte) 0);
+        dest.writeString(this.mFilePath);
+        dest.writeInt(this.mFileLoadState);
+    }
+
+    protected ChatMessage(Parcel in) {
+
+        this.uuid = in.readString();
+        this.mContent = in.readString();
+        this.mMessageType = in.readInt();
+        this.mFriendUsername = in.readString();
+        this.mFriendNickname = in.readString();
+        this.mMeUsername = in.readString();
+        this.mMeNickname = in.readString();
+        this.mDatetime = in.readString();
+        this.mIsMeSend = in.readByte() != 0;
+        this.mFilePath = in.readString();
+        this.mFileLoadState = in.readInt();
+    }
+
+    public static final Creator<ChatMessage> CREATOR = new Creator<ChatMessage>() {
+        @Override
+        public ChatMessage createFromParcel(Parcel source) {
+
+            return new ChatMessage(source);
+        }
+
+        @Override
+        public ChatMessage[] newArray(int size) {
+
+            return new ChatMessage[size];
+        }
+    };
 }

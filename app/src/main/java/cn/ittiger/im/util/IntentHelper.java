@@ -6,6 +6,5 @@ package cn.ittiger.im.util;
  * @site: http://ittiger.cn
  */
 public class IntentHelper {
-    public static final String KEY_CHAT_USER = "key_user";
-    public static final String KEY_CHAT_NAME = "key_name";
+    public static final String KEY_CHAT_DIALOG = "key_chat_dialog";
 }

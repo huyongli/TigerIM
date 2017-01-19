@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.jivesoftware.smack.ReconnectionManager;
 import org.jivesoftware.smack.SmackConfiguration;
 import org.jivesoftware.smack.SmackException;
 import org.jivesoftware.smack.SmackException.NoResponseException;
@@ -104,7 +105,10 @@ public class SmackManager {
                     .setDebuggerEnabled(true).build();
 
             XMPPTCPConnection connection = new XMPPTCPConnection(config);
-            connection.addConnectionListener(new TigerConnectionListener());
+            ReconnectionManager reconnectionManager = ReconnectionManager.getInstanceFor(connection);
+            reconnectionManager.enableAutomaticReconnection();//允许自动重连
+            reconnectionManager.setFixedDelay(2);//重连间隔时间
+            connection.addConnectionListener(new TigerConnectionListener());//连接监听
             connection.connect();
             return connection;
         } catch (Exception e) {

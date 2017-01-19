@@ -6,7 +6,18 @@ package cn.ittiger.im.constant;
  * @site: http://ittiger.cn
  */
 public enum FileLoadState {
-    STATE_LOAD_START,//加载开始
-    STATE_LOAD_SUCCESS,//加载成功
-    STATE_LOAD_ERROR//加载失败
+    STATE_LOAD_START(0),//加载开始
+    STATE_LOAD_SUCCESS(1),//加载成功
+    STATE_LOAD_ERROR(2);//加载失败
+
+    int value;
+    FileLoadState(int value) {
+
+        this.value = value;
+    }
+
+    public int value() {
+
+        return value;
+    }
 }

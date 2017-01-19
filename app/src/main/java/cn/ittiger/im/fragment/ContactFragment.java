@@ -10,7 +10,7 @@ import cn.ittiger.im.adapter.ContactViewHolder;
 import cn.ittiger.im.bean.ContactEntity;
 import cn.ittiger.im.bean.ContactMenuEntity;
 import cn.ittiger.im.event.ContactEvent;
-import cn.ittiger.im.ui.ChatDialog;
+import cn.ittiger.im.ui.ChatPromptDialog;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.indexlist.IndexStickyView;
 import cn.ittiger.indexlist.adapter.IndexHeaderFooterAdapter;
@@ -145,13 +145,13 @@ public class ContactFragment extends BaseFragment {
     }
 
     OnItemClickListener<ContactEntity> mContactItemClickListener = new OnItemClickListener<ContactEntity>() {
-        ChatDialog mDialog;
+        ChatPromptDialog mDialog;
 
         @Override
         public void onItemClick(View childView, int position, ContactEntity item) {
 
             if(mDialog == null) {
-                mDialog = new ChatDialog(mContext);
+                mDialog = new ChatPromptDialog(mContext);
             }
             mDialog.show(item);
         }

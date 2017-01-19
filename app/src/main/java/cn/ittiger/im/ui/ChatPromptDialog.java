@@ -2,6 +2,7 @@ package cn.ittiger.im.ui;
 
 import cn.ittiger.im.R;
 import cn.ittiger.im.activity.ChatActivity;
+import cn.ittiger.im.bean.ChatDialog;
 import cn.ittiger.im.bean.ContactEntity;
 import cn.ittiger.im.util.IntentHelper;
 import cn.ittiger.util.ActivityUtil;
@@ -16,12 +17,12 @@ import android.support.v7.app.AlertDialog;
  * @author: laohu on 2016/12/24
  * @site: http://ittiger.cn
  */
-public class ChatDialog {
+public class ChatPromptDialog {
 
     private AlertDialog mDialog;
     private Context mContext;
 
-    public ChatDialog(Context context) {
+    public ChatPromptDialog(Context context) {
 
         mContext = context;
     }
@@ -47,8 +48,9 @@ public class ChatDialog {
 
                             dialog.dismiss();
                             Intent intent = new Intent(mContext, ChatActivity.class);
-                            intent.putExtra(IntentHelper.KEY_CHAT_NAME, contactEntity.getRosterEntry().getName());
-                            intent.putExtra(IntentHelper.KEY_CHAT_USER, contactEntity.getRosterEntry().getUser());
+                            ChatDialog chatDialog = new ChatDialog(contactEntity.getRosterEntry().getUser(),
+                                    contactEntity.getRosterEntry().getName());
+                            intent.putExtra(IntentHelper.KEY_CHAT_DIALOG, chatDialog);
                             ActivityUtil.startActivity(mContext, intent);
                         }
                     });

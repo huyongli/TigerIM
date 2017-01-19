@@ -4,6 +4,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.bean.ChatMessage;
+import cn.ittiger.im.constant.FileLoadState;
 import cn.ittiger.im.constant.MessageType;
 import cn.ittiger.im.ui.recyclerview.HeaderAndFooterAdapter;
 import cn.ittiger.im.ui.recyclerview.ViewHolder;
@@ -47,7 +48,7 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
     @Override
     public int getItemViewTypeForData(int position) {
 
-        return getItem(position).isSend() ? VIEW_TYPE_ME : VIEW_TYPE_RECEIVER;
+        return getItem(position).isMeSend() ? VIEW_TYPE_ME : VIEW_TYPE_RECEIVER;
     }
 
     @Override
@@ -66,16 +67,21 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
     public void onBindItemViewHolder(ViewHolder holder, int position, final ChatMessage message) {
 
         final ChatViewHolder viewHolder = (ChatViewHolder) holder;
-        viewHolder.chatUsername.setText(message.getSendNickname());
+        if(message.isMeSend()) {
+            viewHolder.chatNickname.setText(message.getMeNickname());
+        } else {
+            viewHolder.chatNickname.setText(message.getFriendNickname());
+        }
         viewHolder.chatContentTime.setText(message.getDatetime());
         setMessageViewVisible(message.getMessageType(), viewHolder);
-        if (message.getMessageType() == MessageType.MESSAGE_TYPE_TEXT) {//文本消息
+
+        if (message.getMessageType() == MessageType.MESSAGE_TYPE_TEXT.value()) {//文本消息
             viewHolder.chatContentText.setText(message.getContent());
-        } else if (message.getMessageType() == MessageType.MESSAGE_TYPE_IMAGE) {//图片消息
+        } else if (message.getMessageType() == MessageType.MESSAGE_TYPE_IMAGE.value()) {//图片消息
             String url = "file://" + message.getFilePath();
             ImageLoader.getInstance().displayImage(url, viewHolder.chatContentImage, ImageLoaderHelper.getChatImageOptions(), new SimpleImageLoadingListener());
             showLoading(viewHolder, message);
-        } else if (message.getMessageType() == MessageType.MESSAGE_TYPE_VOICE) {//语音消息
+        } else if (message.getMessageType() == MessageType.MESSAGE_TYPE_VOICE.value()) {//语音消息
             viewHolder.chatContentVoice.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -89,25 +95,21 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
 
     private void showLoading(ChatViewHolder viewHolder, ChatMessage message) {
 
-        switch (message.getFileLoadState()) {
-            case STATE_LOAD_START://加载开始
-                viewHolder.chatContentLoading.setBackgroundResource(R.drawable.chat_file_content_loading_anim);
-                final AnimationDrawable animationDrawable = (AnimationDrawable) viewHolder.chatContentLoading.getBackground();
-                viewHolder.chatContentLoading.post(new Runnable() {
-                    @Override
-                    public void run() {
+        if (message.getFileLoadState() == FileLoadState.STATE_LOAD_START.value()) {//加载开始
+            viewHolder.chatContentLoading.setBackgroundResource(R.drawable.chat_file_content_loading_anim);
+            final AnimationDrawable animationDrawable = (AnimationDrawable) viewHolder.chatContentLoading.getBackground();
+            viewHolder.chatContentLoading.post(new Runnable() {
+                @Override
+                public void run() {
 
-                        animationDrawable.start();
-                    }
-                });
-                viewHolder.chatContentLoading.setVisibility(View.VISIBLE);
-                break;
-            case STATE_LOAD_SUCCESS://加载完成
-                viewHolder.chatContentLoading.setVisibility(View.GONE);
-                break;
-            case STATE_LOAD_ERROR:
-                viewHolder.chatContentLoading.setBackgroundResource(R.drawable.load_fail);
-                break;
+                    animationDrawable.start();
+                }
+            });
+            viewHolder.chatContentLoading.setVisibility(View.VISIBLE);
+        } else if(message.getFileLoadState() == FileLoadState.STATE_LOAD_SUCCESS.value()) {//加载完成
+            viewHolder.chatContentLoading.setVisibility(View.GONE);
+        } else if(message.getFileLoadState() == FileLoadState.STATE_LOAD_ERROR.value()) {
+            viewHolder.chatContentLoading.setBackgroundResource(R.drawable.load_fail);
         }
     }
 
@@ -117,17 +119,17 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
      * @param messageType
      * @param viewHolder
      */
-    private void setMessageViewVisible(MessageType messageType, ChatViewHolder viewHolder) {
+    private void setMessageViewVisible(int messageType, ChatViewHolder viewHolder) {
 
-        if (messageType == MessageType.MESSAGE_TYPE_TEXT) {//文本消息
+        if (messageType == MessageType.MESSAGE_TYPE_TEXT.value()) {//文本消息
             viewHolder.chatContentText.setVisibility(View.VISIBLE);
             viewHolder.chatContentImage.setVisibility(View.GONE);
             viewHolder.chatContentVoice.setVisibility(View.GONE);
-        } else if (messageType == MessageType.MESSAGE_TYPE_IMAGE) {//图片消息
+        } else if (messageType == MessageType.MESSAGE_TYPE_IMAGE.value()) {//图片消息
             viewHolder.chatContentText.setVisibility(View.GONE);
             viewHolder.chatContentImage.setVisibility(View.VISIBLE);
             viewHolder.chatContentVoice.setVisibility(View.GONE);
-        } else if (messageType == MessageType.MESSAGE_TYPE_VOICE) {//语音消息
+        } else if (messageType == MessageType.MESSAGE_TYPE_VOICE.value()) {//语音消息
             viewHolder.chatContentText.setVisibility(View.GONE);
             viewHolder.chatContentImage.setVisibility(View.GONE);
             viewHolder.chatContentVoice.setVisibility(View.VISIBLE);
@@ -142,7 +144,7 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
      */
     private void playVoice(final ImageView iv, final ChatMessage message) {
 
-        if (message.isSend()) {
+        if (message.isMeSend()) {
             iv.setBackgroundResource(R.drawable.anim_chat_voice_right);
         } else {
             iv.setBackgroundResource(R.drawable.anim_chat_voice_left);
@@ -164,7 +166,7 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
 
                     animationDrawable.stop();
                     // 恢复语音消息图标背景
-                    if (message.isSend()) {
+                    if (message.isMeSend()) {
                         iv.setBackgroundResource(R.drawable.gxu);
                     } else {
                         iv.setBackgroundResource(R.drawable.gxx);
@@ -186,7 +188,7 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
         } else {
             animationDrawable.stop();
             // 恢复语音消息图标背景
-            if (message.isSend()) {
+            if (message.isMeSend()) {
                 iv.setBackgroundResource(R.drawable.gxu);
             } else {
                 iv.setBackgroundResource(R.drawable.gxx);
@@ -201,7 +203,7 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
 
     public class ChatViewHolder extends ViewHolder {
         @BindView(R.id.tv_chat_msg_username)
-        public TextView chatUsername;//消息来源人昵称
+        public TextView chatNickname;//消息来源人昵称
         @BindView(R.id.tv_chat_msg_time)
         public TextView chatContentTime;//消息时间
         @BindView(R.id.iv_chat_avatar)

@@ -31,14 +31,18 @@ public class TigerChatManagerListener implements ChatManagerListener {
             public void processMessage(Chat chat, Message message) {
                 //不会收到自己发送过来的消息
                 Logger.d(message.toString());
-                String from = message.getFrom();//格式:laohu@171.17.100.201/Smack
-                Matcher matcher = Pattern.compile(PATTERN).matcher(from);
+                String from = message.getFrom();//消息发送人，格式:laohu@171.17.100.201/Smack
+                String to = message.getTo();//消息接收人(当前登陆用户)，格式:laohu@171.17.100.201/Smack
+                Matcher matcherFrom = Pattern.compile(PATTERN).matcher(from);
+                Matcher matcherTo = Pattern.compile(PATTERN).matcher(to);
 
-                if(matcher.find()) {
-                    String fromUser = matcher.group(0);
+                if(matcherFrom.find()) {
+                    String fromUser = matcherFrom.group(0);
+                    String toUser = matcherTo.group(0);
 
-                    ChatMessage chatMessage = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT, false);
-                    chatMessage.setSendUsername(fromUser);
+                    ChatMessage chatMessage = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT.value(), false);
+                    chatMessage.setFriendUsername(fromUser);
+                    chatMessage.setMeUsername(toUser);
                     chatMessage.setContent(message.getBody());
                     EventBus.getDefault().post(chatMessage);
                 } else {
