@@ -2,8 +2,9 @@ package cn.ittiger.im.ui;
 
 import cn.ittiger.im.R;
 import cn.ittiger.im.activity.ChatActivity;
-import cn.ittiger.im.bean.ChatDialog;
+import cn.ittiger.im.bean.ChatUser;
 import cn.ittiger.im.bean.ContactEntity;
+import cn.ittiger.im.util.DBQueryHelper;
 import cn.ittiger.im.util.IntentHelper;
 import cn.ittiger.util.ActivityUtil;
 
@@ -48,9 +49,8 @@ public class ChatPromptDialog {
 
                             dialog.dismiss();
                             Intent intent = new Intent(mContext, ChatActivity.class);
-                            ChatDialog chatDialog = new ChatDialog(contactEntity.getRosterEntry().getUser(),
-                                    contactEntity.getRosterEntry().getName());
-                            intent.putExtra(IntentHelper.KEY_CHAT_DIALOG, chatDialog);
+                            ChatUser chatUser = DBQueryHelper.queryChatUser(contactEntity.getRosterEntry());
+                            intent.putExtra(IntentHelper.KEY_CHAT_DIALOG, chatUser);
                             ActivityUtil.startActivity(mContext, intent);
                         }
                     });

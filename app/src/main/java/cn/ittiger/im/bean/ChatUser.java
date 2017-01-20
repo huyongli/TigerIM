@@ -12,13 +12,13 @@ import android.os.Parcelable;
 import java.util.UUID;
 
 /**
- * 聊天窗口实体对象
+ * 聊天用户实体对象
  *
  * @author: laohu on 2017/1/19
  * @site: http://ittiger.cn
  */
 @Table(name = "ChatDialog")
-public class ChatDialog implements Parcelable {
+public class ChatUser implements Parcelable {
     /**
      *
      */
@@ -56,12 +56,12 @@ public class ChatDialog implements Parcelable {
     private String mFileJid;
 
 
-    public ChatDialog() {
+    public ChatUser() {
 
         this.uuid = UUID.randomUUID().toString();
     }
 
-    public ChatDialog(String friendUsername, String friendNickname) {
+    public ChatUser(String friendUsername, String friendNickname) {
 
         this();
         mFriendUsername = friendUsername;
@@ -160,7 +160,7 @@ public class ChatDialog implements Parcelable {
         dest.writeString(this.mFileJid);
     }
 
-    protected ChatDialog(Parcel in) {
+    protected ChatUser(Parcel in) {
 
         this.uuid = in.readString();
         this.mFriendUsername = in.readString();
@@ -171,17 +171,17 @@ public class ChatDialog implements Parcelable {
         this.mFileJid = in.readString();
     }
 
-    public static final Creator<ChatDialog> CREATOR = new Creator<ChatDialog>() {
+    public static final Creator<ChatUser> CREATOR = new Creator<ChatUser>() {
         @Override
-        public ChatDialog createFromParcel(Parcel source) {
+        public ChatUser createFromParcel(Parcel source) {
 
-            return new ChatDialog(source);
+            return new ChatUser(source);
         }
 
         @Override
-        public ChatDialog[] newArray(int size) {
+        public ChatUser[] newArray(int size) {
 
-            return new ChatDialog[size];
+            return new ChatUser[size];
         }
     };
 }

@@ -33,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.ChatAdapter;
-import cn.ittiger.im.bean.ChatDialog;
+import cn.ittiger.im.bean.ChatUser;
 import cn.ittiger.im.bean.ChatMessage;
 import cn.ittiger.im.constant.FileLoadState;
 import cn.ittiger.im.constant.MessageType;
@@ -78,9 +78,9 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
     @BindView(R.id.ckb_chat_board)
     ChatKeyboard mChatKyboard;
     /**
-     * 聊天窗口实体类
+     * 聊天用户实体类
      */
-    private ChatDialog mChatDialog;
+    private ChatUser mChatUser;
     /**
      * 聊天窗口对象
      */
@@ -94,14 +94,14 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        mChatDialog = getIntent().getParcelableExtra(IntentHelper.KEY_CHAT_DIALOG);
+        mChatUser = getIntent().getParcelableExtra(IntentHelper.KEY_CHAT_DIALOG);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_layout);
         ButterKnife.bind(this);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);//不显示ToolBar的标题
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbarTitle.setText(mChatDialog.getFriendNickname());
+        mToolbarTitle.setText(mChatUser.getFriendNickname());
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -111,7 +111,7 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
         });
         mChatKyboard.setChatKeyboardOperateListener(this);
 
-        mChat = SmackManager.getInstance().createChat(mChatDialog.getChatJid());
+        mChat = SmackManager.getInstance().createChat(mChatUser.getChatJid());
 
         addReceiveFileListener();
 
@@ -139,9 +139,9 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReceiveMessageEvent(ChatMessage message) {
 
-        if(mChatDialog.getMeUsername().equals(message.getMeUsername())) {
-            message.setFriendNickname(mChatDialog.getFriendNickname());
-            message.setMeNickname(mChatDialog.getMeNickname());
+        if(mChatUser.getMeUsername().equals(message.getMeUsername())) {
+            message.setFriendNickname(mChatUser.getFriendNickname());
+            message.setMeNickname(mChatUser.getMeNickname());
             addChatMessageView(message);
             DBHelper.getInstance().getSQLiteDB().save(message);
         }
@@ -167,10 +167,10 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
                     try {
                         mChat.sendMessage(message);
                         ChatMessage msg = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT.value(), true);
-                        msg.setFriendNickname(mChatDialog.getFriendNickname());
-                        msg.setFriendUsername(mChatDialog.getFriendUsername());
-                        msg.setMeUsername(mChatDialog.getMeUsername());
-                        msg.setMeNickname(mChatDialog.getMeNickname());
+                        msg.setFriendNickname(mChatUser.getFriendNickname());
+                        msg.setFriendUsername(mChatUser.getFriendUsername());
+                        msg.setMeUsername(mChatUser.getMeUsername());
+                        msg.setMeNickname(mChatUser.getMeNickname());
                         msg.setContent(message);
                         DBHelper.getInstance().getSQLiteDB().save(msg);
                         return msg;
@@ -196,7 +196,7 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
      */
     public void sendFile(final File file, int messageType) {
 
-        final OutgoingFileTransfer transfer = SmackManager.getInstance().getSendFileTransfer(mChatDialog.getFileJid());
+        final OutgoingFileTransfer transfer = SmackManager.getInstance().getSendFileTransfer(mChatUser.getFileJid());
         try {
             transfer.sendFile(file, String.valueOf(messageType));
             checkTransferStatus(transfer, file, messageType, true);
@@ -240,10 +240,10 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
     private void checkTransferStatus(final FileTransfer transfer, final File file, final int messageType, final boolean isMeSend) {
 
         final ChatMessage msg = new ChatMessage(messageType, isMeSend);
-        msg.setFriendNickname(mChatDialog.getFriendNickname());
-        msg.setFriendUsername(mChatDialog.getFriendUsername());
-        msg.setMeUsername(mChatDialog.getMeUsername());
-        msg.setMeNickname(mChatDialog.getMeNickname());
+        msg.setFriendNickname(mChatUser.getFriendNickname());
+        msg.setFriendUsername(mChatUser.getFriendUsername());
+        msg.setMeUsername(mChatUser.getMeUsername());
+        msg.setMeNickname(mChatUser.getMeNickname());
         msg.setFilePath(file.getAbsolutePath());
         DBHelper.getInstance().getSQLiteDB().save(msg);
 

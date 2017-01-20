@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 /**
- * Created by laohu on 16-12-14.
+ * 单聊窗口
+ * @author: laohu on 2016/12/24
+ * @site: http://ittiger.cn
  */
 public class MessageFragment extends BaseFragment {
 
