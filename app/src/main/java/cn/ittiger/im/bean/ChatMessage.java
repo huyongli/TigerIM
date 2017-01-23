@@ -21,6 +21,8 @@ import java.util.UUID;
  */
 @Table(name = "ChatMessage")
 public class ChatMessage implements Parcelable {
+    public static final String KEY_FRIEND_NICKNAME = "friendNickName";
+    public static final String KEY_MESSAGE_CONTENT = "messageContent";
     /**
      *
      */

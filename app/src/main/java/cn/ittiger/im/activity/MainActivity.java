@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.FragmentTabHost;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatDelegate;
@@ -25,6 +24,7 @@ import cn.ittiger.im.fragment.ContactFragment;
 import cn.ittiger.im.fragment.MessageFragment;
 import cn.ittiger.im.smack.SmackListenerManager;
 import cn.ittiger.im.smack.SmackManager;
+import cn.ittiger.im.ui.FragmentSaveStateTabHost;
 import cn.ittiger.im.util.ShareHelper;
 import cn.ittiger.util.ActivityUtil;
 
@@ -60,7 +60,7 @@ public class MainActivity extends IMBaseActivity
     @BindView(R.id.nav_container)
     NavigationView mNavigationView;
     @BindView(android.R.id.tabhost)
-    FragmentTabHost mTabHost;
+    FragmentSaveStateTabHost mTabHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

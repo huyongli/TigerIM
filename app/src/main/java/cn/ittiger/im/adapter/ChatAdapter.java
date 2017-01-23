@@ -8,10 +8,8 @@ import cn.ittiger.im.constant.FileLoadState;
 import cn.ittiger.im.constant.MessageType;
 import cn.ittiger.im.ui.recyclerview.HeaderAndFooterAdapter;
 import cn.ittiger.im.ui.recyclerview.ViewHolder;
+import cn.ittiger.im.util.ChatTimeUtil;
 import cn.ittiger.im.util.ImageLoaderHelper;
-
-import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
@@ -72,14 +70,14 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
         } else {
             viewHolder.chatNickname.setText(message.getFriendNickname());
         }
-        viewHolder.chatContentTime.setText(message.getDatetime());
+        viewHolder.chatContentTime.setText(ChatTimeUtil.getFriendlyTimeSpanByNow(message.getDatetime()));
         setMessageViewVisible(message.getMessageType(), viewHolder);
 
         if (message.getMessageType() == MessageType.MESSAGE_TYPE_TEXT.value()) {//文本消息
             viewHolder.chatContentText.setText(message.getContent());
         } else if (message.getMessageType() == MessageType.MESSAGE_TYPE_IMAGE.value()) {//图片消息
             String url = "file://" + message.getFilePath();
-            ImageLoader.getInstance().displayImage(url, viewHolder.chatContentImage, ImageLoaderHelper.getChatImageOptions(), new SimpleImageLoadingListener());
+            ImageLoaderHelper.displayImage(viewHolder.chatContentImage, url);
             showLoading(viewHolder, message);
         } else if (message.getMessageType() == MessageType.MESSAGE_TYPE_VOICE.value()) {//语音消息
             viewHolder.chatContentVoice.setOnClickListener(new View.OnClickListener() {

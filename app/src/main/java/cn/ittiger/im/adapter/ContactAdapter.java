@@ -1,6 +1,8 @@
 package cn.ittiger.im.adapter;
 
 import cn.ittiger.im.R;
+import cn.ittiger.im.adapter.viewholder.ContactIndexViewHolder;
+import cn.ittiger.im.adapter.viewholder.ContactViewHolder;
 import cn.ittiger.im.bean.ContactEntity;
 import cn.ittiger.indexlist.adapter.IndexStickyViewAdapter;
 

@@ -3,8 +3,11 @@ package cn.ittiger.im.util;
 import cn.ittiger.im.R;
 
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import android.graphics.Bitmap;
+import android.widget.ImageView;
 
 /**
  * 图片参数帮助类
@@ -12,6 +15,14 @@ import android.graphics.Bitmap;
  * @site: http://ittiger.cn
  */
 public class ImageLoaderHelper {
+
+    /*
+    String imageUri = "http://site.com/image.png"; // 网络图片
+    String imageUri = "file:///mnt/sdcard/image.png"; // sd卡图片
+    String imageUri = "content://media/external/audio/albumart/13"; //  content provider
+    String imageUri = "assets://image.png"; // assets文件夹图片
+    String imageUri = "drawable://" + R.drawable.image; // drawable图片
+    */
     private static volatile DisplayImageOptions sImageOptions;
 
     public static DisplayImageOptions getChatImageOptions() {
@@ -32,5 +43,15 @@ public class ImageLoaderHelper {
             }
         }
         return sImageOptions;
+    }
+
+    public static void displayImage(ImageView imageView, String url) {
+
+        displayImage(imageView, url, null);
+    }
+
+    public static void displayImage(ImageView imageView, String url, ImageLoadingListener imageLoadingListener) {
+
+        ImageLoader.getInstance().displayImage(url, imageView, getChatImageOptions(), imageLoadingListener);
     }
 }

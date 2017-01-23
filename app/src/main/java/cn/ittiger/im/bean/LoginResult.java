@@ -5,11 +5,13 @@ package cn.ittiger.im.bean;
  */
 public class LoginResult {
 
+    private User mUser;
     private boolean mSuccess;
     private String mErrorMsg;
 
-    public LoginResult(boolean success) {
+    public LoginResult(User user, boolean success) {
 
+        mUser = user;
         mSuccess = success;
     }
 
@@ -24,18 +26,13 @@ public class LoginResult {
         return mSuccess;
     }
 
-    public void setSuccess(boolean success) {
-
-        mSuccess = success;
-    }
-
     public String getErrorMsg() {
 
         return mErrorMsg;
     }
 
-    public void setErrorMsg(String errorMsg) {
+    public User getUser() {
 
-        mErrorMsg = errorMsg;
+        return mUser;
     }
 }

@@ -14,7 +14,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ittiger.im.R;
 import cn.ittiger.im.bean.ContactEntity;
-import cn.ittiger.im.event.ContactEvent;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.util.ActivityUtil;
 import cn.ittiger.util.UIUtil;
@@ -116,7 +115,7 @@ public class AddFriendActivity extends IMBaseActivity {
             @Override
             public void onNext(RosterEntry rosterEntry) {
 
-                EventBus.getDefault().post(new ContactEvent(new ContactEntity(rosterEntry)));
+                EventBus.getDefault().post(new ContactEntity(rosterEntry));
             }
         });
     }

@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class User implements Serializable {
 
     private String mUsername;
+    private String mNickname;
     private String mPassword;
 
     public User() {
@@ -38,5 +39,15 @@ public class User implements Serializable {
     public void setPassword(String password) {
 
         mPassword = password;
+    }
+
+    public void setNickname(String nickname) {
+
+        mNickname = nickname;
+    }
+
+    public String getNickname() {
+
+        return mNickname;
     }
 }

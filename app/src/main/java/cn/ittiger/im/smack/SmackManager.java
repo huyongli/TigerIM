@@ -1,6 +1,7 @@
 package cn.ittiger.im.smack;
 
 import cn.ittiger.im.bean.LoginResult;
+import cn.ittiger.im.bean.User;
 
 import com.orhanobut.logger.Logger;
 
@@ -119,19 +120,21 @@ public class SmackManager {
     /**
      * 登陆
      *
-     * @param user     用户账号
-     * @param password 用户密码
+     * @param username     用户账号
+     * @param password     用户密码
      * @return
      * @throws Exception
      */
-    public LoginResult login(String user, String password) {
+    public LoginResult login(String username, String password) {
 
         try {
             if (!isConnected()) {
                 throw new IllegalStateException("服务器断开，请先连接服务器");
             }
-            mConnection.login(user, password);
-            return new LoginResult(true);
+            mConnection.login(username, password);
+            User user = new User(username, password);
+            user.setNickname(getAccountName());
+            return new LoginResult(user, true);
         } catch (Exception e) {
             Logger.e(TAG, e, "login failure");
             return new LoginResult(false, e.getMessage());

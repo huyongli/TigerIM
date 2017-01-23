@@ -142,7 +142,7 @@ public class LoginActivity extends IMBaseActivity {
 
                     if (loginResult.isSuccess()) {
                         if (mCbRememberPassword.isChecked()) {
-                            LoginHelper.saveUser(new User(username, password));
+                            LoginHelper.saveUser(loginResult.getUser());
                         }
                         ActivityUtil.skipActivity(LoginActivity.this, MainActivity.class);
                     } else {

@@ -88,6 +88,11 @@ public abstract class HeaderAndFooterAdapter<T> extends RecyclerView.Adapter<Vie
         return mList == null ? 0 : mList.size();
     }
 
+    public List<T> getData() {
+
+        return mList;
+    }
+
     /**
      * 获取position位置的数据
      *

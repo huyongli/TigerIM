@@ -4,4 +4,10 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
+    <cn.ittiger.im.ui.recyclerview.CommonRecyclerView
+        android:id="@+id/recycler_message_record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </cn.ittiger.im.ui.recyclerview.CommonRecyclerView>
+
 </LinearLayout>

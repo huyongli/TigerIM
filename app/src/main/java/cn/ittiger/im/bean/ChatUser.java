@@ -58,18 +58,21 @@ public class ChatUser implements Parcelable {
 
     public ChatUser() {
 
-        this.uuid = UUID.randomUUID().toString();
     }
 
     public ChatUser(String friendUsername, String friendNickname) {
 
         this();
+        this.uuid = UUID.randomUUID().toString();
         mFriendUsername = friendUsername;
         mFriendNickname = friendNickname;
-        mMeUsername = LoginHelper.getUser().getUsername();
-        mMeNickname = SmackManager.getInstance().getAccountName();
+
         mChatJid = SmackManager.getInstance().getChatJidByUser(mFriendUsername);
         mFileJid = SmackManager.getInstance().getFileTransferJidChatJid(mChatJid);
+
+        User user = LoginHelper.getUser();
+        mMeUsername = user.getUsername();
+        mMeNickname = user.getNickname();
     }
 
     public String getUuid() {
@@ -141,6 +144,7 @@ public class ChatUser implements Parcelable {
 
         mFileJid = fileJid;
     }
+
 
     @Override
     public int describeContents() {

@@ -1,4 +1,4 @@
-package cn.ittiger.im.adapter;
+package cn.ittiger.im.adapter.viewholder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

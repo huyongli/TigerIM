@@ -5,11 +5,10 @@ import butterknife.ButterKnife;
 import cn.ittiger.base.BaseFragment;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.ContactAdapter;
-import cn.ittiger.im.adapter.ContactItemDecoration;
-import cn.ittiger.im.adapter.ContactViewHolder;
+import cn.ittiger.im.adapter.decoration.ContactItemDecoration;
+import cn.ittiger.im.adapter.viewholder.ContactViewHolder;
 import cn.ittiger.im.bean.ContactEntity;
 import cn.ittiger.im.bean.ContactMenuEntity;
-import cn.ittiger.im.event.ContactEvent;
 import cn.ittiger.im.ui.ChatPromptDialog;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.indexlist.IndexStickyView;
@@ -181,10 +180,10 @@ public class ContactFragment extends BaseFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onAddContactEvent(ContactEvent event) {
+    public void onAddContactEntityEvent(ContactEntity event) {
 
         if(!isRemoving() && mAdapter != null) {
-            mAdapter.add(event.getContactEntity());
+            mAdapter.add(event);
         }
     }
 

@@ -17,6 +17,7 @@ import org.jivesoftware.smackx.filetransfer.FileTransferListener;
 import org.jivesoftware.smackx.filetransfer.FileTransferRequest;
 import org.jivesoftware.smackx.filetransfer.IncomingFileTransfer;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -137,13 +138,10 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onReceiveMessageEvent(ChatMessage message) {
+    public void onReceiveChatMessageEvent(ChatMessage message) {
 
         if(mChatUser.getMeUsername().equals(message.getMeUsername())) {
-            message.setFriendNickname(mChatUser.getFriendNickname());
-            message.setMeNickname(mChatUser.getMeNickname());
             addChatMessageView(message);
-            DBHelper.getInstance().getSQLiteDB().save(message);
         }
     }
 
@@ -159,32 +157,28 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
             return;
         }
         Observable.just(message)
-            .subscribeOn(Schedulers.io())
-            .map(new Func1<String, ChatMessage>() {
+            .observeOn(Schedulers.io())
+            .subscribe(new Action1<String>() {
                 @Override
-                public ChatMessage call(String s) {
-
+                public void call(String message) {
                     try {
-                        mChat.sendMessage(message);
+                        JSONObject json = new JSONObject();
+                        json.put(ChatMessage.KEY_FRIEND_NICKNAME, mChatUser.getFriendNickname());
+                        json.put(ChatMessage.KEY_MESSAGE_CONTENT, message);
+                        mChat.sendMessage(json.toString());
+
                         ChatMessage msg = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT.value(), true);
                         msg.setFriendNickname(mChatUser.getFriendNickname());
                         msg.setFriendUsername(mChatUser.getFriendUsername());
                         msg.setMeUsername(mChatUser.getMeUsername());
                         msg.setMeNickname(mChatUser.getMeNickname());
                         msg.setContent(message);
+
                         DBHelper.getInstance().getSQLiteDB().save(msg);
-                        return msg;
-                    } catch (NotConnectedException e) {
+                        EventBus.getDefault().post(msg);
+                    } catch (Exception e) {
                         Logger.e(e, "send message failure");
-                        return null;
                     }
-                }
-            })
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(new Action1<ChatMessage>() {
-                @Override
-                public void call(ChatMessage chatMessage) {
-                    addChatMessageView(chatMessage);
                 }
             });
     }

@@ -2,6 +2,8 @@ package cn.ittiger.im.smack;
 
 import cn.ittiger.im.bean.ChatMessage;
 import cn.ittiger.im.constant.MessageType;
+import cn.ittiger.im.util.DBHelper;
+import cn.ittiger.im.util.LoginHelper;
 
 import com.orhanobut.logger.Logger;
 
@@ -10,6 +12,8 @@ import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatManagerListener;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,6 +25,7 @@ import java.util.regex.Pattern;
  */
 public class TigerChatManagerListener implements ChatManagerListener {
     private static final String PATTERN = "[a-zA-Z0-9_]+@";
+    private String mMeNickName = LoginHelper.getUser().getNickname();
 
     @Override
     public void chatCreated(Chat chat, boolean createdLocally) {
@@ -36,15 +41,26 @@ public class TigerChatManagerListener implements ChatManagerListener {
                 Matcher matcherFrom = Pattern.compile(PATTERN).matcher(from);
                 Matcher matcherTo = Pattern.compile(PATTERN).matcher(to);
 
-                if(matcherFrom.find()) {
-                    String fromUser = matcherFrom.group(0);
-                    String toUser = matcherTo.group(0);
+                if(matcherFrom.find() && matcherTo.find()) {
+                    try {
+                        String fromUser = matcherFrom.group(0);
+                        fromUser = fromUser.substring(0, fromUser.length() - 1);//去掉@
+                        String toUser = matcherTo.group(0);
+                        toUser = toUser.substring(0, toUser.length() - 1);//去掉@
+                        JSONObject json = new JSONObject(message.getBody());
 
-                    ChatMessage chatMessage = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT.value(), false);
-                    chatMessage.setFriendUsername(fromUser);
-                    chatMessage.setMeUsername(toUser);
-                    chatMessage.setContent(message.getBody());
-                    EventBus.getDefault().post(chatMessage);
+                        ChatMessage chatMessage = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT.value(), false);
+                        chatMessage.setFriendUsername(fromUser);
+                        chatMessage.setFriendNickname(json.optString(ChatMessage.KEY_FRIEND_NICKNAME));
+                        chatMessage.setMeUsername(toUser);
+                        chatMessage.setMeNickname(mMeNickName);
+                        chatMessage.setContent(json.optString(ChatMessage.KEY_MESSAGE_CONTENT));
+
+                        DBHelper.getInstance().getSQLiteDB().save(chatMessage);
+                        EventBus.getDefault().post(chatMessage);
+                    } catch (Exception e) {
+                        Logger.e(e, "发送的消息格式不正确");
+                    }
                 } else {
                     Logger.e("发送人格式不正确");
                 }
