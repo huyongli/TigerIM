@@ -10,7 +10,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.SmackException.NotConnectedException;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smackx.filetransfer.FileTransfer;
 import org.jivesoftware.smackx.filetransfer.FileTransferListener;
@@ -44,6 +43,7 @@ import cn.ittiger.im.ui.keyboard.ChatKeyboard;
 import cn.ittiger.im.ui.keyboard.ChatKeyboard.ChatKeyboardOperateListener;
 import cn.ittiger.im.util.AppFileHelper;
 import cn.ittiger.im.util.DBHelper;
+import cn.ittiger.im.util.DBQueryHelper;
 import cn.ittiger.im.util.IntentHelper;
 import cn.ittiger.util.BitmapUtil;
 import cn.ittiger.util.DateUtil;
@@ -72,7 +72,7 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
      * 聊天内容展示列表
      */
     @BindView(R.id.chat_content)
-    CommonRecyclerView mChatMessageList;
+    CommonRecyclerView mChatMessageRecyclerView;
     /**
      * 聊天输入控件
      */
@@ -116,24 +116,48 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
 
         addReceiveFileListener();
 
-        List<ChatMessage> list = new ArrayList<>();
-        mAdapter = new ChatAdapter(this, list);
         mLayoutManager = new LinearLayoutManager(this);
-        mChatMessageList.setLayoutManager(mLayoutManager);
-        mChatMessageList.setAdapter(mAdapter);
+        mChatMessageRecyclerView.setLayoutManager(mLayoutManager);
+        initData();
+    }
+
+    private void initData() {
+
+        Observable.create(new Observable.OnSubscribe<List<ChatMessage>>() {
+            @Override
+            public void call(Subscriber<? super List<ChatMessage>> subscriber) {
+
+                List<ChatMessage> messages = DBQueryHelper.queryChatMessage(mChatUser);
+                subscriber.onNext(messages);
+                subscriber.onCompleted();
+            }
+        })
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Action1<List<ChatMessage>>() {
+            @Override
+            public void call(List<ChatMessage> chatMessages) {
+                mAdapter = new ChatAdapter(mActivity, chatMessages);
+                mChatMessageRecyclerView.setAdapter(mAdapter);
+                mLayoutManager.scrollToPosition(mAdapter.getItemCount() - 1);
+            }
+        });
+
     }
 
     @Override
     protected void onStart() {
 
         super.onStart();
-        EventBus.getDefault().register(this);
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     @Override
-    protected void onStop() {
+    protected void onDestroy() {
 
-        super.onStop();
+        super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
 

@@ -5,6 +5,7 @@ import cn.ittiger.database.annotation.Table;
 import cn.ittiger.database.util.ValueUtil;
 import cn.ittiger.im.R;
 import cn.ittiger.im.smack.SmackManager;
+import cn.ittiger.util.DateUtil;
 
 import android.os.Parcel;
 
@@ -47,6 +48,7 @@ public class ChatRecord extends ChatUser {
         setChatJid(chatUser.getChatJid());
         setFileJid(chatUser.getFileJid());
         setUuid(chatUser.getUuid());
+        setChatTime(DateUtil.currentDatetime());
     }
 
     public ChatRecord(ChatMessage chatMessage) {
@@ -79,7 +81,7 @@ public class ChatRecord extends ChatUser {
 
     public String getChatTime() {
 
-        return mChatTime;
+        return mChatTime == null ? DateUtil.currentDatetime() : mChatTime;
     }
 
     public void setChatTime(String chatTime) {

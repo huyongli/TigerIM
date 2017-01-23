@@ -25,8 +25,13 @@ import cn.ittiger.im.fragment.MessageFragment;
 import cn.ittiger.im.smack.SmackListenerManager;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.ui.FragmentSaveStateTabHost;
+import cn.ittiger.im.util.IntentHelper;
 import cn.ittiger.im.util.ShareHelper;
 import cn.ittiger.util.ActivityUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 /**
  * 主页面
@@ -218,8 +223,26 @@ public class MainActivity extends IMBaseActivity
     protected void onDestroy() {
 
         super.onDestroy();
+        EventBus.getDefault().unregister(this);
         SmackListenerManager.getInstance().destroy();
         SmackManager.getInstance().logout();
         SmackManager.getInstance().disconnect();
+    }
+
+    @Override
+    protected void onStart() {
+
+        super.onStart();
+        if(!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onSwitchTabFragmentEvent(Integer index) {
+
+        if(index == IntentHelper.CONTACT_TAB_INDEX || index == IntentHelper.MESSAGE_TAB_INDEX) {
+            mTabHost.setCurrentTab(index);
+        }
     }
 }

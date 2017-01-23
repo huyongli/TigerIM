@@ -1,5 +1,6 @@
 package cn.ittiger.im.util;
 
+import cn.ittiger.im.bean.ChatMessage;
 import cn.ittiger.im.bean.ChatRecord;
 import cn.ittiger.im.bean.ChatUser;
 
@@ -66,5 +67,12 @@ public class DBQueryHelper {
     public static ChatRecord queryChatRecord(String uuid) {
 
         return DBHelper.getInstance().getSQLiteDB().query(ChatRecord.class, uuid);
+    }
+
+    public static List<ChatMessage> queryChatMessage(ChatUser chatUser) {
+
+        String whereClause = "meUserName=? and friendUserName=?";
+        String[] whereArgs = {chatUser.getMeUsername(), chatUser.getFriendUsername()};
+        return DBHelper.getInstance().getSQLiteDB().query(ChatMessage.class, whereClause, whereArgs);
     }
 }

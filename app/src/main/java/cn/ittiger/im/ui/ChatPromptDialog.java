@@ -3,6 +3,9 @@ package cn.ittiger.im.ui;
 import cn.ittiger.im.R;
 import cn.ittiger.im.bean.ContactEntity;
 import cn.ittiger.im.util.IMUtil;
+import cn.ittiger.im.util.IntentHelper;
+
+import org.greenrobot.eventbus.EventBus;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,6 +50,7 @@ public class ChatPromptDialog implements DialogInterface.OnClickListener {
         if(which == DialogInterface.BUTTON_POSITIVE) {
             dialog.dismiss();
             IMUtil.startChatActivity(mContext, mContactEntity.getRosterEntry());
+            EventBus.getDefault().post(Integer.valueOf(IntentHelper.MESSAGE_TAB_INDEX));
             mContactEntity = null;
         } else if(which == DialogInterface.BUTTON_NEGATIVE) {
             dialog.dismiss();
