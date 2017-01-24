@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:fitsSystemWindows="true"
+              android:focusable="true"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <include layout="@layout/toolbar_layout"/>
+
+    <cn.ittiger.indexlist.IndexStickyView
+        android:id="@+id/indexStickyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:sideBarBackgroundColor="@color/transparency">
+    </cn.ittiger.indexlist.IndexStickyView>
+</LinearLayout>

@@ -64,7 +64,11 @@ public class MultiChatActivity extends IMBaseActivity {
         nickName = SmackManager.getInstance().getAccountName();
 
         if ("admin".equals(nickName)) {
-            chatRoom = SmackManager.getInstance().createChatRoom(ROOM_NAME, nickName, "");
+            try {
+                chatRoom = SmackManager.getInstance().createChatRoom(ROOM_NAME, nickName, "");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         } else {
             chatRoom = SmackManager.getInstance().joinChatRoom(ROOM_NAME, nickName, "");
         }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/toolbar_create_multi_chat"
+        android:title="@string/text_create_multi_chat"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/toolbar_add_contact"
+        android:icon="@drawable/ic_toolbar_add"
+        android:title="@string/text_add_contact"
+        app:showAsAction="never"/>
+</menu>

@@ -32,7 +32,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public final View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.base_fragment_layout, container, false);
+        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.base_layout, container, false);
 
         view.addView(getContentView(inflater, savedInstanceState), 0);
 

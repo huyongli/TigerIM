@@ -13,7 +13,12 @@
 
     <string name="text_message">消息</string>
     <string name="text_contact">联系人</string>
-    <string name="text_add">添加</string>
+    <string name="text_add_contact">加好友</string>
+    <string name="text_create_multi_chat">创建群聊</string>
+    <string name="text_create_multi_chat_finish">发起</string>
+    <string name="text_default_multi_chat_nickname">%s创建的群</string>
+    <string name="text_invite_to_multi_chat">%s邀请你入群</string>
+    <string name="text_create_multi_chat_failure">创建群聊失败</string>
 
     <string name="title_add_friend">添加好友</string>
     <string name="title_register">注册</string>

@@ -3,7 +3,6 @@ package cn.ittiger.im.activity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.ittiger.base.BaseActivity;
 import cn.ittiger.im.R;
 import cn.ittiger.util.ActivityUtil;
 
@@ -19,7 +18,7 @@ import android.view.View;
  * @author: laohu on 2016/12/27
  * @site: http://ittiger.cn
  */
-public class AboutActivity extends BaseActivity {
+public class AboutActivity extends IMBaseActivity {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.collapsing_toolbar)

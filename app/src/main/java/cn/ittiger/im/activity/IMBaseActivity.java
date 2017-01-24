@@ -25,4 +25,10 @@ public class IMBaseActivity extends BaseActivity {
             getWindow().setNavigationBarColor(getResources().getColor(R.color.main_color));
         }
     }
+
+    @Override
+    public boolean isLceActivity() {
+
+        return false;
+    }
 }

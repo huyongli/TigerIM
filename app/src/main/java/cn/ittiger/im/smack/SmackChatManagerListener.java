@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
  * @author: laohu on 2017/1/18
  * @site: http://ittiger.cn
  */
-public class TigerChatManagerListener implements ChatManagerListener {
+public class SmackChatManagerListener implements ChatManagerListener {
     private static final String PATTERN = "[a-zA-Z0-9_]+@";
     private String mMeNickName = LoginHelper.getUser().getNickname();
 

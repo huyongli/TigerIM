@@ -49,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/TextInputLayout_Style"
+            app:passwordToggleEnabled="true"
             app:errorEnabled="true"
             app:errorTextAppearance="@style/TextInputLayout_Error_Msg_Style">
 
@@ -56,6 +57,7 @@
                 android:id="@+id/acet_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textPassword"
                 android:hint="@string/hint_input_password"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -64,6 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/TextInputLayout_Style"
+            app:passwordToggleEnabled="true"
             app:errorEnabled="true"
             app:errorTextAppearance="@style/TextInputLayout_Error_Msg_Style">
 
@@ -71,6 +74,7 @@
                 android:id="@+id/acet_repassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:inputType="textPassword"
                 android:hint="@string/hint_input_repassword"/>
         </android.support.design.widget.TextInputLayout>
 

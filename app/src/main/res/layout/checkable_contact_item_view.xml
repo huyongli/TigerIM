@@ -10,14 +10,23 @@
               android:background="?android:attr/selectableItemBackground">
 
     <ImageView
+        android:id="@+id/contact_check"
+        android:layout_width="@dimen/checkable_contact_size"
+        android:layout_height="@dimen/checkable_contact_size"
+        android:layout_gravity="center_vertical"/>
+
+    <ImageView
         android:id="@+id/contact_avatar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="@dimen/dimen_5"/>
 
     <TextView
         android:id="@+id/contact_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/dimen_10"
+        android:layout_gravity="center_vertical"
         android:gravity="center_vertical"/>
 </LinearLayout>

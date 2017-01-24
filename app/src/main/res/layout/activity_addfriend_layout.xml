@@ -55,7 +55,7 @@
             android:layout_marginRight="@dimen/dimen_10"
             android:layout_marginTop="@dimen/dimen_20"
             android:background="@drawable/main_button_bg"
-            android:text="@string/text_add"
+            android:text="@string/text_add_contact"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_18"/>
     </LinearLayout>

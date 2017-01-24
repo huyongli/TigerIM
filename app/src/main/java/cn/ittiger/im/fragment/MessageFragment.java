@@ -5,7 +5,7 @@ import butterknife.ButterKnife;
 import cn.ittiger.base.BaseFragment;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.ChatRecordAdapter;
-import cn.ittiger.im.adapter.decoration.ChatRecordItemDecoration;
+import cn.ittiger.im.adapter.decoration.CommonItemDecoration;
 import cn.ittiger.im.bean.ChatMessage;
 import cn.ittiger.im.bean.ChatRecord;
 import cn.ittiger.im.ui.recyclerview.CommonRecyclerView;
@@ -53,7 +53,7 @@ public class MessageFragment extends BaseFragment implements CommonRecyclerView.
         ButterKnife.bind(this, view);
         mLayoutManager = new LinearLayoutManager(mContext);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.addItemDecoration(new ChatRecordItemDecoration());
+        mRecyclerView.addItemDecoration(new CommonItemDecoration());
         mRecyclerView.setOnItemClickListener(this);
         return view;
     }

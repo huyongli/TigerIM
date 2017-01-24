@@ -10,7 +10,7 @@ import org.jivesoftware.smack.XMPPConnection;
  * @author: laohu on 2017/1/18
  * @site: http://ittiger.cn
  */
-public class TigerConnectionListener implements ConnectionListener {
+public class SmackConnectionListener implements ConnectionListener {
 
     @Override
     public void connected(XMPPConnection connection) {

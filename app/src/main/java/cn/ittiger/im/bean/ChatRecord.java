@@ -58,8 +58,8 @@ public class ChatRecord extends ChatUser {
         setMeUsername(chatMessage.getMeUsername());
         setMeNickname(chatMessage.getMeNickname());
 
-        String chatJid = SmackManager.getInstance().getChatJidByUser(chatMessage.getFriendUsername());
-        String fileJid = SmackManager.getInstance().getFileTransferJidChatJid(chatJid);
+        String chatJid = SmackManager.getInstance().getChatJid(chatMessage.getFriendUsername());
+        String fileJid = SmackManager.getInstance().getFileTransferJid(chatJid);
         setChatJid(chatJid);
         setFileJid(fileJid);
 

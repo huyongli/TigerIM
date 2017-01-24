@@ -11,6 +11,7 @@ import cn.ittiger.im.bean.ContactEntity;
 import cn.ittiger.im.bean.ContactMenuEntity;
 import cn.ittiger.im.ui.ChatPromptDialog;
 import cn.ittiger.im.smack.SmackManager;
+import cn.ittiger.im.util.LoginHelper;
 import cn.ittiger.indexlist.IndexStickyView;
 import cn.ittiger.indexlist.adapter.IndexHeaderFooterAdapter;
 import cn.ittiger.indexlist.listener.OnItemClickListener;
@@ -18,11 +19,16 @@ import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 import rx.schedulers.Schedulers;
+
+import com.orhanobut.logger.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.jivesoftware.smack.SmackException;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.roster.RosterEntry;
 
 import android.os.Bundle;
@@ -73,6 +79,7 @@ public class ContactFragment extends BaseFragment {
     @Override
     public void refreshData() {
 
+        startRefresh();
         Observable.create(new Observable.OnSubscribe<List<ContactEntity>>() {
             @Override
             public void call(Subscriber<? super List<ContactEntity>> subscriber) {
@@ -88,22 +95,17 @@ public class ContactFragment extends BaseFragment {
         })
         .subscribeOn(Schedulers.io())//指定上面的Subscriber线程
         .observeOn(AndroidSchedulers.mainThread())//指定下面的回调线程
-        .subscribe(new Observer<List<ContactEntity>>() {
+        .doOnError(new Action1<Throwable>() {
             @Override
-            public void onCompleted() {
-
-                refreshSuccess();
-            }
-
-            @Override
-            public void onError(Throwable e) {
+            public void call(Throwable throwable) {
 
                 refreshFailed();
+                Logger.e(throwable, "query contact list failure");
             }
-
+        })
+        .subscribe(new Action1<List<ContactEntity>>() {
             @Override
-            public void onNext(List<ContactEntity> contacts) {
-
+            public void call(List<ContactEntity> contacts) {
                 if(mAdapter == null) {
                     mAdapter = new ContactAdapter(mContext, contacts);
                     mAdapter.setOnItemClickListener(mContactItemClickListener);
@@ -112,6 +114,7 @@ public class ContactFragment extends BaseFragment {
                 } else {
                     mAdapter.reset(contacts);
                 }
+                refreshSuccess();
             }
         });
     }
@@ -161,6 +164,23 @@ public class ContactFragment extends BaseFragment {
         @Override
         public void onItemClick(View childView, int position, ContactMenuEntity item) {
 
+            switch (item.getMenuType()) {
+                case MULTI_CHAT://群聊
+                    try {
+                        String jid = SmackManager.getInstance().getFullJid(LoginHelper.getUser().getUsername());
+                        List<String> rooms = SmackManager.getInstance().getMultiUserChatManager().getJoinedRooms(jid);
+                        Logger.d(rooms);
+                    } catch (SmackException.NoResponseException e) {
+                        e.printStackTrace();
+                    } catch (XMPPException.XMPPErrorException e) {
+                        e.printStackTrace();
+                    } catch (SmackException.NotConnectedException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+                case GROUP:
+                    break;
+            }
         }
     };
 

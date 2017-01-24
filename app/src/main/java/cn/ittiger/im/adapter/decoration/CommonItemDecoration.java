@@ -15,12 +15,12 @@ import android.view.View;
  * @author: laohu on 2016/12/27
  * @site: http://ittiger.cn
  */
-public class ChatRecordItemDecoration extends RecyclerView.ItemDecoration {
+public class CommonItemDecoration extends RecyclerView.ItemDecoration {
 
     private final Drawable mDivider;
     private final int mSize;
 
-    public ChatRecordItemDecoration() {
+    public CommonItemDecoration() {
 
         mDivider = new ColorDrawable(AppContext.getInstance().getResources().getColor(R.color.divider_color));
         mSize = AppContext.getInstance().getResources().getDimensionPixelSize(R.dimen.global_divider_size);

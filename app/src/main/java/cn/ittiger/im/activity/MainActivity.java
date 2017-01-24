@@ -78,7 +78,7 @@ public class MainActivity extends IMBaseActivity
         initTabHost();
 
         //普通消息接收监听
-        SmackListenerManager.addMessageListener();
+        SmackListenerManager.addGlobalListener();
     }
 
     private void initToolbar() {
@@ -156,7 +156,7 @@ public class MainActivity extends IMBaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.main_toolbar_menu, menu);
         return true;
     }
 
@@ -164,8 +164,11 @@ public class MainActivity extends IMBaseActivity
     public boolean onMenuItemClick(MenuItem item) {
 
         switch (item.getItemId()) {
-            case R.id.toolbar_add:
+            case R.id.toolbar_add_contact:
                 ActivityUtil.startActivity(mActivity, AddFriendActivity.class);
+                break;
+            case R.id.toolbar_create_multi_chat:
+                ActivityUtil.startActivity(mActivity, CreateMultiChatActivity.class);
                 break;
             default:
                 break;

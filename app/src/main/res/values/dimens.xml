@@ -23,6 +23,7 @@
     <dimen name="global_divider_size">1px</dimen>
     <dimen name="contact_item_left_margin">10dp</dimen>
     <dimen name="contact_item_right_margin">24dp</dimen>
+    <dimen name="checkable_contact_size">20dp</dimen>
 
     <!-- font size -->
     <dimen name="sp_12">12sp</dimen>
