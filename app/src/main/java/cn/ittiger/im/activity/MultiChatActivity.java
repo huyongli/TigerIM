@@ -1,146 +1,87 @@
 package cn.ittiger.im.activity;
 
-import org.jivesoftware.smack.MessageListener;
-import org.jivesoftware.smack.SmackException.NotConnectedException;
-import org.jivesoftware.smack.packet.Message;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.jivesoftware.smackx.muc.MultiUserChat;
+import org.json.JSONObject;
 
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cn.ittiger.im.R;
+import cn.ittiger.im.bean.ChatMessage;
 import cn.ittiger.im.smack.SmackManager;
-import cn.ittiger.util.UIUtil;
 import cn.ittiger.util.ValueUtil;
+import rx.Observable;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
+
+import com.orhanobut.logger.Logger;
+
+import java.io.File;
 
 /**
  * 多人聊天
  *
- * @auther: hyl
- * @time: 2015-10-27上午11:05:33
+ * @author: laohu on 2017/2/3
+ * @site: http://ittiger.cn
  */
-public class MultiChatActivity extends IMBaseActivity {
+public class MultiChatActivity extends BaseChatActivity {
     /**
-     * 发送消息展示区
+     * 多人聊天对象
      */
-    @BindView(R.id.tv_multichat_content)
-    TextView mTvMessageContent;
-    /**
-     * 编辑要发送的消息
-     */
-    @BindView(R.id.et_multichat_msg)
-    EditText mEtChatMessage;
-    /**
-     * 发送消息按钮
-     */
-    @BindView(R.id.btn_multichat_msg_send)
-    Button mBtnMsgSend;
-    /**
-     * 当前账户昵称
-     */
-    String nickName;
-    /**
-     * 会议室聊天对象
-     */
-    private MultiUserChat chatRoom;
-    /**
-     * 会议室名字
-     */
-    private static final String ROOM_NAME = "chatRoom";
+    private MultiUserChat mMultiUserChat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multichat_layout);
-        ButterKnife.bind(this);
-
-        nickName = SmackManager.getInstance().getAccountName();
-
-        if ("admin".equals(nickName)) {
-            try {
-                chatRoom = SmackManager.getInstance().createChatRoom(ROOM_NAME, nickName, "");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            chatRoom = SmackManager.getInstance().joinChatRoom(ROOM_NAME, nickName, "");
-        }
-        chatRoom.addMessageListener(messageListener);
+        mMultiUserChat = SmackManager.getInstance().getMultiChat(mChatUser.getFriendUsername());
     }
 
-    private MessageListener messageListener = new MessageListener() {
-        @Override
-        public void processMessage(Message message) {
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReceiveChatMessageEvent(ChatMessage message) {
 
-            final String from = message.getFrom();
-            final String msg = message.getBody();
-            runOnUiThread(new Runnable() {
-
-                @Override
-                public void run() {
-
-                    updateMsg(msg, from);
-                }
-            });
+        if(mChatUser.getFriendUsername().equals(message.getFriendUsername()) && message.isMulti()) {
+            addChatMessageView(message);
         }
-    };
-
-    /**
-     * 更新展示发送、接收的消息
-     *
-     * @param msg
-     * @param userName
-     */
-    public void updateMsg(String msg, String userName) {
-
-        String disMsg = mTvMessageContent.getText().toString();
-        if (!ValueUtil.isEmpty(disMsg)) {
-            disMsg += "\n\n";
-        }
-        disMsg += userName + ":" + msg;
-        mTvMessageContent.setText(disMsg);
-        mEtChatMessage.setText("");
-    }
-
-    /**
-     * 发送消息
-     *
-     * @param v
-     */
-    @OnClick(R.id.btn_multichat_msg_send)
-    public void onMessageSendClick(View v) {
-
-        final String msg = mEtChatMessage.getText().toString();
-        if (ValueUtil.isEmpty(msg)) {
-            UIUtil.showToast(this, "请输入要发送的消息");
-            return;
-        }
-        updateMsg(msg, nickName);
-        new Thread() {
-            public void run() {
-
-                try {
-                    chatRoom.sendMessage(msg);
-                } catch (NotConnectedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            ;
-        }.start();
     }
 
     @Override
-    protected void onStop() {
+    public void send(String message) {
 
-        super.onStop();
-        chatRoom.removeMessageListener(messageListener);
+        if (ValueUtil.isEmpty(message)) {
+            return;
+        }
+        Observable.just(message)
+        .observeOn(Schedulers.io())
+        .subscribe(new Action1<String>() {
+            @Override
+            public void call(String message) {
+                try {
+                    JSONObject json = new JSONObject();
+                    json.put(ChatMessage.KEY_MESSAGE_CONTENT, message);
+                    json.put(ChatMessage.KEY_MULTI_CHAT_SEND_USER, mChatUser.getMeUsername());
+                    mMultiUserChat.sendMessage(json.toString());
+                } catch (Exception e) {
+                    Logger.e(e, "send message failure");
+                }
+            }
+        });
+    }
+
+    @Override
+    public void sendVoice(File audioFile) {
+
+    }
+
+    @Override
+    public void recordStart() {
+
+    }
+
+    @Override
+    public void functionClick(int index) {
+
     }
 }

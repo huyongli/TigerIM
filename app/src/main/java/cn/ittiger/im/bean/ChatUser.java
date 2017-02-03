@@ -25,7 +25,7 @@ public class ChatUser implements Parcelable {
     @PrimaryKey
     private String uuid;
     /**
-     * 聊天好友的用户名
+     * 聊天好友的用户名，群聊时为群聊MultiUserChat的room，即jid,格式为：老胡创建的群@conference.121.42.13.79
      */
     @Column(columnName = "friendUserName")
     private String mFriendUsername;
@@ -45,7 +45,7 @@ public class ChatUser implements Parcelable {
     @Column(columnName = "meNickName")
     private String mMeNickname;
     /**
-     * 聊天JID
+     * 聊天JID，群聊时为群聊jid
      */
     @Column(columnName = "chatJid")
     private String mChatJid;
@@ -54,12 +54,23 @@ public class ChatUser implements Parcelable {
      */
     @Column(columnName = "fileJid")
     private String mFileJid;
+    /**
+     * 是否为群聊信息
+     */
+    @Column(columnName = "isMulti")
+    private boolean mIsMulti = false;
 
 
     public ChatUser() {
 
     }
 
+    /**
+     * 单人聊天时使用
+     *
+     * @param friendUsername
+     * @param friendNickname
+     */
     public ChatUser(String friendUsername, String friendNickname) {
 
         this();
@@ -69,6 +80,31 @@ public class ChatUser implements Parcelable {
 
         mChatJid = SmackManager.getInstance().getChatJid(mFriendUsername);
         mFileJid = SmackManager.getInstance().getFileTransferJid(mChatJid);
+
+        User user = LoginHelper.getUser();
+        mMeUsername = user.getUsername();
+        mMeNickname = user.getNickname();
+    }
+
+    /**
+     * 创建群聊时使用
+     *
+     * @param friendUsername
+     * @param friendNickname
+     * @param isMulti
+     */
+    public ChatUser(String friendUsername, String friendNickname, boolean isMulti) {
+
+        this();
+        if(isMulti == false) {
+            throw new IllegalArgumentException("multi chat the argument isMulti must be true");
+        }
+        this.uuid = UUID.randomUUID().toString();
+        mFriendUsername = friendUsername;
+        mFriendNickname = friendNickname;
+        mIsMulti = isMulti;
+
+        mChatJid = friendUsername;
 
         User user = LoginHelper.getUser();
         mMeUsername = user.getUsername();
@@ -145,6 +181,16 @@ public class ChatUser implements Parcelable {
         mFileJid = fileJid;
     }
 
+    public boolean isMulti() {
+
+        return mIsMulti;
+    }
+
+    public void setMulti(boolean multi) {
+
+        mIsMulti = multi;
+    }
+
 
     @Override
     public int describeContents() {
@@ -162,6 +208,7 @@ public class ChatUser implements Parcelable {
         dest.writeString(this.mMeNickname);
         dest.writeString(this.mChatJid);
         dest.writeString(this.mFileJid);
+        dest.writeByte(this.mIsMulti ? (byte) 1 : (byte) 0);
     }
 
     protected ChatUser(Parcel in) {
@@ -173,6 +220,7 @@ public class ChatUser implements Parcelable {
         this.mMeNickname = in.readString();
         this.mChatJid = in.readString();
         this.mFileJid = in.readString();
+        this.mIsMulti = in.readByte() != 0;
     }
 
     public static final Creator<ChatUser> CREATOR = new Creator<ChatUser>() {

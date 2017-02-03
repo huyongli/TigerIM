@@ -3,7 +3,6 @@ package cn.ittiger.im.activity;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -23,27 +22,14 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.widget.TextView;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import cn.ittiger.im.R;
-import cn.ittiger.im.adapter.ChatAdapter;
-import cn.ittiger.im.bean.ChatUser;
 import cn.ittiger.im.bean.ChatMessage;
 import cn.ittiger.im.constant.FileLoadState;
 import cn.ittiger.im.constant.MessageType;
-import cn.ittiger.im.ui.recyclerview.CommonRecyclerView;
 import cn.ittiger.im.smack.SmackManager;
-import cn.ittiger.im.ui.keyboard.ChatKeyboard;
-import cn.ittiger.im.ui.keyboard.ChatKeyboard.ChatKeyboardOperateListener;
 import cn.ittiger.im.util.AppFileHelper;
 import cn.ittiger.im.util.DBHelper;
-import cn.ittiger.im.util.DBQueryHelper;
-import cn.ittiger.im.util.IntentHelper;
 import cn.ittiger.util.BitmapUtil;
 import cn.ittiger.util.DateUtil;
 import cn.ittiger.util.FileUtil;
@@ -62,108 +48,25 @@ import com.orhanobut.logger.Logger;
  * @author: laohu on 2017/1/12
  * @site: http://ittiger.cn
  */
-public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateListener {
-    @BindView(R.id.toolbar)
-    Toolbar mToolbar;
-    @BindView(R.id.toolbarTitle)
-    TextView mToolbarTitle;
-    /**
-     * 聊天内容展示列表
-     */
-    @BindView(R.id.chat_content)
-    CommonRecyclerView mChatMessageRecyclerView;
-    /**
-     * 聊天输入控件
-     */
-    @BindView(R.id.ckb_chat_board)
-    ChatKeyboard mChatKyboard;
-    /**
-     * 聊天用户实体类
-     */
-    private ChatUser mChatUser;
+public class ChatActivity extends BaseChatActivity {
     /**
      * 聊天窗口对象
      */
     private Chat mChat;
-    /**
-     * 聊天记录展示适配器
-     */
-    private ChatAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        mChatUser = getIntent().getParcelableExtra(IntentHelper.KEY_CHAT_DIALOG);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat_layout);
-        ButterKnife.bind(this);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);//不显示ToolBar的标题
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mToolbarTitle.setText(mChatUser.getFriendNickname());
-        mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                onBackPressed();
-            }
-        });
-        mChatKyboard.setChatKeyboardOperateListener(this);
-
         mChat = SmackManager.getInstance().createChat(mChatUser.getChatJid());
-
         addReceiveFileListener();
-
-        mLayoutManager = new LinearLayoutManager(this);
-        mChatMessageRecyclerView.setLayoutManager(mLayoutManager);
-        initData();
-    }
-
-    private void initData() {
-
-        Observable.create(new Observable.OnSubscribe<List<ChatMessage>>() {
-            @Override
-            public void call(Subscriber<? super List<ChatMessage>> subscriber) {
-
-                List<ChatMessage> messages = DBQueryHelper.queryChatMessage(mChatUser);
-                subscriber.onNext(messages);
-                subscriber.onCompleted();
-            }
-        })
-        .subscribeOn(Schedulers.io())
-        .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Action1<List<ChatMessage>>() {
-            @Override
-            public void call(List<ChatMessage> chatMessages) {
-                mAdapter = new ChatAdapter(mActivity, chatMessages);
-                mChatMessageRecyclerView.setAdapter(mAdapter);
-                mLayoutManager.scrollToPosition(mAdapter.getItemCount() - 1);
-            }
-        });
-
-    }
-
-    @Override
-    protected void onStart() {
-
-        super.onStart();
-        if(!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this);
-        }
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReceiveChatMessageEvent(ChatMessage message) {
 
-        if(mChatUser.getMeUsername().equals(message.getMeUsername())) {
+        if(mChatUser.getMeUsername().equals(message.getMeUsername()) && !message.isMulti()) {
             addChatMessageView(message);
         }
     }
@@ -310,12 +213,6 @@ public class ChatActivity extends IMBaseActivity implements ChatKeyboardOperateL
                 }
             }
         });
-    }
-
-    private void addChatMessageView(ChatMessage message) {
-
-        mAdapter.add(message);
-        mLayoutManager.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     /**

@@ -2,6 +2,7 @@ package cn.ittiger.im.smack;
 
 import cn.ittiger.im.bean.LoginResult;
 import cn.ittiger.im.bean.User;
+import cn.ittiger.im.constant.Constant;
 
 import com.orhanobut.logger.Logger;
 
@@ -26,13 +27,16 @@ import org.jivesoftware.smack.roster.Roster;
 import org.jivesoftware.smack.roster.RosterEntry;
 import org.jivesoftware.smack.tcp.XMPPTCPConnection;
 import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
+import org.jivesoftware.smackx.disco.ServiceDiscoveryManager;
 import org.jivesoftware.smackx.filetransfer.FileTransferListener;
 import org.jivesoftware.smackx.filetransfer.FileTransferManager;
 import org.jivesoftware.smackx.filetransfer.OutgoingFileTransfer;
 import org.jivesoftware.smackx.iqregister.AccountManager;
 import org.jivesoftware.smackx.muc.DiscussionHistory;
+import org.jivesoftware.smackx.muc.HostedRoom;
 import org.jivesoftware.smackx.muc.MultiUserChat;
 import org.jivesoftware.smackx.muc.MultiUserChatManager;
+import org.jivesoftware.smackx.muc.RoomInfo;
 import org.jivesoftware.smackx.xdata.Form;
 import org.jivesoftware.smackx.xdata.FormField;
 
@@ -139,6 +143,14 @@ public class SmackManager {
             Logger.e(TAG, e, "login failure");
             return new LoginResult(false, e.getMessage());
         }
+    }
+
+    public XMPPTCPConnection getConnection() {
+
+        if (!isConnected() || mConnection == null) {
+            throw new IllegalStateException("服务器断开，请先连接服务器");
+        }
+        return mConnection;
     }
 
     /**
@@ -633,7 +645,7 @@ public class SmackManager {
         if (!isConnected()) {
             throw new NullPointerException("服务器连接失败，请先连接服务器");
         }
-        MultiUserChat muc = getMultiUserChatManager().getMultiUserChat(roomName + "@conference." + mConnection.getServiceName());
+        MultiUserChat muc = getMultiChat(getMultiChatJid(roomName));
         // 创建聊天室
         boolean isCreated = muc.createOrJoin(nickName);
         if (isCreated) {
@@ -669,8 +681,6 @@ public class SmackManager {
             List<String> list = new ArrayList<String>();
             list.add("0");
             submitForm.setAnswer("muc#roomconfig_maxusers", list);
-            // 能够发现占有者真实 JID 的角色
-            // submitForm.setAnswer("muc#roomconfig_whois", "anyone");
             // 登录房间对话
             submitForm.setAnswer("muc#roomconfig_enablelogging", true);
             // 仅允许注册的昵称登录
@@ -700,7 +710,7 @@ public class SmackManager {
         }
         try {
             // 使用XMPPConnection创建一个MultiUserChat窗口  
-            MultiUserChat muc = getMultiUserChatManager().getMultiUserChat(roomName + "@conference." + mConnection.getServiceName());
+            MultiUserChat muc = getMultiChat(getMultiChatJid(roomName));
             // 聊天室服务将会决定要接受的历史记录数量  
             DiscussionHistory history = new DiscussionHistory();
             history.setMaxChars(0);
@@ -714,11 +724,43 @@ public class SmackManager {
         }
     }
 
+    private String getMultiChatJid(String roomName) {
+
+        return roomName + Constant.MULTI_CHAT_ADDRESS_SPLIT + mConnection.getServiceName();
+    }
+
+    public MultiUserChat getMultiChat(String roomJid) {
+
+        return getMultiUserChatManager().getMultiUserChat(roomJid);
+    }
+
     public MultiUserChatManager getMultiUserChatManager() {
 
         if (!isConnected()) {
             throw new NullPointerException("服务器连接失败，请先连接服务器");
         }
         return MultiUserChatManager.getInstanceFor(mConnection);
+    }
+
+    /**
+     * 获取服务器上的所有群聊房间
+     *
+     * @return
+     * @throws Exception
+     */
+    public List<HostedRoom> getHostedRooms() throws Exception {
+
+        if (!isConnected()) {
+            throw new NullPointerException("服务器连接失败，请先连接服务器");
+        }
+        return getMultiUserChatManager().getHostedRooms(mConnection.getServiceName());
+    }
+
+    public ServiceDiscoveryManager getServiceDiscoveryManager() {
+
+        if (!isConnected()) {
+            throw new NullPointerException("服务器连接失败，请先连接服务器");
+        }
+        return ServiceDiscoveryManager.getInstanceFor(mConnection);
     }
 }

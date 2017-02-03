@@ -1,31 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
-	<TextView 
-	    android:id="@+id/tv_multichat_content"
-	    android:layout_width="match_parent"
-	    android:layout_height="match_parent"
-	    android:layout_above="@+id/ll_multichat_msg"
-	    android:padding="@dimen/dimen_10"/>
-	
-	<LinearLayout 
-	    android:id="@+id/ll_multichat_msg"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_alignParentBottom="true"
-	    android:orientation="horizontal">
-	    <EditText 
-	        android:id="@+id/et_multichat_msg"
-	        android:layout_width="0dp"
-	        android:layout_height="wrap_content"
-	        android:singleLine="false"
-	        android:layout_weight="1"/>
-	    <Button 
-	        android:id="@+id/btn_multichat_msg_send"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:text="发送"/>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:layout_width="match_parent"
+			  android:layout_height="match_parent"
+			  android:fitsSystemWindows="true"
+			  android:focusable="true"
+			  android:focusableInTouchMode="true"
+			  android:orientation="vertical">
+
+	<include layout="@layout/toolbar_layout"/>
+
+	<LinearLayout
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+
+		<cn.ittiger.im.ui.recyclerview.CommonRecyclerView
+			android:id="@+id/chat_content"
+			android:layout_width="match_parent"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:layout_margin="@dimen/dimen_10"/>
+
+		<include layout="@layout/divider_horizontal_view"/>
+
+		<cn.ittiger.im.ui.keyboard.ChatKeyboard
+			android:id="@+id/ckb_chat_board"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"/>
+
 	</LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>

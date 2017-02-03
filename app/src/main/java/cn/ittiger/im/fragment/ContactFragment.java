@@ -11,12 +11,10 @@ import cn.ittiger.im.bean.ContactEntity;
 import cn.ittiger.im.bean.ContactMenuEntity;
 import cn.ittiger.im.ui.ChatPromptDialog;
 import cn.ittiger.im.smack.SmackManager;
-import cn.ittiger.im.util.LoginHelper;
 import cn.ittiger.indexlist.IndexStickyView;
 import cn.ittiger.indexlist.adapter.IndexHeaderFooterAdapter;
 import cn.ittiger.indexlist.listener.OnItemClickListener;
 import rx.Observable;
-import rx.Observer;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
@@ -27,8 +25,6 @@ import com.orhanobut.logger.Logger;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
-import org.jivesoftware.smack.SmackException;
-import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.roster.RosterEntry;
 
 import android.os.Bundle;
@@ -166,17 +162,6 @@ public class ContactFragment extends BaseFragment {
 
             switch (item.getMenuType()) {
                 case MULTI_CHAT://群聊
-                    try {
-                        String jid = SmackManager.getInstance().getFullJid(LoginHelper.getUser().getUsername());
-                        List<String> rooms = SmackManager.getInstance().getMultiUserChatManager().getJoinedRooms(jid);
-                        Logger.d(rooms);
-                    } catch (SmackException.NoResponseException e) {
-                        e.printStackTrace();
-                    } catch (XMPPException.XMPPErrorException e) {
-                        e.printStackTrace();
-                    } catch (SmackException.NotConnectedException e) {
-                        e.printStackTrace();
-                    }
                     break;
                 case GROUP:
                     break;

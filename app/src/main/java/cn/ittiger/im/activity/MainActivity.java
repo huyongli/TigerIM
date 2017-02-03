@@ -24,6 +24,7 @@ import cn.ittiger.im.fragment.ContactFragment;
 import cn.ittiger.im.fragment.MessageFragment;
 import cn.ittiger.im.smack.SmackListenerManager;
 import cn.ittiger.im.smack.SmackManager;
+import cn.ittiger.im.smack.SmackMultiChatManager;
 import cn.ittiger.im.ui.FragmentSaveStateTabHost;
 import cn.ittiger.im.util.IntentHelper;
 import cn.ittiger.im.util.ShareHelper;

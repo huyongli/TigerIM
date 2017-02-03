@@ -2,6 +2,8 @@ package cn.ittiger.im.smack;
 
 import org.jivesoftware.smackx.muc.MultiUserChat;
 
+import java.util.HashMap;
+
 /**
  * Smack全局监听器管理
  * @author: laohu on 2017/1/18
@@ -21,6 +23,10 @@ public class SmackListenerManager {
      * 群聊消息监听
      */
     private MultiChatMessageListener mMultiChatMessageListener;
+    /**
+     * 群聊信息
+     */
+    private HashMap<String, MultiUserChat> mMultiUserChatHashMap = new HashMap<>();
 
     private SmackListenerManager() {
 
@@ -69,6 +75,8 @@ public class SmackListenerManager {
      */
     static void addAllMultiChatMessageListener() {
 
+        //因Smack+openfire群聊在用户退出登陆后，群聊无法保存已加入的用户信息，所以手动添加该群中的用户
+        SmackMultiChatManager.bindJoinMultiChat();
     }
 
     /**
@@ -81,6 +89,7 @@ public class SmackListenerManager {
         if(multiUserChat == null) {
             return;
         }
+        getInstance().mMultiUserChatHashMap.put(multiUserChat.getRoom(), multiUserChat);
         multiUserChat.addMessageListener(getInstance().mMultiChatMessageListener);
     }
 
@@ -88,7 +97,14 @@ public class SmackListenerManager {
 
         SmackManager.getInstance().getChatManager().removeChatListener(mChatManagerListener);
         SmackManager.getInstance().getMultiUserChatManager().removeInvitationListener(mInvitationListener);
+
+        for(MultiUserChat multiUserChat : mMultiUserChatHashMap.values()) {
+            multiUserChat.removeMessageListener(mMultiChatMessageListener);
+        }
+
         mChatManagerListener = null;
         mInvitationListener = null;
+        mMultiChatMessageListener = null;
+        mMultiUserChatHashMap.clear();
     }
 }

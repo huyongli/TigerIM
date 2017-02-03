@@ -3,8 +3,10 @@ package cn.ittiger.im.util;
 import cn.ittiger.im.bean.ChatMessage;
 import cn.ittiger.im.bean.ChatRecord;
 import cn.ittiger.im.bean.ChatUser;
+import cn.ittiger.im.constant.Constant;
 
 import org.jivesoftware.smack.roster.RosterEntry;
+import org.jivesoftware.smackx.muc.MultiUserChat;
 
 import java.util.List;
 
@@ -26,6 +28,28 @@ public class DBQueryHelper {
 
          return queryChatUser(friendRoster.getUser(), friendRoster.getName());
      }
+
+
+    /**
+     * 根据多人聊天信息查询对应的ChatUser，如果数据库中不存在则创建新的
+     *
+     * @param multiUserChat
+     * @return
+     */
+    public static ChatUser queryChatUser(MultiUserChat multiUserChat) {
+
+        String friendUserName = multiUserChat.getRoom();
+        int idx = friendUserName.indexOf(Constant.MULTI_CHAT_ADDRESS_SPLIT);
+        String friendNickName = friendUserName.substring(0, idx);
+        String whereClause = "meUserName=? and friendUserName=? and isMulti=?";
+        String[] whereArgs = {LoginHelper.getUser().getUsername(), friendUserName, "true"};
+        ChatUser chatUser = DBHelper.getInstance().getSQLiteDB().queryOne(ChatUser.class, whereClause, whereArgs);
+        if(chatUser == null) {
+            chatUser = new ChatUser(friendUserName, friendNickName, true);
+            DBHelper.getInstance().getSQLiteDB().save(chatUser);
+        }
+        return chatUser;
+    }
 
     /**
      * 根据好友信息查询对应的ChatUser，如果数据库中不存在则创建新的

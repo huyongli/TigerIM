@@ -6,7 +6,10 @@ import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.CheckableContactAdapter;
 import cn.ittiger.im.adapter.decoration.ContactItemDecoration;
 import cn.ittiger.im.bean.CheckableContactEntity;
+import cn.ittiger.im.smack.SmackListenerManager;
 import cn.ittiger.im.smack.SmackManager;
+import cn.ittiger.im.smack.SmackMultiChatManager;
+import cn.ittiger.im.util.IMUtil;
 import cn.ittiger.im.util.LoginHelper;
 import cn.ittiger.indexlist.IndexStickyView;
 import cn.ittiger.indexlist.listener.OnItemClickListener;
@@ -33,7 +36,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * 创建群聊界面
@@ -175,7 +177,7 @@ public class CreateMultiChatActivity extends IMBaseActivity
     private void createMultiChat() {
 
         String meNickName = LoginHelper.getUser().getNickname();
-        String chatRoomName = UUID.randomUUID().toString();
+        String chatRoomName = String.format(getString(R.string.text_default_multi_chat_nickname), meNickName);
         String reason = String.format(getString(R.string.text_invite_to_multi_chat), meNickName);
         try {
             MultiUserChat multiUserChat = SmackManager.getInstance().createChatRoom(chatRoomName, meNickName, null);
@@ -183,6 +185,9 @@ public class CreateMultiChatActivity extends IMBaseActivity
                 String jid = SmackManager.getInstance().getFullJid(entity.getRosterEntry().getUser());
                 multiUserChat.invite(jid, reason);//邀请入群
             }
+            SmackListenerManager.addMultiChatMessageListener(multiUserChat);
+            SmackMultiChatManager.saveMultiChat(multiUserChat);
+            IMUtil.startMultiChatActivity(this, multiUserChat);
             ActivityUtil.finishActivity(this);
         } catch (Exception e) {
             Logger.e(e, "invite friend to chatRoom failure ");

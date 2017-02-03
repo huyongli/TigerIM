@@ -1,5 +1,8 @@
 package cn.ittiger.im.smack;
 
+import cn.ittiger.im.bean.ChatUser;
+import cn.ittiger.im.constant.Constant;
+import cn.ittiger.im.util.DBHelper;
 import cn.ittiger.im.util.LoginHelper;
 
 import com.orhanobut.logger.Logger;
@@ -22,6 +25,14 @@ public class MultiChatInvitationListener implements InvitationListener {
 
         try {
             room.join(LoginHelper.getUser().getNickname());
+            SmackMultiChatManager.saveMultiChat(room);
+            SmackListenerManager.addMultiChatMessageListener(room);
+
+            String friendUserName = room.getRoom();
+            int idx = friendUserName.indexOf(Constant.MULTI_CHAT_ADDRESS_SPLIT);
+            String friendNickName = friendUserName.substring(0, idx);
+            ChatUser chatUser = new ChatUser(friendUserName, friendNickName, true);
+            DBHelper.getInstance().getSQLiteDB().save(chatUser);
         } catch (Exception e) {
             Logger.e(e, "join multiChat failure on invitationReceived");
         }

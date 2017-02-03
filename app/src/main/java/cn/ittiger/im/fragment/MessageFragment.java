@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * 单聊窗口
+ * 聊天消息列表
  * @author: laohu on 2016/12/24
  * @site: http://ittiger.cn
  */
@@ -172,6 +172,8 @@ public class MessageFragment extends BaseFragment implements CommonRecyclerView.
                         chatRecord.getFriendUsername().equals(message.getFriendUsername())) {
                     mMap.put(message.getFriendUsername(), i);
                     break;
+                } else {
+                    chatRecord = null;
                 }
             }
         }

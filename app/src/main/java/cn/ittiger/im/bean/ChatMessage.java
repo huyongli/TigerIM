@@ -23,6 +23,7 @@ import java.util.UUID;
 public class ChatMessage implements Parcelable {
     public static final String KEY_FRIEND_NICKNAME = "friendNickName";
     public static final String KEY_MESSAGE_CONTENT = "messageContent";
+    public static final String KEY_MULTI_CHAT_SEND_USER = "multiChatSendUser";
     /**
      *
      */
@@ -39,7 +40,7 @@ public class ChatMessage implements Parcelable {
     @Column(columnName = "messageType")
     private int mMessageType;
     /**
-     * 聊天好友的用户名
+     * 聊天好友的用户名,群聊时为群聊的jid,格式为：老胡创建的群@conference.121.42.13.79
      */
     @Column(columnName = "friendUserName")
     private String mFriendUsername;
@@ -78,6 +79,11 @@ public class ChatMessage implements Parcelable {
      */
     @Column(columnName = "fileLoadState")
     private int mFileLoadState = FileLoadState.STATE_LOAD_START.value();
+    /**
+     * 是否为群聊记录
+     */
+    @Column(columnName = "isMulti")
+    private boolean mIsMulti = false;
 
     public ChatMessage() {
 
@@ -202,6 +208,16 @@ public class ChatMessage implements Parcelable {
         this.uuid = uuid;
     }
 
+    public boolean isMulti() {
+
+        return mIsMulti;
+    }
+
+    public void setMulti(boolean multi) {
+
+        mIsMulti = multi;
+    }
+
     @Override
     public boolean equals(Object o) {
 
@@ -235,6 +251,7 @@ public class ChatMessage implements Parcelable {
         dest.writeByte(this.mIsMeSend ? (byte) 1 : (byte) 0);
         dest.writeString(this.mFilePath);
         dest.writeInt(this.mFileLoadState);
+        dest.writeByte(this.mIsMulti ? (byte) 1 : (byte) 0);
     }
 
     protected ChatMessage(Parcel in) {
@@ -250,6 +267,7 @@ public class ChatMessage implements Parcelable {
         this.mIsMeSend = in.readByte() != 0;
         this.mFilePath = in.readString();
         this.mFileLoadState = in.readInt();
+        this.mIsMulti = in.readByte() != 0;
     }
 
     public static final Creator<ChatMessage> CREATOR = new Creator<ChatMessage>() {

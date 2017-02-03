@@ -4,6 +4,7 @@ import cn.ittiger.database.annotation.Column;
 import cn.ittiger.database.annotation.Table;
 import cn.ittiger.database.util.ValueUtil;
 import cn.ittiger.im.R;
+import cn.ittiger.im.constant.Constant;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.util.DateUtil;
 
@@ -54,14 +55,22 @@ public class ChatRecord extends ChatUser {
     public ChatRecord(ChatMessage chatMessage) {
 
         setFriendUsername(chatMessage.getFriendUsername());
-        setFriendNickname(chatMessage.getFriendNickname());
         setMeUsername(chatMessage.getMeUsername());
         setMeNickname(chatMessage.getMeNickname());
 
-        String chatJid = SmackManager.getInstance().getChatJid(chatMessage.getFriendUsername());
-        String fileJid = SmackManager.getInstance().getFileTransferJid(chatJid);
-        setChatJid(chatJid);
-        setFileJid(fileJid);
+        if(chatMessage.isMulti()) {//群发
+            int idx = chatMessage.getFriendUsername().indexOf(Constant.MULTI_CHAT_ADDRESS_SPLIT);
+            String friendNickName = chatMessage.getFriendUsername().substring(0, idx);
+            setFriendNickname(friendNickName);//群聊记录显示群聊名称
+            setChatJid(chatMessage.getFriendUsername());
+            setMulti(chatMessage.isMulti());
+        } else {
+            setFriendNickname(chatMessage.getFriendNickname());
+            String chatJid = SmackManager.getInstance().getChatJid(chatMessage.getFriendUsername());
+            String fileJid = SmackManager.getInstance().getFileTransferJid(chatJid);
+            setChatJid(chatJid);
+            setFileJid(fileJid);
+        }
 
         setChatTime(chatMessage.getDatetime());
         setLastMessage(chatMessage.getContent());
