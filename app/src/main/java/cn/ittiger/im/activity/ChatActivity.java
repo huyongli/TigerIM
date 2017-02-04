@@ -89,7 +89,7 @@ public class ChatActivity extends BaseChatActivity {
                 public void call(String message) {
                     try {
                         JSONObject json = new JSONObject();
-                        json.put(ChatMessage.KEY_FRIEND_NICKNAME, mChatUser.getFriendNickname());
+                        json.put(ChatMessage.KEY_FROM_NICKNAME, mChatUser.getMeNickname());
                         json.put(ChatMessage.KEY_MESSAGE_CONTENT, message);
                         mChat.sendMessage(json.toString());
 

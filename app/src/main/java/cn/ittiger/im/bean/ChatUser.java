@@ -79,7 +79,7 @@ public class ChatUser implements Parcelable {
         mFriendNickname = friendNickname;
 
         mChatJid = SmackManager.getInstance().getChatJid(mFriendUsername);
-        mFileJid = SmackManager.getInstance().getFileTransferJid(mChatJid);
+        mFileJid = SmackManager.getInstance().getFileTransferJid(mFriendUsername);
 
         User user = LoginHelper.getUser();
         mMeUsername = user.getUsername();

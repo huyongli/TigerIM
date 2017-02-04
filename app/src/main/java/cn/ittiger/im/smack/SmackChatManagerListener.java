@@ -54,7 +54,7 @@ public class SmackChatManagerListener implements ChatManagerListener {
 
                         ChatMessage chatMessage = new ChatMessage(MessageType.MESSAGE_TYPE_TEXT.value(), false);
                         chatMessage.setFriendUsername(fromUser);
-                        chatMessage.setFriendNickname(json.optString(ChatMessage.KEY_FRIEND_NICKNAME));
+                        chatMessage.setFriendNickname(json.optString(ChatMessage.KEY_FROM_NICKNAME));
                         chatMessage.setMeUsername(toUser);
                         chatMessage.setMeNickname(mMeNickName);
                         chatMessage.setContent(json.optString(ChatMessage.KEY_MESSAGE_CONTENT));
