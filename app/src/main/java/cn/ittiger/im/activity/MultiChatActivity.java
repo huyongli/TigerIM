@@ -8,7 +8,9 @@ import org.json.JSONObject;
 import android.os.Bundle;
 
 import cn.ittiger.im.R;
+import cn.ittiger.im.activity.base.BaseChatActivity;
 import cn.ittiger.im.bean.ChatMessage;
+import cn.ittiger.im.constant.KeyBoardMoreFunType;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.util.ValueUtil;
 import rx.Observable;
@@ -81,7 +83,7 @@ public class MultiChatActivity extends BaseChatActivity {
     }
 
     @Override
-    public void functionClick(int index) {
+    public void functionClick(KeyBoardMoreFunType funType) {
 
     }
 }

@@ -8,6 +8,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,19 +18,26 @@ import android.widget.RelativeLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cn.ittiger.im.R;
-import cn.ittiger.im.ui.PressSpeakView;
+import cn.ittiger.im.constant.KeyBoardMoreFunType;
+import cn.ittiger.im.ui.KeyBoardMoreView;
+import cn.ittiger.im.ui.RecordVoiceView;
+import cn.ittiger.im.util.IMUtil;
 import cn.ittiger.util.ValueUtil;
 
 public class ChatKeyboard extends RelativeLayout implements
-        SoftKeyboardStateHelper.SoftKeyboardStateListener {
+        SoftKeyboardStateHelper.SoftKeyboardStateListener,
+        KeyBoardMoreView.OnMoreFunItemClickListener,
+        View.OnClickListener{
+
     private Context context;
 
     /**
      * 软键盘监听助手
      */
     private SoftKeyboardStateHelper mKeyboardHelper;
+    @BindView(R.id.rl_chat_message_toolbox)
+    View mKeyBoardTopView;
     /**
      * 发送表情开关按钮
      */
@@ -56,39 +64,27 @@ public class ChatKeyboard extends RelativeLayout implements
     @BindView(R.id.cb_chat_send_voice)
     CheckBox mCbSendVoice;
     /**
-     * 当前是否为正在录音界面
+     * 录音界面布局 控件
      */
-    private boolean isRecordVoice = false;
+    @BindView(R.id.recordVoiceView)
+    RecordVoiceView mRecordVoiceView;
     /**
-     * 录音界面
+     * 选择更多聊天功能布局
      */
-    @BindView(R.id.rl_chat_record_voice_layout)
-    RelativeLayout mRecordVoiceLayout;
-    /**
-     * 录音控件
-     */
-    @BindView(R.id.psv_record)
-    PressSpeakView mSpeakRecord;
-
+    @BindView(R.id.keyBoardMoreVIew)
+    KeyBoardMoreView mKeyBoardMoreView;
     /**
      * 聊天操作监听
      */
     private ChatKeyboardOperateListener listener;
     /**
-     * 选择更多聊天功能布局
+     * 当前是否为正在录音界面
      */
-    @BindView(R.id.rl_chat_keyboard_more)
-    RelativeLayout mChatMoreLayout;
+    private boolean mIsRecordVoice = false;
     /**
-     * 选择图片
+     * 当前是否在more功能界面
      */
-    @BindView(R.id.ll_chat_more_images)
-    LinearLayout mChatMoreImage;
-    /**
-     * 拍照
-     */
-    @BindView(R.id.ll_chat_more_photo)
-    LinearLayout mChatMorePhoto;
+    private boolean mIsMoreFun = false;
 
     public ChatKeyboard(Context context, AttributeSet attrs, int defStyle) {
 
@@ -111,7 +107,7 @@ public class ChatKeyboard extends RelativeLayout implements
     private void init(Context context) {
 
         this.context = context;
-        inflate(context, R.layout.chat_key_board_layout, this);
+        inflate(context, R.layout.chat_keyboard_layout, this);
         ButterKnife.bind(this, this);
     }
 
@@ -121,13 +117,25 @@ public class ChatKeyboard extends RelativeLayout implements
         super.onFinishInflate();
         initKeyboardHelper();
         this.initWidget();
+        resetViewHieght();
     }
 
     private void initKeyboardHelper() {
 
         mKeyboardHelper = new SoftKeyboardStateHelper(((Activity) getContext())
-                .getWindow().getDecorView());
+                .getWindow().getDecorView(), mKeyBoardTopView);
         mKeyboardHelper.addSoftKeyboardStateListener(this);
+    }
+
+    private void resetViewHieght() {
+
+        if(!IMUtil.isKeyboardHeightStored()) {
+            return;
+        }
+        int keyboardHeight = IMUtil.getKeyboardHeight();
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, keyboardHeight);
+        mKeyBoardMoreView.setLayoutParams(params);
+        mRecordVoiceView.setLayoutParams(params);
     }
 
     /**
@@ -135,7 +143,8 @@ public class ChatKeyboard extends RelativeLayout implements
      */
     private void initWidget() {
 
-        mSpeakRecord.setRecordListener(mRecordListener);
+        mRecordVoiceView.setRecordListener(mRecordListener);
+        mKeyBoardMoreView.setOnMoreFunItemClickListener(this);
         mEtMessage.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -155,80 +164,68 @@ public class ChatKeyboard extends RelativeLayout implements
                 if (ValueUtil.isEmpty(text)) {//切换语音输入与文本输入
                     mCbSendVoice.setVisibility(View.VISIBLE);
                     mBtnSendTxt.setVisibility(View.GONE);
-                } else {
+                } else {//文本输入
                     mCbSendVoice.setVisibility(View.GONE);
                     mBtnSendTxt.setVisibility(View.VISIBLE);
                 }
             }
         });
+        mEtMessage.setOnClickListener(this);
+        mBtnSendTxt.setOnClickListener(this);
+        mCbMore.setOnClickListener(this);
+        mCbFace.setOnClickListener(this);
+        mCbSendVoice.setOnClickListener(this);
+        mEtMessage.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(hasFocus) {
+                    hideMoreFunView();
+                    hideRecordVoiceView();
+                    hideFaceView();
+                }
+            }
+        });
     }
 
-    /**
-     * 发送文本消息
-     *
-     * @param v
-     */
-    @OnClick(R.id.btn_chat_send_txt)
-    public void sendTxtClick(View v) {
+    @Override
+    public void onClick(View v) {
 
-        if (listener != null) {
-            String msg = mEtMessage.getText().toString();
-            if (msg == null || msg.length() == 0) {
-                return;
-            }
-            listener.send(msg);
-            mEtMessage.setText("");
+        switch (v.getId()) {
+            case R.id.et_chat_message_toolbox://文本输入框
+                hideMoreFunView();
+                hideRecordVoiceView();
+                hideFaceView();
+                break;
+            case R.id.btn_chat_send_txt://发送文本消息按钮
+                if (listener != null) {
+                    String msg = mEtMessage.getText().toString();
+                    if(!ValueUtil.isEmpty(msg)) {
+                        listener.send(msg);
+                        mEtMessage.setText("");
+                    }
+                }
+                break;
+            case R.id.cb_chat_send_voice://切换到语音输入界面
+                mIsRecordVoice = !mIsRecordVoice;
+                switchShowView(R.id.cb_chat_send_voice, mIsRecordVoice);
+                break;
+            case R.id.cb_chat_more_toolbox://切换到more功能界面
+                mIsMoreFun = !mIsMoreFun;
+                switchShowView(R.id.cb_chat_more_toolbox, mIsMoreFun);
+                break;
         }
     }
 
     /**
-     * 发送语音消息
+     * 更多功能点击响应
      *
-     * @param v
+     * @param funType
      */
-    @OnClick(R.id.cb_chat_send_voice)
-    public void sendVoiceClick(View v) {
+    @Override
+    public void onMoreFunItemClick(KeyBoardMoreFunType funType) {
 
-        isRecordVoice = !isRecordVoice;
-        changeLayout(1, isRecordVoice);
-    }
-
-    /**
-     * Chat more功能是否选中
-     */
-    private boolean isChatMoreClick = false;
-
-    /**
-     * 展示more功能按钮选择
-     *
-     * @param v
-     */
-    @OnClick(R.id.cb_chat_more_toolbox)
-    public void chatMoreClick(View v) {
-
-        isChatMoreClick = !isChatMoreClick;
-        changeLayout(2, isChatMoreClick);
-    }
-
-    /**
-     * 更多功能
-     *
-     * @param v
-     */
-    @OnClick({R.id.ll_chat_more_images, R.id.ll_chat_more_photo})
-    public void chatMoreItemClick(View v) {
-
-        switch (v.getId()) {
-            case R.id.ll_chat_more_images://选择图片
-                if (listener != null) {
-                    listener.functionClick(1);
-                }
-                break;
-            case R.id.ll_chat_more_photo:
-                if (listener != null) {
-                    listener.functionClick(2);
-                }
-                break;
+        if (listener != null) {
+            listener.functionClick(funType);
         }
     }
 
@@ -238,51 +235,117 @@ public class ChatKeyboard extends RelativeLayout implements
      * @param funFlag 功能代码
      * @param isShow  是否显示
      */
-    private void changeLayout(int funFlag, boolean isShow) {
+    private void switchShowView(int funFlag, boolean isShow) {
 
         if (isShow == false) {
             showKeyboard(context);
-//    		mCbSendVoice.setBackgroundResource(R.drawable.chat_keyboard_start_record_voice_bg_selector);
-            mEtMessage.setVisibility(View.VISIBLE);
-            mRecordVoiceLayout.setVisibility(View.GONE);
-            mChatMoreLayout.setVisibility(View.GONE);
+            showMessageEditView();
+            hideRecordVoiceView();
+            hideMoreFunView();
+            hideFaceView();
             return;
         }
         hideKeyboard(context);
         switch (funFlag) {
-            case 1://语音
+            case R.id.cb_chat_send_voice://语音
                 //延迟一会显示，避免出现某一时刻视图与键盘同时显示
                 postDelayed(new Runnable() {
                     public void run() {
-//						mCbSendVoice.setBackgroundResource(R.drawable.chat_keyboard_start_txt_bg_selector);
-                        mEtMessage.setVisibility(View.INVISIBLE);
-                        mRecordVoiceLayout.setVisibility(View.VISIBLE);
-                        mChatMoreLayout.setVisibility(View.GONE);
+                        hideMessageEditView();
+                        showRecordVoiceView();
+                        hideMoreFunView();
+                        hideFaceView();
                     }
-                }, 50);
+                }, 100);
                 break;
-            case 2://more
+            case R.id.cb_chat_more_toolbox://more
                 //延迟一会显示，避免出现某一时刻视图与键盘同时显示
                 postDelayed(new Runnable() {
                     public void run() {
-//						mCbSendVoice.setBackgroundResource(R.drawable.chat_keyboard_start_record_voice_bg_selector);
-                        mEtMessage.setVisibility(View.VISIBLE);
-                        mRecordVoiceLayout.setVisibility(View.GONE);
-                        mChatMoreLayout.setVisibility(View.VISIBLE);
+                        showMessageEditView();
+                        hideRecordVoiceView();
+                        showMoreFunView();
+                        hideFaceView();
                     }
-                }, 50);
+                }, 100);
+                break;
+            case R.id.cb_chat_face_toolbox://表情
+                //延迟一会显示，避免出现某一时刻视图与键盘同时显示
+                postDelayed(new Runnable() {
+                    public void run() {
+                        showMessageEditView();
+                        hideRecordVoiceView();
+                        hideMoreFunView();
+                        showFaceView();
+                    }
+                }, 100);
                 break;
         }
     }
 
+    void hideMessageEditView() {
+
+        if(mEtMessage.getVisibility() == VISIBLE) {
+            mEtMessage.setVisibility(GONE);
+        }
+    }
+
+    void showMessageEditView() {
+
+        if(mEtMessage.getVisibility() == GONE) {
+            mEtMessage.setVisibility(VISIBLE);
+        }
+    }
+
+    void hideMoreFunView() {
+
+        if(mKeyBoardMoreView.getVisibility() == VISIBLE) {
+            mKeyBoardMoreView.setVisibility(GONE);
+        }
+        mIsMoreFun = false;
+        mCbMore.setChecked(false);
+    }
+
+    void showMoreFunView() {
+
+        if(mKeyBoardMoreView.getVisibility() == GONE) {
+            mKeyBoardMoreView.setVisibility(VISIBLE);
+        }
+        mCbMore.setChecked(true);
+    }
+
+    void hideRecordVoiceView() {
+
+        if(mRecordVoiceView.getVisibility() == VISIBLE) {
+            mRecordVoiceView.setVisibility(GONE);
+        }
+        mIsRecordVoice = false;
+        mCbSendVoice.setChecked(false);
+    }
+
+    void showRecordVoiceView() {
+
+        if(mRecordVoiceView.getVisibility() == GONE) {
+            mRecordVoiceView.setVisibility(VISIBLE);
+        }
+        mCbSendVoice.setChecked(true);
+    }
+
+    void hideFaceView() {
+
+        mCbFace.setChecked(false);
+    }
+
+    void showFaceView() {
+
+        mCbFace.setChecked(true);
+    }
+
     @Override
     public void onSoftKeyboardOpened(int keyboardHeightInPx) {
-//		mCbSendVoice.setBackgroundResource(R.drawable.chat_keyboard_start_record_voice_bg_selector);
         mEtMessage.setVisibility(View.VISIBLE);
-        mRecordVoiceLayout.setVisibility(View.GONE);
-        mChatMoreLayout.setVisibility(View.GONE);
-        isChatMoreClick = false;
-        isRecordVoice = false;
+        hideMoreFunView();
+        hideRecordVoiceView();
     }
 
     @Override
@@ -334,7 +397,7 @@ public class ChatKeyboard extends RelativeLayout implements
     /**
      * 录音过程中的监听
      */
-    private PressSpeakView.RecordListener mRecordListener = new PressSpeakView.RecordListener() {
+    private RecordVoiceView.RecordListener mRecordListener = new RecordVoiceView.RecordListener() {
 
         @Override
         public void recordFinish(File audioFile) {
@@ -383,8 +446,8 @@ public class ChatKeyboard extends RelativeLayout implements
         /**
          * 点击触发的功能
          *
-         * @param index 从1开始，按照展示顺序进行索引
+         * @param funType 功能类型
          */
-        void functionClick(int index);
+        void functionClick(KeyBoardMoreFunType funType);
     }
 }

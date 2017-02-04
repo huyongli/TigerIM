@@ -36,8 +36,8 @@ public class ImageLoaderHelper {
                             .bitmapConfig(Bitmap.Config.RGB_565)//图片解码类型，推荐此种方式，减少OOM
                             .considerExifParams(true)//是否考虑JPEG图像EXIF参数（旋转，翻转）
                             .resetViewBeforeLoading(true)//设置图片在下载前是否重置，复位
-                            .showImageOnFail(R.drawable.pic_default)//图片加载失败后显示的图片
-                            .showImageOnLoading(R.drawable.pic_default)
+                            .showImageOnFail(R.drawable.vector_default_image)//图片加载失败后显示的图片
+                            .showImageOnLoading(R.drawable.vector_default_image)
                             .build();
                 }
             }

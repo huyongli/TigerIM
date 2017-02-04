@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:app="http://schemas.android.com/apk/res-auto"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tv_chat_record_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="@string/keyboard_press_record_voice"
+            android:textColor="@color/keyboard_record_voice_txt_color" />
+
+        <RelativeLayout
+            android:layout_width="@dimen/dimen_80"
+            android:layout_height="@dimen/dimen_80"
+            android:layout_marginTop="@dimen/dimen_10"
+            android:background="@drawable/ic_keyboard_record_voice_bg"
+            android:layout_below="@id/tv_chat_record_txt"
+            android:layout_centerHorizontal="true"
+            android:clickable="true">
+            <ImageView
+                android:layout_width="@dimen/dimen_50"
+                android:layout_height="@dimen/dimen_50"
+                android:layout_centerInParent="true"
+                app:srcCompat="@drawable/vector_keyboard_record_voice"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</merge>

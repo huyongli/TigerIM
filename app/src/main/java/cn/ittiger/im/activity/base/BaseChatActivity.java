@@ -1,4 +1,4 @@
-package cn.ittiger.im.activity;
+package cn.ittiger.im.activity.base;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

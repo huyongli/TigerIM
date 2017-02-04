@@ -1,6 +1,9 @@
 package cn.ittiger.im.ui.keyboard;
 
+import cn.ittiger.im.util.IMUtil;
+
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -23,9 +26,11 @@ public class SoftKeyboardStateHelper implements
     private final View activityRootView;
     private int lastSoftKeyboardHeightInPx;
     private boolean isSoftKeyboardOpened;
+    private View mKeyboardTopView;
 
-    public SoftKeyboardStateHelper(View activityRootView) {
+    public SoftKeyboardStateHelper(View activityRootView, View keyboardTopView) {
         this(activityRootView, false);
+        mKeyboardTopView = keyboardTopView;
     }
 
     public SoftKeyboardStateHelper(View activityRootView,
@@ -42,11 +47,23 @@ public class SoftKeyboardStateHelper implements
         // visible.
         activityRootView.getWindowVisibleDisplayFrame(r);
 
-        final int heightDiff = activityRootView.getRootView().getHeight()
-                - (r.bottom - r.top);
+        int screenHeight = activityRootView.getRootView().getHeight();
+        final int heightDiff = screenHeight - (r.bottom - r.top);//键盘高度
+
+        if(heightDiff > 100) {
+            // if more than 100 pixels, its probably a keyboard
+            // get status bar height
+            int statusBarHeight = IMUtil.getStatusBarHeight();
+            int keyboardTopViewHeight = mKeyboardTopView.getHeight();
+            int realKeyboardHeight = heightDiff - statusBarHeight - keyboardTopViewHeight;
+            if(realKeyboardHeight > 100 && !IMUtil.isKeyboardHeightStored()) {
+                IMUtil.storeKeyboardHeight(realKeyboardHeight);
+                Log.d("KeyBoard", "The keyboard height is :" + realKeyboardHeight);
+            }
+        }
         if (!isSoftKeyboardOpened && heightDiff > 100) { // if more than 100
-                                                         // pixels, its probably
-                                                         // a keyboard...
+            // pixels, its probably
+            // a keyboard...
             isSoftKeyboardOpened = true;
             notifyOnSoftKeyboardOpened(heightDiff);
         } else if (isSoftKeyboardOpened && heightDiff < 100) {

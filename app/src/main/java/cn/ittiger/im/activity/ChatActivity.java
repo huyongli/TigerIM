@@ -24,8 +24,10 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 
 import cn.ittiger.im.R;
+import cn.ittiger.im.activity.base.BaseChatActivity;
 import cn.ittiger.im.bean.ChatMessage;
 import cn.ittiger.im.constant.FileLoadState;
+import cn.ittiger.im.constant.KeyBoardMoreFunType;
 import cn.ittiger.im.constant.MessageType;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.im.util.AppFileHelper;
@@ -241,13 +243,13 @@ public class ChatActivity extends BaseChatActivity {
     private static final int REQUEST_CODE_TAKE_PHOTO = 2;
 
     @Override
-    public void functionClick(int index) {
+    public void functionClick(KeyBoardMoreFunType funType) {
 
-        switch (index) {
-            case 1://选择图片
+        switch (funType) {
+            case FUN_TYPE_IMAGE://选择图片
                 selectImage();
                 break;
-            case 2://拍照
+            case FUN_TYPE_TAKE_PHOTO://拍照
                 takePhoto();
                 break;
         }

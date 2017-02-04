@@ -1,4 +1,4 @@
-package cn.ittiger.im.activity;
+package cn.ittiger.im.activity.base;
 
 import cn.ittiger.base.BaseActivity;
 import cn.ittiger.im.R;

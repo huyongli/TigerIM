@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer-array name="keyboard_more_icons">
+        <item>@drawable/icon_chat_image</item>
+        <item>@drawable/icon_chat_take_photo</item>
+    </integer-array>
+
+    <integer-array name="keyboard_more_names">
+        <item>@string/keyboard_more_image</item>
+        <item>@string/keyboard_more_take_photo</item>
+    </integer-array>
+</resources>

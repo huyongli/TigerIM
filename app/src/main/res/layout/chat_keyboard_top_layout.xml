@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/dimen_8"
+                android:paddingTop="@dimen/dimen_8"
+                android:background="@color/chat_keyboard_bg"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical">
+    <!-- 表情按钮 -->
+    <CheckBox
+        android:id="@+id/cb_chat_face_toolbox"
+        android:layout_width="@dimen/dimen_30"
+        android:layout_height="@dimen/dimen_30"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="@dimen/dimen_5"
+        android:background="@drawable/ic_keyboard_face"
+        android:button="@null"/>
+
+    <!-- 更多按钮 -->
+    <CheckBox
+        android:id="@+id/cb_chat_more_toolbox"
+        android:layout_width="@dimen/dimen_30"
+        android:layout_height="@dimen/dimen_30"
+        android:layout_marginLeft="@dimen/dimen_2"
+        android:layout_marginRight="@dimen/dimen_5"
+        android:layout_toRightOf="@+id/cb_chat_face_toolbox"
+        android:background="@drawable/ic_keyboard_more"
+        android:button="@null"/>
+
+    <LinearLayout
+        android:id="@+id/ll_chat_send_toolbox"
+        android:layout_width="@dimen/dimen_50"
+        android:layout_height="@dimen/dimen_30"
+        android:layout_alignParentRight="true"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- 发送文字按钮 -->
+        <Button
+            android:id="@+id/btn_chat_send_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/dimen_5"
+            android:layout_marginRight="@dimen/dimen_5"
+            android:background="@drawable/main_button_bg"
+            android:gravity="center"
+            android:text="@string/chat_send"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:visibility="gone"/>
+
+        <!-- 语言输入切换按钮 -->
+        <CheckBox
+            android:id="@+id/cb_chat_send_voice"
+            android:layout_width="@dimen/dimen_30"
+            android:layout_height="@dimen/dimen_30"
+            android:layout_marginLeft="@dimen/dimen_5"
+            android:layout_marginRight="@dimen/dimen_5"
+            android:background="@drawable/ic_keyboard_voice"
+            android:button="@null"/>
+    </LinearLayout>
+
+    <!-- 文字输入框 -->
+    <EditText
+        android:id="@+id/et_chat_message_toolbox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/ll_chat_send_toolbox"
+        android:layout_toRightOf="@+id/cb_chat_more_toolbox"
+        android:background="@color/white"
+        android:inputType="textMultiLine"
+        android:maxHeight="@dimen/dimen_60"
+        android:minHeight="@dimen/dimen_30"
+        android:singleLine="false"
+        android:textSize="18sp"/>
+</RelativeLayout>

@@ -14,6 +14,7 @@ import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.indexlist.IndexStickyView;
 import cn.ittiger.indexlist.adapter.IndexHeaderFooterAdapter;
 import cn.ittiger.indexlist.listener.OnItemClickListener;
+import cn.ittiger.util.UIUtil;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -164,6 +165,7 @@ public class ContactFragment extends BaseFragment {
                 case MULTI_CHAT://群聊
                     break;
                 case GROUP:
+                    UIUtil.showToast(mContext, R.string.text_function_none);
                     break;
             }
         }

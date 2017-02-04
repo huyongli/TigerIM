@@ -107,7 +107,7 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
         } else if(message.getFileLoadState() == FileLoadState.STATE_LOAD_SUCCESS.value()) {//加载完成
             viewHolder.chatContentLoading.setVisibility(View.GONE);
         } else if(message.getFileLoadState() == FileLoadState.STATE_LOAD_ERROR.value()) {
-            viewHolder.chatContentLoading.setBackgroundResource(R.drawable.load_fail);
+            viewHolder.chatContentLoading.setBackgroundResource(R.drawable.file_load_fail);
         }
     }
 

@@ -19,6 +19,7 @@
     <string name="text_default_multi_chat_nickname">%s创建的群</string>
     <string name="text_invite_to_multi_chat">%s邀请你入群</string>
     <string name="text_create_multi_chat_failure">创建群聊失败</string>
+    <string name="text_function_none">暂未实现，敬请期待...</string>
 
     <string name="title_add_friend">添加好友</string>
     <string name="title_register">注册</string>
@@ -45,6 +46,9 @@
     <string name="chat_dialog_message">开始与%s聊天?</string>
     <string name="ok">确定</string>
     <string name="cancel">取消</string>
+    <string name="keyboard_press_record_voice">按住说话</string>
+    <string name="keyboard_more_image">图片</string>
+    <string name="keyboard_more_take_photo">拍照</string>
 
     <string name="nav_header_title">基于Smack实现的简单即时通讯App</string>
     <string name="nav_share">分享应用</string>

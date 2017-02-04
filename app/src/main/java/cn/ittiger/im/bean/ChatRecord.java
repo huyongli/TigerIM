@@ -2,8 +2,6 @@ package cn.ittiger.im.bean;
 
 import cn.ittiger.database.annotation.Column;
 import cn.ittiger.database.annotation.Table;
-import cn.ittiger.database.util.ValueUtil;
-import cn.ittiger.im.R;
 import cn.ittiger.im.constant.Constant;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.util.DateUtil;
@@ -80,7 +78,7 @@ public class ChatRecord extends ChatUser {
 
     public String getFriendAvatar() {
 
-        return ValueUtil.isEmpty(mFriendAvatar) ? "drawable://" + R.drawable.avatar : mFriendAvatar;
+        return mFriendAvatar;
     }
 
     public void setFriendAvatar(String friendAvatar) {

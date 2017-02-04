@@ -41,7 +41,10 @@ public class ChatRecordAdapter extends HeaderAndFooterAdapter<ChatRecord> {
     public void onBindItemViewHolder(ViewHolder holder, int position, ChatRecord item) {
 
         ChatRecordViewHolder viewHolder = (ChatRecordViewHolder) holder;
-        ImageLoaderHelper.displayImage(viewHolder.avatar, item.getFriendAvatar());
+
+        if(!ValueUtil.isEmpty(item.getFriendAvatar())) {
+            ImageLoaderHelper.displayImage(viewHolder.avatar, item.getFriendAvatar());
+        }
         viewHolder.nickName.setText(item.getFriendNickname());
         if(!ValueUtil.isEmpty(item.getLastMessage())) {
             if(viewHolder.message.getVisibility() == View.GONE) {

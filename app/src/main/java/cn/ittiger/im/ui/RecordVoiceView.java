@@ -22,7 +22,7 @@ import cn.ittiger.util.SdCardUtil;
  * @time: 2015-10-29下午2:43:38
  */
 @SuppressLint("ClickableViewAccessibility")
-public class PressSpeakView extends RelativeLayout {
+public class RecordVoiceView extends RelativeLayout {
 	/**
 	 * 录音对象
 	 */
@@ -40,17 +40,17 @@ public class PressSpeakView extends RelativeLayout {
 	 */
 	private RecordListener recordListener;
 
-	public PressSpeakView(Context context, AttributeSet attrs, int defStyleAttr) {
+	public RecordVoiceView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		init(context);
 	}
 
-	public PressSpeakView(Context context, AttributeSet attrs) {
+	public RecordVoiceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context);
 	}
 
-	public PressSpeakView(Context context) {
+	public RecordVoiceView(Context context) {
 		super(context);
 		init(context);
 	}
@@ -58,8 +58,7 @@ public class PressSpeakView extends RelativeLayout {
 	private void init(Context context) {
 		this.setClickable(true);
 		fileDir = SdCardUtil.getCacheDir(context);
-		View view = View.inflate(context, R.layout.press_speak_view_layout, null);
-		this.addView(view);
+		inflate(context, R.layout.chat_keyboard_voice_layout, this);
 	}
 	
 	@Override

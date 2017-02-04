@@ -36,6 +36,16 @@ public class PreferenceHelper {
         return sSharedPreferences.getString(key, defaultValue);
     }
 
+    public static void putInt(String key, int value) {
+
+        sSharedPreferences.edit().putInt(key, value).commit();
+    }
+
+    public static int getInt(String key) {
+
+        return sSharedPreferences.getInt(key, 0);
+    }
+
     public static void putBoolean(String key, boolean value) {
 
         sSharedPreferences.edit().putBoolean(key, value).commit();

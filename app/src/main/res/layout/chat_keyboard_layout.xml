@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <!-- 键盘Top部分，包含输入框，发送按钮，表情，更多功能按钮等 -->
+    <include
+        layout="@layout/chat_keyboard_top_layout"
+        android:id="@+id/rl_chat_message_toolbox"/>
+
+    <!-- 分割线 -->
+    <include layout="@layout/divider_horizontal_view"/>
+
+    <!-- 录音View -->
+    <cn.ittiger.im.ui.RecordVoiceView
+        android:id="@+id/recordVoiceView"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="@color/chat_keyboard_bg"
+        android:padding="@dimen/dimen_10"
+        android:visibility="gone"/>
+
+    <!-- more View -->
+    <cn.ittiger.im.ui.KeyBoardMoreView
+        android:id="@+id/keyBoardMoreVIew"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="@color/chat_keyboard_bg"
+        android:visibility="gone"
+        android:paddingTop="@dimen/dimen_20"
+        android:paddingBottom="@dimen/dimen_10"
+        android:paddingLeft="@dimen/dimen_30"
+        android:paddingRight="@dimen/dimen_30"/>
+
+</LinearLayout>

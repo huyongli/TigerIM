@@ -16,6 +16,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.ittiger.im.R;
+import cn.ittiger.im.activity.base.IMBaseActivity;
 import cn.ittiger.im.smack.SmackManager;
 import cn.ittiger.util.ActivityUtil;
 import cn.ittiger.util.UIUtil;
