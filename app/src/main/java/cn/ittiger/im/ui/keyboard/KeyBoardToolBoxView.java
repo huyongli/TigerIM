@@ -3,7 +3,6 @@ package cn.ittiger.im.ui.keyboard;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ittiger.im.R;
-import cn.ittiger.util.KeyboardUtil;
 import cn.ittiger.util.ValueUtil;
 
 import android.app.Activity;
@@ -29,28 +28,33 @@ public class KeyBoardToolBoxView extends RelativeLayout {
     /**
      * 发送表情开关按钮
      */
-    @BindView(R.id.cb_keyboard_emotion_toolbox)
+    @BindView(R.id.keyboard_emotion_button)
     CheckBox mButtonEmotion;
     /**
      * 发送更多类型消息开关按钮
      */
-    @BindView(R.id.cb_keyboard_more_toolbox)
+    @BindView(R.id.keyboard_moreFun_button)
     CheckBox mButtonMoreFun;
     /**
-     * 发送语音消息按钮
+     * 切换到语音输入按钮
      */
-    @BindView(R.id.cb_keyboard_send_voice)
-    CheckBox mButtonSendVoice;
+    @BindView(R.id.keyboard_voice_button)
+    CheckBox mButtonVoice;
     /**
      * 发送文本消息按钮
      */
-    @BindView(R.id.btn_keyboard_send_txt)
+    @BindView(R.id.keyboard_sendText_button)
     Button mButtonSendText;
     /**
      * 文本消息输入框
      */
-    @BindView(R.id.et_keyboard_input_toolbox)
-    EditText mInputView;
+    @BindView(R.id.keyboard_input_editText)
+    EditText mInputEditText;
+    /**
+     * 语音录音按钮
+     */
+    @BindView(R.id.keyboard_record_voice_button)
+    Button mButtonRecordVoice;
     /**
      * 聊天操作监听
      */
@@ -78,7 +82,7 @@ public class KeyBoardToolBoxView extends RelativeLayout {
         inflate(context, R.layout.chat_keyboard_toolbox_layout, this);
         ButterKnife.bind(this);
 
-        mInputView.addTextChangedListener(new TextWatcher() {
+        mInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 
@@ -93,12 +97,12 @@ public class KeyBoardToolBoxView extends RelativeLayout {
             @Override
             public void afterTextChanged(Editable s) {
 
-                String text = mInputView.getText().toString();
+                String text = mInputEditText.getText().toString();
                 if (ValueUtil.isEmpty(text)) {//切换语音输入与文本输入
-                    mButtonSendVoice.setVisibility(View.VISIBLE);
+                    mButtonMoreFun.setVisibility(View.VISIBLE);
                     mButtonSendText.setVisibility(View.GONE);
                 } else {//文本输入
-                    mButtonSendVoice.setVisibility(View.GONE);
+                    mButtonMoreFun.setVisibility(View.GONE);
                     mButtonSendText.setVisibility(View.VISIBLE);
                 }
             }
@@ -108,32 +112,84 @@ public class KeyBoardToolBoxView extends RelativeLayout {
             @Override
             public void onClick(View v) {
                 if(mKeyboardOperateListener != null) {
-                    mKeyboardOperateListener.send(mInputView.getText().toString());
-                    mInputView.setText("");
+                    mKeyboardOperateListener.send(mInputEditText.getText().toString());
+                    mInputEditText.setText("");
                 }
             }
         });
 
-        mInputView.setOnTouchListener(new OnTouchListener() {
+        mInputEditText.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
 
-                unFocusToolBox();
+                unFocusAllToolButton();
                 return false;
             }
         });
     }
 
-    public void unFocusToolBox() {
+    public void unFocusAllToolButton() {
 
+        mButtonVoice.setChecked(false);
         mButtonEmotion.setChecked(false);
         mButtonMoreFun.setChecked(false);
-        mButtonSendVoice.setChecked(false);
+    }
+
+    /**
+     * 表情按钮选中
+     */
+    public void voiceButtonFocus() {
+
+        mButtonMoreFun.setChecked(false);
+        mButtonEmotion.setChecked(false);
+        switchToVoiceInput();
+    }
+
+    /**
+     * 表情按钮选中
+     */
+    public void moreFunButtonFocus() {
+
+        mButtonVoice.setChecked(false);
+        mButtonEmotion.setChecked(false);
+        switchToTextInput();
+    }
+
+    /**
+     * 表情按钮选中
+     */
+    public void emotionButtonFocus() {
+
+        mButtonVoice.setChecked(false);
+        mButtonMoreFun.setChecked(false);
+        switchToTextInput();
+    }
+
+    /**
+     * 切换到语音输入
+     */
+    public void switchToVoiceInput() {
+
+        if(mInputEditText.getVisibility() == VISIBLE) {
+            mInputEditText.setVisibility(GONE);
+        }
+        if(mButtonRecordVoice.getVisibility() == GONE) {
+            mButtonRecordVoice.setVisibility(VISIBLE);
+        }
+    }
+
+    /**
+     * 切换到文本输入
+     */
+    public void switchToTextInput() {
+
+        mInputEditText.setVisibility(VISIBLE);
+        mButtonRecordVoice.setVisibility(GONE);
     }
 
     public EditText getInputEditText() {
 
-        return mInputView;
+        return mInputEditText;
     }
 
     public View getEmotionButton() {
@@ -143,7 +199,7 @@ public class KeyBoardToolBoxView extends RelativeLayout {
 
     public View getVoiceButton() {
 
-        return mButtonSendVoice;
+        return mButtonVoice;
     }
 
     public View getMoreFunButton() {

@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-			  android:id="@id/keyboard_root_id"
-			  android:layout_width="match_parent"
-			  android:layout_height="match_parent"
-			  android:fitsSystemWindows="true"
-			  android:focusable="true"
-			  android:focusableInTouchMode="true"
-			  android:orientation="vertical">
+<RelativeLayout android:id="@id/keyboard_root_id"
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fitsSystemWindows="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
 
-	<include layout="@layout/toolbar_layout"/>
+    <include layout="@layout/toolbar_layout"/>
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:orientation="vertical">
 
-		<cn.ittiger.im.ui.recyclerview.CommonRecyclerView
-			android:id="@+id/chat_content"
-			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_weight="1"
-			android:layout_margin="@dimen/dimen_10"/>
+        <cn.ittiger.im.ui.recyclerview.CommonRecyclerView
+            android:id="@+id/chat_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_margin="@dimen/dimen_10"
+            android:layout_weight="1"/>
 
-		<include layout="@layout/divider_horizontal_view"/>
+        <include layout="@layout/divider_horizontal_view"/>
 
-		<cn.ittiger.im.ui.keyboard.ChatKeyboard
-			android:id="@+id/ckb_chat_board"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"/>
+        <cn.ittiger.im.ui.keyboard.ChatKeyboard
+            android:id="@+id/ckb_chat_board"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
-	</LinearLayout>
+    </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>

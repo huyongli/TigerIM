@@ -2,38 +2,73 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-    <!-- 表情按钮 -->
+
+    <!-- 语音输入切换按钮 -->
     <CheckBox
-        android:id="@+id/cb_keyboard_emotion_toolbox"
+        android:id="@+id/keyboard_voice_button"
         android:layout_width="@dimen/dimen_30"
         android:layout_height="@dimen/dimen_30"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="@dimen/dimen_5"
-        android:background="@drawable/ic_keyboard_emotion"
+        android:background="@drawable/ic_keyboard_voice"
+        android:layout_centerVertical="true"
         android:button="@null"/>
 
-    <!-- 更多按钮 -->
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_toLeftOf="@+id/keyboard_emotion_button"
+        android:layout_toRightOf="@id/keyboard_voice_button"
+        android:layout_marginLeft="@dimen/dimen_5"
+        android:layout_marginRight="@dimen/dimen_5">
+
+        <!-- 文字输入框 -->
+        <EditText
+            android:id="@+id/keyboard_input_editText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:inputType="textMultiLine"
+            android:maxHeight="@dimen/dimen_60"
+            android:minHeight="@dimen/dimen_30"
+            android:singleLine="false"
+            android:textSize="18sp"/>
+
+        <Button
+            android:id="@+id/keyboard_record_voice_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_30"
+            android:text="@string/keyboard_press_record_voice"
+            android:textColor="@color/chat_keyboard_record_voice_button_text_color"
+            android:background="@drawable/keyboard_record_voice_button_bg"
+            android:visibility="gone"/>
+    </RelativeLayout>
+
+    <!-- 表情按钮 -->
     <CheckBox
-        android:id="@+id/cb_keyboard_more_toolbox"
+        android:id="@+id/keyboard_emotion_button"
         android:layout_width="@dimen/dimen_30"
         android:layout_height="@dimen/dimen_30"
-        android:layout_marginLeft="@dimen/dimen_2"
-        android:layout_marginRight="@dimen/dimen_5"
-        android:layout_toRightOf="@+id/cb_keyboard_emotion_toolbox"
-        android:background="@drawable/ic_keyboard_more"
+        android:layout_marginLeft="@dimen/dimen_5"
+        android:layout_toLeftOf="@+id/keyboard_send_and_moreFun_layout"
+        android:background="@drawable/ic_keyboard_emotion"
+        android:layout_centerVertical="true"
         android:button="@null"/>
 
     <LinearLayout
-        android:id="@+id/ll_keyboard_send_toolbox"
+        android:id="@+id/keyboard_send_and_moreFun_layout"
         android:layout_width="@dimen/dimen_50"
         android:layout_height="@dimen/dimen_30"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:gravity="center"
         android:orientation="horizontal">
 
         <!-- 发送文字按钮 -->
         <Button
-            android:id="@+id/btn_keyboard_send_txt"
+            android:id="@+id/keyboard_sendText_button"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="@dimen/dimen_5"
@@ -45,28 +80,14 @@
             android:textSize="15sp"
             android:visibility="gone"/>
 
-        <!-- 语言输入切换按钮 -->
+        <!-- 更多按钮 -->
         <CheckBox
-            android:id="@+id/cb_keyboard_send_voice"
+            android:id="@+id/keyboard_moreFun_button"
             android:layout_width="@dimen/dimen_30"
             android:layout_height="@dimen/dimen_30"
             android:layout_marginLeft="@dimen/dimen_5"
             android:layout_marginRight="@dimen/dimen_5"
-            android:background="@drawable/ic_keyboard_voice"
+            android:background="@drawable/ic_keyboard_more"
             android:button="@null"/>
     </LinearLayout>
-
-    <!-- 文字输入框 -->
-    <EditText
-        android:id="@+id/et_keyboard_input_toolbox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/ll_keyboard_send_toolbox"
-        android:layout_toRightOf="@+id/cb_keyboard_more_toolbox"
-        android:background="@color/white"
-        android:inputType="textMultiLine"
-        android:maxHeight="@dimen/dimen_60"
-        android:minHeight="@dimen/dimen_30"
-        android:singleLine="false"
-        android:textSize="18sp"/>
 </merge>

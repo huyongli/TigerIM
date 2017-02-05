@@ -15,6 +15,9 @@
     <color name="contact_index_text_color">#8a8a8a</color>
 
     <color name="chat_keyboard_bg">#ECECEC</color>
+    <color name="chat_keyboard_record_voice_button_press_color">#bfbfbf</color>
+    <color name="chat_keyboard_record_voice_button_press_border_color">#8a8a8a</color>
+    <color name="chat_keyboard_record_voice_button_text_color">#515151</color>
     <color name="keyboard_record_voice_txt_color">#969A99</color>
 
     <color name="about_text_color">#2C2C2C</color>

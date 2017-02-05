@@ -31,6 +31,10 @@ import java.util.Map;
 public abstract class BaseKeyboardLayout extends LinearLayout implements View.OnClickListener {
     private static final String KEY_SOFT_KEYBOARD_HEIGHT = "soft_keyboard_height";
     /**
+     * NONE
+     */
+    public final static int SHOW_NONE = 0;
+    /**
      * 软键盘
      */
     public final static int SHOW_KEYBOARD = 0X1;
@@ -42,10 +46,6 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
      * 更多功能
      */
     public final static int SHOW_MORE_FUN = 0X11;
-    /**
-     * 语音
-     */
-    public final static int SHOW_VOICE = 0X12;
     /**
      * 所处Activity的DecorView
      */
@@ -73,7 +73,7 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
     /**
      * 当前展示视图的类型
      */
-    private int mShowViewType;
+    private int mShowViewType = SHOW_NONE;
     /**
      * 软键盘的高度
      */
@@ -100,7 +100,7 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
     private int mLastHitBottom;
 
     public static class KeyboardContentViewHolder {
-        private int showType;
+        private int showType = SHOW_NONE;
         private View showView;
 
         public KeyboardContentViewHolder(int showType, View showView) {
@@ -176,7 +176,7 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
                     }
                     showView(mKeyboradContentContainer);
                 } else {
-                    if (mShowViewType == 0) {
+                    if (mShowViewType == SHOW_NONE) {
                         hideView(mKeyboradContentContainer);
                     } else {
                         showView(mKeyboradContentContainer);
@@ -284,12 +284,15 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
     @Override
     public void onClick(View v) {
 
+        KeyboardContentViewHolder viewHolder = mViewKeyboardContentViewHolderMap.get(v);
+        int show_type = viewHolder == null ? SHOW_NONE : viewHolder.getShowType();
+        onKeyboardToolButtonClick(v, show_type);
         if (v == mEvokeKeyBoardView) {
             // 点击键盘
             if (mShowViewType == SHOW_KEYBOARD) {
-                mShowViewType = 0;
+                mShowViewType = SHOW_NONE;
                 hideSoftInput();
-            } else if (mShowViewType == 0) {
+            } else if (mShowViewType == SHOW_NONE) {
                 mShowViewType = SHOW_KEYBOARD;
                 showSoftInput();
                 showView(mKeyboradContentContainer);
@@ -299,14 +302,12 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
                 showSoftInput();
             }
         } else {
-            KeyboardContentViewHolder viewHolder = mViewKeyboardContentViewHolderMap.get(v);
             if (viewHolder != null) {
-                int show_type = viewHolder.getShowType();
                 View showView = viewHolder.getShowView();
                 // 点击表情
                 if (mShowViewType == show_type) {
                     // 隐藏表情,隐藏layout
-                    mShowViewType = 0;
+                    mShowViewType = SHOW_NONE;
                     hideView(showView);
                     hideView(mKeyboradContentContainer);
                 } else if (mShowViewType == SHOW_KEYBOARD) {
@@ -322,6 +323,10 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
                 }
             }
         }
+    }
+
+    public void onKeyboardToolButtonClick(View view, int clickViewType) {
+
     }
 
     @Override
@@ -350,7 +355,7 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
                 InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    private void showSoftInput() {
+    public void showSoftInput() {
 
         if (mInputEditText == null) return;
         mInputEditText.requestFocus();

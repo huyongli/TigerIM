@@ -5,6 +5,7 @@ import java.io.File;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import butterknife.BindView;
@@ -71,8 +72,8 @@ public class ChatKeyboard extends BaseKeyboardLayout implements
         mKeyBoardMoreView.setOnMoreFunItemClickListener(this);
 
         mToolBoxView.getVoiceButton().setOnClickListener(this);
-        addToShowViewList(mRecordVoiceView);
-        addToViewMappingMap(mToolBoxView.getVoiceButton(), SHOW_VOICE, mRecordVoiceView);
+//        addToShowViewList(mRecordVoiceView);
+//        addToViewMappingMap(mToolBoxView.getVoiceButton(), SHOW_VOICE, mRecordVoiceView);
 
         mToolBoxView.getMoreFunButton().setOnClickListener(this);
         addToShowViewList(mKeyBoardMoreView);
@@ -105,7 +106,35 @@ public class ChatKeyboard extends BaseKeyboardLayout implements
     public void hideKeyBoardView() {
 
         super.hideKeyBoardView();
-        mToolBoxView.unFocusToolBox();
+        mToolBoxView.unFocusAllToolButton();
+    }
+
+    @Override
+    public void onKeyboardToolButtonClick(View view, int clickViewType) {
+
+        super.onKeyboardToolButtonClick(view, clickViewType);
+        if(view instanceof CheckBox) {
+            boolean checked = ((CheckBox) view).isChecked();
+            if(checked) {
+                switch (clickViewType) {
+                    case SHOW_EMOTION://表情
+                        mToolBoxView.emotionButtonFocus();
+                        break;
+                    case SHOW_MORE_FUN://更多功能
+                        mToolBoxView.moreFunButtonFocus();
+                        break;
+                    case SHOW_NONE://为Checkbox且当前无View展示时说明点击的是语音按钮
+                        mToolBoxView.voiceButtonFocus();
+                        super.hideKeyBoardView();
+                        break;
+                }
+            } else {
+                if(clickViewType == SHOW_NONE) {
+                    mToolBoxView.switchToTextInput();
+                    showSoftInput();
+                }
+            }
+        }
     }
 
     /**
