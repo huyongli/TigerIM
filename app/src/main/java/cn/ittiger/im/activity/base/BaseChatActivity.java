@@ -33,7 +33,7 @@ import java.util.List;
  * @author: laohu on 2017/2/3
  * @site: http://ittiger.cn
  */
-public abstract class BaseChatActivity extends IMBaseActivity implements ChatKeyboard.ChatKeyboardOperateListener {
+public abstract class BaseChatActivity extends IMBaseActivity implements ChatKeyboard.KeyboardOperateListener {
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.toolbarTitle)
@@ -74,6 +74,7 @@ public abstract class BaseChatActivity extends IMBaseActivity implements ChatKey
 
         super.setContentView(layoutResID);
         ButterKnife.bind(this);
+        mChatKyboard.bindToContentView(mChatMessageRecyclerView);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);//不显示ToolBar的标题
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -85,7 +86,7 @@ public abstract class BaseChatActivity extends IMBaseActivity implements ChatKey
                 onBackPressed();
             }
         });
-        mChatKyboard.setChatKeyboardOperateListener(this);
+        mChatKyboard.setKeyboardOperateListener(this);
 
         mLayoutManager = new LinearLayoutManager(this);
         mChatMessageRecyclerView.setLayoutManager(mLayoutManager);

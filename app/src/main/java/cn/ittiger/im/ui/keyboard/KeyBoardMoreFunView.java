@@ -1,4 +1,4 @@
-package cn.ittiger.im.ui;
+package cn.ittiger.im.ui.keyboard;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -28,23 +28,23 @@ import java.util.List;
  * @author: laohu on 2017/2/4
  * @site: http://ittiger.cn
  */
-public class KeyBoardMoreView extends FrameLayout implements CommonRecyclerView.OnItemClickListener {
+public class KeyBoardMoreFunView extends FrameLayout implements CommonRecyclerView.OnItemClickListener {
     @BindView(R.id.moreFunGridView)
     CommonRecyclerView mRecyclerView;
     OnMoreFunItemClickListener mOnItemClickListener;
     MoreAdapter mAdapter;
 
-    public KeyBoardMoreView(Context context) {
+    public KeyBoardMoreFunView(Context context) {
 
         this(context, null);
     }
 
-    public KeyBoardMoreView(Context context, AttributeSet attrs) {
+    public KeyBoardMoreFunView(Context context, AttributeSet attrs) {
 
         this(context, attrs, 0);
     }
 
-    public KeyBoardMoreView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public KeyBoardMoreFunView(Context context, AttributeSet attrs, int defStyleAttr) {
 
         super(context, attrs, defStyleAttr);
         initView(context);

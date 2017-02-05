@@ -5,16 +5,23 @@
     android:orientation="vertical" >
 
     <!-- 键盘Top部分，包含输入框，发送按钮，表情，更多功能按钮等 -->
-    <include
-        layout="@layout/chat_keyboard_top_layout"
-        android:id="@+id/rl_chat_message_toolbox"/>
+    <cn.ittiger.im.ui.keyboard.KeyBoardToolBoxView
+        android:id="@+id/keyboard_toolbox_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dimen_8"
+        android:paddingTop="@dimen/dimen_8"
+        android:background="@color/chat_keyboard_bg"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical"/>
 
     <!-- 分割线 -->
     <include layout="@layout/divider_horizontal_view"/>
 
     <!-- 录音View -->
-    <cn.ittiger.im.ui.RecordVoiceView
-        android:id="@+id/recordVoiceView"
+    <cn.ittiger.im.ui.keyboard.KeyBoardRecordVoiceView
+        android:id="@+id/keyboard_record_voice_view"
         android:layout_width="match_parent"
         android:layout_height="170dp"
         android:background="@color/chat_keyboard_bg"
@@ -22,8 +29,8 @@
         android:visibility="gone"/>
 
     <!-- more View -->
-    <cn.ittiger.im.ui.KeyBoardMoreView
-        android:id="@+id/keyBoardMoreVIew"
+    <cn.ittiger.im.ui.keyboard.KeyBoardMoreFunView
+        android:id="@+id/keyboard_more_fun_view"
         android:layout_width="match_parent"
         android:layout_height="170dp"
         android:background="@color/chat_keyboard_bg"

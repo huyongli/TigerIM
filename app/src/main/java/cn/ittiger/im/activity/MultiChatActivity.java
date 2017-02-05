@@ -78,11 +78,6 @@ public class MultiChatActivity extends BaseChatActivity {
     }
 
     @Override
-    public void recordStart() {
-
-    }
-
-    @Override
     public void functionClick(KeyBoardMoreFunType funType) {
 
     }

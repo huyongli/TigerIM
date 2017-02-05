@@ -228,11 +228,6 @@ public class ChatActivity extends BaseChatActivity {
         sendFile(audioFile, MessageType.MESSAGE_TYPE_VOICE.value());
     }
 
-    @Override
-    public void recordStart() {
-
-    }
-
     /**
      * 选择图片
      */

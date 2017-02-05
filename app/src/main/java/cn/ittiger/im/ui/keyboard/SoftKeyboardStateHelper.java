@@ -72,14 +72,6 @@ public class SoftKeyboardStateHelper implements
         }
     }
 
-    public void setIsSoftKeyboardOpened(boolean isSoftKeyboardOpened) {
-        this.isSoftKeyboardOpened = isSoftKeyboardOpened;
-    }
-
-    public boolean isSoftKeyboardOpened() {
-        return isSoftKeyboardOpened;
-    }
-
     /**
      * Default value is zero (0)
      * 
@@ -91,11 +83,6 @@ public class SoftKeyboardStateHelper implements
 
     public void addSoftKeyboardStateListener(SoftKeyboardStateListener listener) {
         listeners.add(listener);
-    }
-
-    public void removeSoftKeyboardStateListener(
-            SoftKeyboardStateListener listener) {
-        listeners.remove(listener);
     }
 
     private void notifyOnSoftKeyboardOpened(int keyboardHeightInPx) {

@@ -1,4 +1,4 @@
-package cn.ittiger.im.ui;
+package cn.ittiger.im.ui.keyboard;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,19 +10,18 @@ import android.media.MediaRecorder;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
 import android.widget.RelativeLayout;
 import cn.ittiger.im.R;
 import cn.ittiger.util.DateUtil;
 import cn.ittiger.util.SdCardUtil;
 
 /**
- * 按住说话
+ * 语音录音视图
  * @auther: hyl
  * @time: 2015-10-29下午2:43:38
  */
 @SuppressLint("ClickableViewAccessibility")
-public class RecordVoiceView extends RelativeLayout {
+public class KeyBoardRecordVoiceView extends RelativeLayout {
 	/**
 	 * 录音对象
 	 */
@@ -40,17 +39,17 @@ public class RecordVoiceView extends RelativeLayout {
 	 */
 	private RecordListener recordListener;
 
-	public RecordVoiceView(Context context, AttributeSet attrs, int defStyleAttr) {
+	public KeyBoardRecordVoiceView(Context context, AttributeSet attrs, int defStyleAttr) {
 		super(context, attrs, defStyleAttr);
 		init(context);
 	}
 
-	public RecordVoiceView(Context context, AttributeSet attrs) {
+	public KeyBoardRecordVoiceView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		init(context);
 	}
 
-	public RecordVoiceView(Context context) {
+	public KeyBoardRecordVoiceView(Context context) {
 		super(context);
 		init(context);
 	}
@@ -65,9 +64,6 @@ public class RecordVoiceView extends RelativeLayout {
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		switch(ev.getAction()) {
 			case MotionEvent.ACTION_DOWN://按下
-				if(recordListener != null) {
-					recordListener.recordStart();
-				}
 				startRecordVoice();
 				break;
 			case MotionEvent.ACTION_UP://松开手指
@@ -127,10 +123,6 @@ public class RecordVoiceView extends RelativeLayout {
         recorder = null;
 	}
 	
-	public RecordListener getRecordListener() {
-		return recordListener;
-	}
-
 	public void setRecordListener(RecordListener recordListener) {
 		this.recordListener = recordListener;
 	}
@@ -146,11 +138,5 @@ public class RecordVoiceView extends RelativeLayout {
 		 * @param audioFile		录音文件
 		 */
 		public abstract void recordFinish(File audioFile);
-		/**
-		 * 录音开始，UI线程
-		 */
-		public void recordStart() {
-			
-		}
 	}
 }
