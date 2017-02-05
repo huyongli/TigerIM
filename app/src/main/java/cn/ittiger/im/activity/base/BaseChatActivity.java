@@ -22,6 +22,7 @@ import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -74,7 +75,6 @@ public abstract class BaseChatActivity extends IMBaseActivity implements ChatKey
 
         super.setContentView(layoutResID);
         ButterKnife.bind(this);
-        mChatKyboard.bindToContentView(mChatMessageRecyclerView);
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);//不显示ToolBar的标题
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -90,6 +90,14 @@ public abstract class BaseChatActivity extends IMBaseActivity implements ChatKey
 
         mLayoutManager = new LinearLayoutManager(this);
         mChatMessageRecyclerView.setLayoutManager(mLayoutManager);
+        mChatMessageRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                mChatKyboard.hideKeyBoardView();
+                return false;
+            }
+        });
 
         initData();
     }

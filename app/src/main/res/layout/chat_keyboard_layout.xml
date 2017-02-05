@@ -19,25 +19,38 @@
     <!-- 分割线 -->
     <include layout="@layout/divider_horizontal_view"/>
 
-    <!-- 录音View -->
-    <cn.ittiger.im.ui.keyboard.KeyBoardRecordVoiceView
-        android:id="@+id/keyboard_record_voice_view"
+    <RelativeLayout
+        android:id="@+id/keyboardContentContainer"
         android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:background="@color/chat_keyboard_bg"
-        android:padding="@dimen/dimen_10"
-        android:visibility="gone"/>
+        android:layout_height="200dp"
+        android:visibility="gone">
+        <!-- 录音View -->
+        <cn.ittiger.im.ui.keyboard.KeyBoardRecordVoiceView
+            android:id="@+id/keyboard_record_voice_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/chat_keyboard_bg"
+            android:padding="@dimen/dimen_10"
+            android:visibility="gone"/>
 
-    <!-- more View -->
-    <cn.ittiger.im.ui.keyboard.KeyBoardMoreFunView
-        android:id="@+id/keyboard_more_fun_view"
-        android:layout_width="match_parent"
-        android:layout_height="170dp"
-        android:background="@color/chat_keyboard_bg"
-        android:visibility="gone"
-        android:paddingTop="@dimen/dimen_20"
-        android:paddingBottom="@dimen/dimen_10"
-        android:paddingLeft="@dimen/dimen_30"
-        android:paddingRight="@dimen/dimen_30"/>
+        <!-- more View -->
+        <cn.ittiger.im.ui.keyboard.KeyBoardMoreFunView
+            android:id="@+id/keyboard_more_fun_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/chat_keyboard_bg"
+            android:visibility="gone"
+            android:paddingTop="@dimen/dimen_20"
+            android:paddingBottom="@dimen/dimen_10"
+            android:paddingLeft="@dimen/dimen_30"
+            android:paddingRight="@dimen/dimen_30"/>
+
+        <View
+            android:id="@+id/keyboard_emotion_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#209280"
+            android:visibility="gone" />
+    </RelativeLayout>
 
 </LinearLayout>

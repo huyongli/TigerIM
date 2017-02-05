@@ -5,9 +5,11 @@ import cn.ittiger.R;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -27,7 +29,7 @@ import java.util.Map;
  * @site: http://ittiger.cn
  */
 public abstract class BaseKeyboardLayout extends LinearLayout implements View.OnClickListener {
-
+    private static final String KEY_SOFT_KEYBOARD_HEIGHT = "soft_keyboard_height";
     /**
      * 软键盘
      */
@@ -37,9 +39,13 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
      */
     public final static int SHOW_EMOTION = 0X10;
     /**
-     * 其他
+     * 更多功能
      */
-    public final static int SHOW_OTHER = 0X11;
+    public final static int SHOW_MORE_FUN = 0X11;
+    /**
+     * 语音
+     */
+    public final static int SHOW_VOICE = 0X12;
     /**
      * 所处Activity的DecorView
      */
@@ -144,20 +150,21 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
 
         mViewKeyboardContentViewHolderMap = new HashMap<>();
         showViewList = new ArrayList<>();
-        inflateView();
+        inflateView(context);
         if (context instanceof Activity) {
             mDecorView = ((Activity) context).getWindow().getDecorView();
         } else {
             mDecorView = this;
         }
-        mRootView = mDecorView.findViewById(R.id.keyboard_root_id);
-        if(mRootView == null) {
-            throw new IllegalStateException("this activity or fragment first view's id must be @id/keyboard_root_id");
-        }
-
         mEvokeKeyBoardView = getEvokeKeyBoardView();
         mInputEditText = getInputEditText();
         mKeyboradContentContainer = getKeyboradContentContainer();
+    }
+
+    @Override
+    protected void onFinishInflate() {
+
+        super.onFinishInflate();
         mDecorView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -182,7 +189,7 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
     /**
      * 渲染自定义布局
      */
-    protected abstract void inflateView();
+    protected abstract void inflateView(Context context);
 
     protected abstract View getKeyboradContentContainer();
 
@@ -223,6 +230,7 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
             }
             if (mKeyboardHeight != height) {
                 mKeyboardHeight = height;
+                cacheSoftKeyboardHeight(height);
                 mKeyboradContentContainer.getLayoutParams().height = height;
                 mKeyboradContentContainer.requestLayout();
             }
@@ -320,7 +328,14 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        if(mRootView == null) {//此时mRootView已经添加到mDecorView中
+            mRootView = mDecorView.findViewById(R.id.keyboard_root_id);
+            if(mRootView == null) {
+                throw new IllegalStateException("this activity or fragment first view's id must be @id/keyboard_root_id");
+            }
+        }
         if (mNavigationBarHeight == -1) {
+            mRootView = mDecorView.findViewById(R.id.keyboard_root_id);
             mRootView.getLayoutParams().height = getMeasuredHeight();
             mNavigationBarHeight = getNavigationBarHeight(getContext());
         }
@@ -396,4 +411,15 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
         this.mMminOtherBoardHeight = minOtherBoardHeight;
     }
 
+    private void cacheSoftKeyboardHeight(int height) {
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+        sp.edit().putInt(KEY_SOFT_KEYBOARD_HEIGHT, height).commit();
+    }
+
+    private int getSoftKeyboardHeight() {
+
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
+        return sp.getInt(KEY_SOFT_KEYBOARD_HEIGHT, 788);//默认值设为788，为经验值
+    }
 }

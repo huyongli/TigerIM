@@ -4,12 +4,12 @@
                 android:layout_height="wrap_content">
     <!-- 表情按钮 -->
     <CheckBox
-        android:id="@+id/cb_keyboard_face_toolbox"
+        android:id="@+id/cb_keyboard_emotion_toolbox"
         android:layout_width="@dimen/dimen_30"
         android:layout_height="@dimen/dimen_30"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="@dimen/dimen_5"
-        android:background="@drawable/ic_keyboard_face"
+        android:background="@drawable/ic_keyboard_emotion"
         android:button="@null"/>
 
     <!-- 更多按钮 -->
@@ -19,7 +19,7 @@
         android:layout_height="@dimen/dimen_30"
         android:layout_marginLeft="@dimen/dimen_2"
         android:layout_marginRight="@dimen/dimen_5"
-        android:layout_toRightOf="@+id/cb_keyboard_face_toolbox"
+        android:layout_toRightOf="@+id/cb_keyboard_emotion_toolbox"
         android:background="@drawable/ic_keyboard_more"
         android:button="@null"/>
 
