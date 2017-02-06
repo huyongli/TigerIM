@@ -22,7 +22,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  * KeyBoard更多功能视图
  * @author: laohu on 2017/2/4
@@ -129,7 +128,7 @@ public class KeyBoardMoreFunView extends FrameLayout implements CommonRecyclerVi
     }
 
     @Override
-    public void onItemClick(int position, View itemView) {
+    public void onItemClick(HeaderAndFooterAdapter adapter, int position, View itemView) {
 
         if(mOnItemClickListener != null) {
             KeyBoardMoreFunType type = KeyBoardMoreFunType.getFunType(mAdapter.getItem(position).mIndex);

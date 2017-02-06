@@ -2,6 +2,6 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android" >
     <item android:drawable="@drawable/vector_keyboard_voice_focus" android:state_checked="false" android:state_pressed="true"/>
     <item android:drawable="@drawable/vector_keyboard_voice" android:state_checked="false" android:state_pressed="false"/>
-    <item android:drawable="@drawable/vector_keyboard_pressed" android:state_checked="true" android:state_pressed="true"/>
-    <item android:drawable="@drawable/vector_keyboard_normal" android:state_checked="true" android:state_pressed="false"/>
+    <item android:drawable="@drawable/vector_keyboard_text_focus" android:state_checked="true" android:state_pressed="true"/>
+    <item android:drawable="@drawable/vector_keyboard_text" android:state_checked="true" android:state_pressed="false"/>
 </selector>

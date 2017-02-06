@@ -2,7 +2,7 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_pressed="true">
         <shape>
-            <corners android:radius="@dimen/dimen_3"/>
+            <corners android:radius="@dimen/dimen_5"/>
             <stroke android:color="@color/chat_keyboard_record_voice_button_press_border_color"
                     android:width="@dimen/dimen_1"/>
             <solid android:color="@color/chat_keyboard_record_voice_button_press_color"/>
@@ -10,8 +10,8 @@
     </item>
     <item>
         <shape>
-            <corners android:radius="@dimen/dimen_3"/>
-            <stroke android:color="@color/divider_color"
+            <corners android:radius="@dimen/dimen_5"/>
+            <stroke android:color="@color/chat_keyboard_input_edittext_border_color"
                     android:width="@dimen/dimen_1"/>
             <solid android:color="@color/chat_keyboard_bg"/>
         </shape>

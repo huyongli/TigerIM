@@ -3,18 +3,23 @@ package cn.ittiger.im.adapter;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.viewholder.ChatRecordViewHolder;
 import cn.ittiger.im.bean.ChatRecord;
+import cn.ittiger.im.constant.EmotionType;
 import cn.ittiger.im.ui.recyclerview.HeaderAndFooterAdapter;
 import cn.ittiger.im.ui.recyclerview.ViewHolder;
 import cn.ittiger.im.util.ChatTimeUtil;
+import cn.ittiger.im.util.EmotionUtil;
 import cn.ittiger.im.util.ImageLoaderHelper;
 import cn.ittiger.util.ValueUtil;
 
 import android.content.Context;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
+
+import static android.R.id.message;
 
 /**
  * 聊天记录列表适配器
@@ -50,7 +55,8 @@ public class ChatRecordAdapter extends HeaderAndFooterAdapter<ChatRecord> {
             if(viewHolder.message.getVisibility() == View.GONE) {
                 viewHolder.message.setVisibility(View.VISIBLE);
             }
-            viewHolder.message.setText(item.getLastMessage());
+            SpannableString content = EmotionUtil.getInputEmotionContent(mContext, EmotionType.EMOTION_TYPE_CLASSIC, viewHolder.message, item.getLastMessage());
+            viewHolder.message.setText(content);
         }
         viewHolder.chatTime.setText(ChatTimeUtil.getFriendlyTimeSpanByNow(item.getChatTime()));
         String messageCount = item.getUnReadMessageCount() > 0 ? String.valueOf(item.getUnReadMessageCount()) : "";

@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:text="@string/keyboard_press_record_voice"
-            android:textColor="@color/keyboard_record_voice_txt_color" />
+            android:textColor="@color/chat_keyboard_record_voice_txt_color" />
 
         <RelativeLayout
             android:layout_width="@dimen/dimen_80"

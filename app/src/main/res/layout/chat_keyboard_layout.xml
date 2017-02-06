@@ -45,12 +45,14 @@
             android:paddingLeft="@dimen/dimen_30"
             android:paddingRight="@dimen/dimen_30"/>
 
-        <View
+        <!-- emotion view 可实现多种类型的表情 -->
+        <cn.ittiger.im.ui.keyboard.emotion.KeyBoardEmotionView
             android:id="@+id/keyboard_emotion_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#209280"
-            android:visibility="gone" />
+            android:background="@color/chat_keyboard_bg"
+            android:visibility="gone"/>
+
     </RelativeLayout>
 
 </LinearLayout>

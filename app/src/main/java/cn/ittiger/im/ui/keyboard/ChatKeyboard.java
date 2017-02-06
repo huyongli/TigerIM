@@ -12,8 +12,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.constant.KeyBoardMoreFunType;
+import cn.ittiger.im.ui.keyboard.emotion.KeyBoardEmotionView;
 import cn.ittiger.ui.BaseKeyboardLayout;
 
+/**
+ * 聊天键盘
+ * @author: laohu on 2016/12/24
+ * @site: http://ittiger.cn
+ */
 public class ChatKeyboard extends BaseKeyboardLayout implements
         KeyBoardMoreFunView.OnMoreFunItemClickListener{
     @BindView(R.id.keyboardContentContainer)
@@ -37,7 +43,7 @@ public class ChatKeyboard extends BaseKeyboardLayout implements
      * 表情
      */
     @BindView(R.id.keyboard_emotion_view)
-    View mEmotionView;
+    KeyBoardEmotionView mEmotionView;
     /**
      * 聊天操作监听，如：发送消息，发送文件，选择图片
      */
@@ -72,8 +78,6 @@ public class ChatKeyboard extends BaseKeyboardLayout implements
         mKeyBoardMoreView.setOnMoreFunItemClickListener(this);
 
         mToolBoxView.getVoiceButton().setOnClickListener(this);
-//        addToShowViewList(mRecordVoiceView);
-//        addToViewMappingMap(mToolBoxView.getVoiceButton(), SHOW_VOICE, mRecordVoiceView);
 
         mToolBoxView.getMoreFunButton().setOnClickListener(this);
         addToShowViewList(mKeyBoardMoreView);
@@ -82,6 +86,8 @@ public class ChatKeyboard extends BaseKeyboardLayout implements
         mToolBoxView.getEmotionButton().setOnClickListener(this);
         addToShowViewList(mEmotionView);
         addToViewMappingMap(mToolBoxView.getEmotionButton(), SHOW_EMOTION, mEmotionView);
+
+        mEmotionView.bindToEditText(mToolBoxView.getInputEditText());//绑定输入框，以便处理表情输入
     }
 
     @Override
@@ -107,6 +113,15 @@ public class ChatKeyboard extends BaseKeyboardLayout implements
 
         super.hideKeyBoardView();
         mToolBoxView.unFocusAllToolButton();
+    }
+
+    public boolean onInterceptBackPressed() {
+
+        if(isKeyboardViewShow()) {
+            hideKeyBoardView();
+            return true;
+        }
+        return false;
     }
 
     @Override

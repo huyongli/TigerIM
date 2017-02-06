@@ -56,7 +56,7 @@ public class CommonRecyclerView extends RecyclerView {
                         if(!(mHeaderAndFooterAdapter.isHeaderViewPosition(position) ||
                             mHeaderAndFooterAdapter.isFooterViewPosition(position))) {
                             int headerViewCount = mHeaderAndFooterAdapter.getHeaderViewCount();
-                            mItemLongClickListener.onItemLongClick(position - headerViewCount, childView);
+                            mItemLongClickListener.onItemLongClick(mHeaderAndFooterAdapter, position - headerViewCount, childView);
                         }
                     }
                 }
@@ -72,7 +72,7 @@ public class CommonRecyclerView extends RecyclerView {
                         if(!(mHeaderAndFooterAdapter.isHeaderViewPosition(position) ||
                                 mHeaderAndFooterAdapter.isFooterViewPosition(position))) {
                             int headerViewCount = mHeaderAndFooterAdapter.getHeaderViewCount();
-                            mOnItemClickListener.onItemClick(position - headerViewCount, childView);
+                            mOnItemClickListener.onItemClick(mHeaderAndFooterAdapter, position - headerViewCount, childView);
                         }
                         return true;
                     }
@@ -217,7 +217,7 @@ public class CommonRecyclerView extends RecyclerView {
      */
     public interface OnItemClickListener {
 
-        void onItemClick(int position, View itemView);
+        void onItemClick(HeaderAndFooterAdapter adapter, int position, View itemView);
     }
 
     /**
@@ -225,7 +225,7 @@ public class CommonRecyclerView extends RecyclerView {
      */
     public interface OnItemLongClickListener {
 
-        void onItemLongClick(int position, View itemView);
+        void onItemLongClick(HeaderAndFooterAdapter adapter, int position, View itemView);
     }
 
     /**

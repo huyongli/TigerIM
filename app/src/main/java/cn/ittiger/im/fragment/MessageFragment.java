@@ -5,10 +5,11 @@ import butterknife.ButterKnife;
 import cn.ittiger.base.BaseFragment;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.ChatRecordAdapter;
-import cn.ittiger.im.adapter.decoration.CommonItemDecoration;
+import cn.ittiger.im.decoration.CommonItemDecoration;
 import cn.ittiger.im.bean.ChatMessage;
 import cn.ittiger.im.bean.ChatRecord;
 import cn.ittiger.im.ui.recyclerview.CommonRecyclerView;
+import cn.ittiger.im.ui.recyclerview.HeaderAndFooterAdapter;
 import cn.ittiger.im.util.DBHelper;
 import cn.ittiger.im.util.DBQueryHelper;
 import cn.ittiger.im.util.IMUtil;
@@ -92,7 +93,7 @@ public class MessageFragment extends BaseFragment implements CommonRecyclerView.
     }
 
     @Override
-    public void onItemClick(int position, View itemView) {
+    public void onItemClick(HeaderAndFooterAdapter adapter, int position, View itemView) {
 
         IMUtil.startChatActivity(mContext, mAdapter.getItem(position));
     }

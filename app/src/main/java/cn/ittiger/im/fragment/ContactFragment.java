@@ -5,7 +5,7 @@ import butterknife.ButterKnife;
 import cn.ittiger.base.BaseFragment;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.ContactAdapter;
-import cn.ittiger.im.adapter.decoration.ContactItemDecoration;
+import cn.ittiger.im.decoration.ContactItemDecoration;
 import cn.ittiger.im.adapter.viewholder.ContactViewHolder;
 import cn.ittiger.im.bean.ContactEntity;
 import cn.ittiger.im.bean.ContactMenuEntity;

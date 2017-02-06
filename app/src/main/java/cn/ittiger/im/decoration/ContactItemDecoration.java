@@ -1,4 +1,4 @@
-package cn.ittiger.im.adapter.decoration;
+package cn.ittiger.im.decoration;
 
 import cn.ittiger.app.AppContext;
 import cn.ittiger.im.R;

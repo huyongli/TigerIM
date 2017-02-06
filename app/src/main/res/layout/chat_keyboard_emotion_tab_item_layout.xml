@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:id="@+id/emotionTabItemRoot"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="@dimen/dimen_35"
+              android:layout_height="@dimen/dimen_35"
+              android:gravity="center"
+              android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/emotionTabItemIcon"
+        android:layout_width="@dimen/dimen_30"
+        android:layout_height="@dimen/dimen_30"
+        android:layout_gravity="center"/>
+</LinearLayout>

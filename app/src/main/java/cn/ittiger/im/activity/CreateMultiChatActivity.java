@@ -5,7 +5,7 @@ import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.activity.base.IMBaseActivity;
 import cn.ittiger.im.adapter.CheckableContactAdapter;
-import cn.ittiger.im.adapter.decoration.ContactItemDecoration;
+import cn.ittiger.im.decoration.ContactItemDecoration;
 import cn.ittiger.im.bean.CheckableContactEntity;
 import cn.ittiger.im.smack.SmackListenerManager;
 import cn.ittiger.im.smack.SmackManager;

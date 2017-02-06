@@ -427,4 +427,9 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getContext());
         return sp.getInt(KEY_SOFT_KEYBOARD_HEIGHT, 788);//默认值设为788，为经验值
     }
+
+    public boolean isKeyboardViewShow() {
+
+        return mKeyboradContentContainer.isShown();
+    }
 }

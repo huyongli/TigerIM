@@ -1,4 +1,4 @@
-package cn.ittiger.im.adapter.decoration;
+package cn.ittiger.im.decoration;
 
 import cn.ittiger.app.AppContext;
 import cn.ittiger.im.R;
@@ -11,16 +11,16 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 /**
- * 聊天记录列表分割线
- * @author: laohu on 2016/12/27
+ * 列表垂直分割线
+ * @author: laohu on 2017/2/6
  * @site: http://ittiger.cn
  */
-public class CommonItemDecoration extends RecyclerView.ItemDecoration {
+public class CommonVerticalItemDecoration extends RecyclerView.ItemDecoration {
 
     private final Drawable mDivider;
     private final int mSize;
 
-    public CommonItemDecoration() {
+    public CommonVerticalItemDecoration() {
 
         mDivider = new ColorDrawable(AppContext.getInstance().getResources().getColor(R.color.divider_color));
         mSize = AppContext.getInstance().getResources().getDimensionPixelSize(R.dimen.global_divider_size);
@@ -29,24 +29,24 @@ public class CommonItemDecoration extends RecyclerView.ItemDecoration {
     @Override
     public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
 
-        outRect.set(0, 0, 0, mSize);
+        outRect.set(0, 0, mSize, 0);
     }
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
 
         super.onDraw(c, parent, state);
-        int top;
-        int bottom;
-        int left = parent.getPaddingLeft();
-        int right = parent.getWidth() - parent.getPaddingRight();
+        int top = parent.getPaddingTop();
+        int bottom = parent.getHeight() - parent.getPaddingTop();
+        int left;
+        int right;
         final int childCount = parent.getChildCount();
         for (int i = 0; i < childCount; i++) {
             final View child = parent.getChildAt(i);
             //获得child的布局信息
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams)child.getLayoutParams();
-            top = child.getBottom() + params.bottomMargin;
-            bottom = top + mSize;
+            left = child.getRight() + params.rightMargin;
+            right = left + mSize;
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
         }

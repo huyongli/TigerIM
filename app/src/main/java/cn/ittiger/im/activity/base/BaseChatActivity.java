@@ -146,4 +146,13 @@ public abstract class BaseChatActivity extends IMBaseActivity implements ChatKey
         super.onDestroy();
         EventBus.getDefault().unregister(this);
     }
+
+    @Override
+    public void onBackPressed() {
+
+        if(mChatKyboard.onInterceptBackPressed()) {
+            return;
+        }
+        super.onBackPressed();
+    }
 }

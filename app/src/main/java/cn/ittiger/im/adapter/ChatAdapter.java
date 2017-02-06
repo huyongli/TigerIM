@@ -4,16 +4,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.bean.ChatMessage;
+import cn.ittiger.im.constant.EmotionType;
 import cn.ittiger.im.constant.FileLoadState;
 import cn.ittiger.im.constant.MessageType;
 import cn.ittiger.im.ui.recyclerview.HeaderAndFooterAdapter;
 import cn.ittiger.im.ui.recyclerview.ViewHolder;
 import cn.ittiger.im.util.ChatTimeUtil;
+import cn.ittiger.im.util.EmotionUtil;
 import cn.ittiger.im.util.ImageLoaderHelper;
 
 import android.content.Context;
 import android.graphics.drawable.AnimationDrawable;
 import android.media.MediaPlayer;
+import android.text.SpannableString;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +77,9 @@ public class ChatAdapter extends HeaderAndFooterAdapter<ChatMessage> {
         setMessageViewVisible(message.getMessageType(), viewHolder);
 
         if (message.getMessageType() == MessageType.MESSAGE_TYPE_TEXT.value()) {//文本消息
-            viewHolder.chatContentText.setText(message.getContent());
+            //处理表情
+            SpannableString content = EmotionUtil.getEmotionContent(mContext, EmotionType.EMOTION_TYPE_CLASSIC, message.getContent());
+            viewHolder.chatContentText.setText(content);
         } else if (message.getMessageType() == MessageType.MESSAGE_TYPE_IMAGE.value()) {//图片消息
             String url = "file://" + message.getFilePath();
             ImageLoaderHelper.displayImage(viewHolder.chatContentImage, url);
