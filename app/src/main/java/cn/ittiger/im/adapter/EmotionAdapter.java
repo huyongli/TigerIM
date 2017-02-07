@@ -1,15 +1,14 @@
 package cn.ittiger.im.adapter;
 
 import cn.ittiger.im.R;
-import cn.ittiger.im.util.EmotionDataHelper;
 import cn.ittiger.im.constant.EmotionType;
-import cn.ittiger.im.ui.recyclerview.HeaderAndFooterAdapter;
-import cn.ittiger.im.ui.recyclerview.ViewHolder;
+import cn.ittiger.im.util.EmotionDataHelper;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView.LayoutParams;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import java.util.List;
@@ -20,57 +19,73 @@ import java.util.List;
  * @author: laohu on 2017/2/6
  * @site: http://ittiger.cn
  */
-public class EmotionAdapter extends HeaderAndFooterAdapter<String> {
+public class EmotionAdapter extends BaseAdapter {
+
     private Context mContext;
+    private List<String> mEmotionNames;
+    private int mItemWidth;
     private EmotionType mEmotionType;
-    private int mEmotionSize;
 
-    public EmotionAdapter(Context context, List<String> list, EmotionType emotionType) {
+    public EmotionAdapter(Context context, List<String> emotionNames, int itemWidth, EmotionType emotionType) {
 
-        super(list);
-        mContext = context;
-        mEmotionType = emotionType;
-        mEmotionSize = context.getResources().getDimensionPixelSize(R.dimen.dimen_30);
+        this.mContext = context;
+        this.mEmotionNames = emotionNames;
+        this.mItemWidth = itemWidth;
+        this.mEmotionType = emotionType;
     }
 
     @Override
-    public int getItemDataCount() {
+    public int getCount() {
 
-        return super.getItemDataCount();
+        return mEmotionNames.size();
     }
 
     @Override
-    public ViewHolder onCreateItemViewHolder(ViewGroup parent, int viewType) {
+    public String getItem(int position) {
 
-        ImageView imageView = new ImageView(mContext);
-        RecyclerView.LayoutParams layoutParams = new RecyclerView.LayoutParams(mWidth, mWidth);
-        imageView.setLayoutParams(layoutParams);
-        return new EmotionViewHolder(imageView);
+        return mEmotionNames.get(position);
     }
 
     @Override
-    public void onBindItemViewHolder(ViewHolder holder, int position, String item) {
+    public long getItemId(int position) {
 
-        EmotionViewHolder viewHolder = (EmotionViewHolder) holder;
-        if(position == getItemDataCount() - 1) {//最后一个显示表情删除按钮
-            viewHolder.mImageView.setImageResource(R.drawable.vector_keyboard_emotion_delete);
+        return position;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+        EmotionViewHolder emotionViewHolder;
+        if(convertView == null) {
+            ImageView emotionIcon = new ImageView(mContext);
+            // 设置内边距
+            emotionIcon.setPadding(mItemWidth / 8, mItemWidth / 8, mItemWidth / 8, mItemWidth / 8);
+            LayoutParams params = new LayoutParams(mItemWidth, mItemWidth);
+            emotionIcon.setLayoutParams(params);
+
+            emotionViewHolder = new EmotionViewHolder(emotionIcon);
+            convertView.setTag(emotionViewHolder);
         } else {
-            viewHolder.mImageView.setImageResource(EmotionDataHelper.getEmotionForName(mEmotionType, item));
+            emotionViewHolder = (EmotionViewHolder) convertView.getTag();
         }
+
+        //判断是否为最后一个item
+        if (position == getCount() - 1) {
+            emotionViewHolder.mImageView.setImageResource(R.drawable.vector_keyboard_emotion_delete);
+        } else {
+            String emotionName = mEmotionNames.get(position);
+            emotionViewHolder.mImageView.setImageResource(EmotionDataHelper.getEmotionForName(mEmotionType, emotionName));
+        }
+
+        return emotionViewHolder.mImageView;
     }
 
-    int mWidth;
-    public void setWidth(int width) {
-
-        mWidth = width;
-    }
-
-    class EmotionViewHolder extends ViewHolder {
+    class EmotionViewHolder {
         ImageView mImageView;
-        public EmotionViewHolder(View itemView) {
 
-            super(itemView);
-            mImageView = (ImageView) itemView;
+        public EmotionViewHolder(ImageView imageView) {
+
+            mImageView = imageView;
         }
     }
 }

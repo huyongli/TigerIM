@@ -4,23 +4,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.adapter.EmotionAdapter;
-import cn.ittiger.im.decoration.EmotionItemDecoration;
+import cn.ittiger.im.ui.keyboard.emotion.EmotionItemClickListener;
 import cn.ittiger.im.util.EmotionDataHelper;
 import cn.ittiger.im.ui.keyboard.emotion.EmotionIndicatorView;
-import cn.ittiger.im.ui.keyboard.emotion.EmotionItemClickListener;
 import cn.ittiger.im.adapter.EmotionViewPagerAdapter;
-import cn.ittiger.im.ui.recyclerview.CommonRecyclerView;
 import cn.ittiger.util.DisplayUtils;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.util.ArrayMap;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.GridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.GridView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,11 +49,12 @@ public class EmotionFragment extends BaseEmotionFragment {
 
         // 获取屏幕宽度
         int screenWidth = DisplayUtils.getScreenWidthPixels(getActivity());
-
         // item的间距
-        int spacing = DisplayUtils.dp2px(getActivity(), 15);
+        int spacing = DisplayUtils.dp2px(getActivity(), 12);
         // 动态计算item的宽度和高度
-        int itemWidth = (int) ((screenWidth - spacing * 8) / 7 + 0.5f);
+        int itemWidth = (screenWidth - spacing * 8) / 7;
+        //动态计算gridview的总高度
+        int gridViewHeight = itemWidth * 3 + spacing * 6;
 
         List<View> emotionViewPagerData = new ArrayList<>();
 
@@ -70,7 +68,7 @@ public class EmotionFragment extends BaseEmotionFragment {
             emotionNames.add(emotions.keyAt(i));
             if(emotionNames.size() == 20) {//已满一页
                 emotionNames.add("");//增加一个表情删除按钮的占位符
-                CommonRecyclerView gridView = createEmotionPageView(emotionNames, spacing, itemWidth);
+                GridView gridView = createEmotionGridView(emotionNames, screenWidth, spacing, itemWidth, gridViewHeight);
                 emotionViewPagerData.add(gridView);
                 emotionNames = new ArrayList<>();
             }
@@ -78,7 +76,7 @@ public class EmotionFragment extends BaseEmotionFragment {
 
         if(emotionNames.size() > 0) {//最后一页不满20个
             emotionNames.add("");//增加一个表情删除按钮的占位符
-            CommonRecyclerView gridView = createEmotionPageView(emotionNames, spacing, itemWidth);
+            GridView gridView = createEmotionGridView(emotionNames, screenWidth, spacing, itemWidth, gridViewHeight);
             emotionViewPagerData.add(gridView);
         }
 
@@ -107,17 +105,27 @@ public class EmotionFragment extends BaseEmotionFragment {
         });
     }
 
-    private CommonRecyclerView createEmotionPageView(List<String> emotionNames, int padding, int width) {
-
-        CommonRecyclerView gridView = new CommonRecyclerView(getActivity());
-        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-        gridView.addItemDecoration(new EmotionItemDecoration(padding));
-        gridView.setLayoutParams(layoutParams);
-        gridView.setLayoutManager(new GridLayoutManager(getActivity(), 7));//7列
-        EmotionAdapter adapter = new EmotionAdapter(getActivity(), emotionNames, mEmotionType);
-        adapter.setWidth(width);
-        gridView.setOnItemClickListener(new EmotionItemClickListener(getActivity(), mEditText, mEmotionType));
+    /**
+     * 创建显示表情的GridView
+     */
+    private GridView createEmotionGridView(List<String> emotionNames, int gridViewWidth, int padding, int itemWidth, int gridViewHeight) {
+        // 创建GridView
+        GridView gridView = new GridView(getActivity());
+        //设置点击背景透明
+        gridView.setSelector(android.R.color.transparent);
+        //设置7列
+        gridView.setNumColumns(7);
+        gridView.setPadding(padding, padding, padding, padding);
+        gridView.setHorizontalSpacing(padding);
+        gridView.setVerticalSpacing(padding * 2);
+        //设置GridView的宽高
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(gridViewWidth, gridViewHeight);
+        gridView.setLayoutParams(params);
+        // 给GridView设置表情图片
+        EmotionAdapter adapter = new EmotionAdapter(getActivity(), emotionNames, itemWidth, mEmotionType);
         gridView.setAdapter(adapter);
+        //设置全局点击事件
+        gridView.setOnItemClickListener(new EmotionItemClickListener(getActivity(), mEditText, mEmotionType));
         return gridView;
     }
 }

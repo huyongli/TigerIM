@@ -2,20 +2,20 @@ package cn.ittiger.im.ui.keyboard.emotion;
 
 import cn.ittiger.im.adapter.EmotionAdapter;
 import cn.ittiger.im.constant.EmotionType;
-import cn.ittiger.im.ui.recyclerview.CommonRecyclerView;
-import cn.ittiger.im.ui.recyclerview.HeaderAndFooterAdapter;
 import cn.ittiger.im.util.EmotionUtil;
 
 import android.content.Context;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.GridView;
 
 /**
  * @author: laohu on 2017/2/6
  * @site: http://ittiger.cn
  */
-public class EmotionItemClickListener implements CommonRecyclerView.OnItemClickListener {
+public class EmotionItemClickListener implements GridView.OnItemClickListener {
     private Context mContext;
     private EditText mEditText;
     private EmotionType mEmotionType;
@@ -28,17 +28,17 @@ public class EmotionItemClickListener implements CommonRecyclerView.OnItemClickL
     }
 
     @Override
-    public void onItemClick(HeaderAndFooterAdapter adapter, int position, View itemView) {
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        if(!(adapter instanceof EmotionAdapter)) {
+        if(!(parent.getAdapter() instanceof EmotionAdapter)) {
             return;
         }
-        if(position == adapter.getItemDataCount() - 1) {//点击了最后一个，即删除表情按钮
+        EmotionAdapter adapter = (EmotionAdapter) parent.getAdapter();
+        if(position == adapter.getCount() - 1) {//点击了最后一个，即删除表情按钮
             //发送一个删除事件交给系统进行删除操作
             mEditText.dispatchKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
         } else {//点击了表情，则添加到输入框
-            EmotionAdapter emotionAdapter = (EmotionAdapter) adapter;
-            String emotionName = emotionAdapter.getItem(position);//得到点击表情的名称
+            String emotionName = adapter.getItem(position);//得到点击表情的名称
 
             // 获取输入框当前光标位置,在指定位置上添加表情图片文本
             int curPosition = mEditText.getSelectionStart();
@@ -52,6 +52,4 @@ public class EmotionItemClickListener implements CommonRecyclerView.OnItemClickL
             mEditText.setSelection(curPosition + emotionName.length());
         }
     }
-
-
 }
