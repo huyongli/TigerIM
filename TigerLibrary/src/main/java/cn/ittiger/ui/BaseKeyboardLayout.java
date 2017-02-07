@@ -200,6 +200,12 @@ public abstract class BaseKeyboardLayout extends LinearLayout implements View.On
      */
     protected abstract View getEvokeKeyBoardView();
 
+    @Override
+    public View getRootView() {
+
+        return mRootView;
+    }
+
     /**
      * 检测键盘弹出状态
      */

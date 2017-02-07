@@ -3,10 +3,12 @@ package cn.ittiger.im.ui.keyboard;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ittiger.im.R;
+import cn.ittiger.im.util.RecordVoiceManager;
 import cn.ittiger.util.ValueUtil;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
@@ -16,6 +18,8 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+
+import java.io.File;
 
 /**
  * 键盘顶部的输入相关布局
@@ -59,6 +63,14 @@ public class KeyBoardToolBoxView extends RelativeLayout {
      * 聊天操作监听
      */
     private ChatKeyboard.KeyboardOperateListener mKeyboardOperateListener;
+    /**
+     * 录音管理类
+     */
+    private RecordVoiceManager mRecordVoiceManager;
+    /**
+     * 录音结束监听，一般录音结束时发送
+     */
+    private RecordVoiceManager.RecordFinishListener mRecordFinishListener;
 
     public KeyBoardToolBoxView(Context context) {
 
@@ -126,6 +138,9 @@ public class KeyBoardToolBoxView extends RelativeLayout {
                 return false;
             }
         });
+
+        mRecordVoiceManager = new RecordVoiceManager();
+        mButtonRecordVoice.setOnTouchListener(mRecordVoiceButtonTouchListener);
     }
 
     public void unFocusAllToolButton() {
@@ -202,6 +217,18 @@ public class KeyBoardToolBoxView extends RelativeLayout {
         return mButtonVoice;
     }
 
+    public Button getButtonRecordVoice() {
+
+        mButtonRecordVoice.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                return false;
+            }
+        });
+        return mButtonRecordVoice;
+    }
+
     public View getMoreFunButton() {
 
         return mButtonMoreFun;
@@ -211,4 +238,50 @@ public class KeyBoardToolBoxView extends RelativeLayout {
 
         mKeyboardOperateListener = keyboardOperateListener;
     }
+
+    public void setRecordFinishListener(RecordVoiceManager.RecordFinishListener recordFinishListener) {
+
+        mRecordFinishListener = recordFinishListener;
+    }
+
+    OnTouchListener mRecordVoiceButtonTouchListener = new OnTouchListener() {
+        float mDownY;
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    mDownY = event.getRawY();
+                    if(mRecordFinishListener != null) {
+                        mRecordFinishListener.onStart();
+                    }
+                    mRecordVoiceManager.startRecordVoice();
+                    break;
+                case MotionEvent.ACTION_UP:
+                    mRecordVoiceManager.stopRecordVoice();
+                    File voiceFile = mRecordVoiceManager.getVoiceFile();
+                    if(mRecordFinishListener != null) {
+                        float distance = Math.abs(event.getRawY() - mDownY);
+                        if(distance > 80) {//滑动超过80则提示取消
+                            mRecordFinishListener.onCancel(voiceFile);
+                        } else {
+                            mRecordFinishListener.onFinish(voiceFile);
+                        }
+                    }
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if(mRecordFinishListener != null) {
+                        float distance = Math.abs(event.getRawY() - mDownY);
+                        if(distance > 80) {//滑动超过80则提示取消
+                            mRecordFinishListener.prepareCancel();
+                        } else {
+                            mRecordFinishListener.onStart();
+                        }
+                    }
+                    break;
+            }
+            return false;
+        }
+    };
 }

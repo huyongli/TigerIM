@@ -49,6 +49,8 @@
     <string name="keyboard_press_record_voice">按住  说话</string>
     <string name="keyboard_more_image">图片</string>
     <string name="keyboard_more_take_photo">拍照</string>
+    <string name="recording_voice_text">手指上滑，取消发送</string>
+    <string name="cancel_recording_voice_text">松开手指，取消发送</string>
 
     <string name="nav_header_title">基于Smack实现的简单即时通讯App</string>
     <string name="nav_share">分享应用</string>

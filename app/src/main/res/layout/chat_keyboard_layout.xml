@@ -24,14 +24,6 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:visibility="gone">
-        <!-- 录音View -->
-        <cn.ittiger.im.ui.keyboard.KeyBoardRecordVoiceView
-            android:id="@+id/keyboard_record_voice_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/chat_keyboard_bg"
-            android:padding="@dimen/dimen_10"
-            android:visibility="gone"/>
 
         <!-- more View -->
         <cn.ittiger.im.ui.keyboard.KeyBoardMoreFunView
