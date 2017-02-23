@@ -59,7 +59,7 @@
     <string name="share_app_title">分享TigerIM给朋友</string>
     <string name="about_author">作者：老胡</string>
     <string name="about_blog">博客：<a href="http://ittiger.cn">http://ittiger.cn</a></string>
-    <string name="about_contact">QQ群：106510493</string>
+    <string name="about_contact">QQ群：106510493(点此复制)</string>
     <string name="about_project">项目地址：\n<a href="https://github.com/huyongli/TigerIM">https://github.com/huyongli/TigerIM</a></string>
     <string name="about_project_desc">项目简介：\nTigerIM是我基于Smack和Openfire实现的一个简易即时通讯App，包含了即时通讯中的主要应用场景。主要包括：\n1.用户登陆与注册\n2.添加好友\n3.单人点对点聊天\n4.多人群聊\n5.支持发送语音，图片，文本和文件\n6.好友搜索\n\n喜欢的朋友到github上star一下</string>
 

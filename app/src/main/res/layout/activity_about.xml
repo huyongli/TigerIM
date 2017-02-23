@@ -39,6 +39,7 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.widget.NestedScrollView
+        android:id="@+id/about_nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/main_color"
@@ -70,7 +71,7 @@
                 app:contentPadding="@dimen/dimen_3">
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/tv_about_contact"
                     style="@style/AboutTextViewStyle"
                     android:lineSpacingMultiplier="1.2"
                     android:text="@string/about_contact"/>
