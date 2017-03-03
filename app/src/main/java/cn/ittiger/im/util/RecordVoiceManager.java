@@ -3,7 +3,11 @@ package cn.ittiger.im.util;
 import cn.ittiger.im.constant.MessageType;
 import cn.ittiger.util.DateUtil;
 
+import com.orhanobut.logger.Logger;
+
+import android.Manifest;
 import android.media.MediaRecorder;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import java.io.File;
@@ -38,6 +42,7 @@ public class RecordVoiceManager {
      * 按下录音
      */
     public void startRecordVoice() {
+
         try {
             recorder = new MediaRecorder();
             recorder.setAudioSource(MediaRecorder.AudioSource.MIC); // 设置音频采集原
@@ -65,10 +70,15 @@ public class RecordVoiceManager {
      * 停止录音
      */
     public void stopRecordVoice() {
-        recorder.stop();// 停止刻录
-        recorder.reset();// 重设
-        recorder.release();// 刻录完成一定要释放资源
-        recorder = null;
+
+        try {
+            recorder.stop();// 停止刻录
+            recorder.reset();// 重设
+            recorder.release();// 刻录完成一定要释放资源
+            recorder = null;
+        } catch(Exception e) {
+            Logger.e("RecordVoice", e);
+        }
     }
 
     /**

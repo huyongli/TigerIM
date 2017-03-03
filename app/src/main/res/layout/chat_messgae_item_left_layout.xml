@@ -89,8 +89,8 @@
 
         <ImageView
             android:id="@+id/iv_chat_msg_content_loading"
-            android:layout_width="@dimen/dimen_30"
-            android:layout_height="@dimen/dimen_30"
+            android:layout_width="@dimen/dimen_20"
+            android:layout_height="@dimen/dimen_20"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dimen_10"
             android:layout_marginTop="@dimen/dimen_10"

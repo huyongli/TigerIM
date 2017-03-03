@@ -63,6 +63,7 @@ public class EmotionAdapter extends BaseAdapter {
             LayoutParams params = new LayoutParams(mItemWidth, mItemWidth);
             emotionIcon.setLayoutParams(params);
 
+            convertView = emotionIcon;
             emotionViewHolder = new EmotionViewHolder(emotionIcon);
             convertView.setTag(emotionViewHolder);
         } else {

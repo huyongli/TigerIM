@@ -200,16 +200,7 @@ public class ChatActivity extends BaseChatActivity {
                 if (FileTransfer.Status.complete.toString().equals(transfer.getStatus())) {//传输完成
                     chatMessage.setFileLoadState(FileLoadState.STATE_LOAD_SUCCESS.value());
                     mAdapter.update(chatMessage);
-                } else if (FileTransfer.Status.cancelled.toString().equals(transfer.getStatus())) {
-                    //传输取消
-                    chatMessage.setFileLoadState(FileLoadState.STATE_LOAD_ERROR.value());
-                    mAdapter.update(chatMessage);
-                } else if (FileTransfer.Status.error.toString().equals(transfer.getStatus())) {
-                    //传输错误
-                    chatMessage.setFileLoadState(FileLoadState.STATE_LOAD_ERROR.value());
-                    mAdapter.update(chatMessage);
-                } else if (FileTransfer.Status.refused.toString().equals(transfer.getStatus())) {
-                    //传输拒绝
+                } else {
                     chatMessage.setFileLoadState(FileLoadState.STATE_LOAD_ERROR.value());
                     mAdapter.update(chatMessage);
                 }

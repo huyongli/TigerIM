@@ -4,10 +4,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.ittiger.im.R;
 import cn.ittiger.im.util.RecordVoiceManager;
+import cn.ittiger.util.UIUtil;
 import cn.ittiger.util.ValueUtil;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -256,7 +261,11 @@ public class KeyBoardToolBoxView extends RelativeLayout {
                     if(mRecordFinishListener != null) {
                         mRecordFinishListener.onStart();
                     }
-                    mRecordVoiceManager.startRecordVoice();
+                    if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
+                        UIUtil.showToast(getContext(), "此应用录音权限已被禁止，请先打开");
+                    } else {
+                        mRecordVoiceManager.startRecordVoice();
+                    }
                     break;
                 case MotionEvent.ACTION_UP:
                     mRecordVoiceManager.stopRecordVoice();
