@@ -48,6 +48,7 @@ public class ChatRecord extends ChatUser {
         setFileJid(chatUser.getFileJid());
         setUuid(chatUser.getUuid());
         setChatTime(DateUtil.currentDatetime());
+        setMulti(chatUser.isMulti());
     }
 
     public ChatRecord(ChatMessage chatMessage) {
