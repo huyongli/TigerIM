@@ -7,6 +7,9 @@ Smack与openfire服务之间的通信关键代码和实现可以参考我的[博
 
 此Demo已停止维护
 
+个人微信公众号，欢迎扫码关注交流：   
+![](https://img-blog.csdnimg.cn/2019052410035231.jpg)
+
 # 实现效果如如下：
 <img src="screenshots/1.jpg" width = "360" height = "640" alt=""/>
 <img src="screenshots/2.jpg" width = "360" height = "640" alt=""/>
